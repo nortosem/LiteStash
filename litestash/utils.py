@@ -13,8 +13,8 @@ def mk_table_names():
     Generate names for all tables in cache
     Return a generator.
     """
-    for i in [Num,LowerCase,UpperCase]
-    for table_name in (
-        f'{TableName.ROOT.value}{suffix.value}' for suffix in i
-    ):
-        yield table_name
+    for i in [Num,LowerCase,UpperCase]:
+        for table_name in (
+            f'{TableName.ROOT.value}{suffix.value}' for suffix in i
+        ):
+            yield table_name
