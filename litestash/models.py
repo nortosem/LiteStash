@@ -6,7 +6,6 @@ from datetime import datetime
 from sqlmodel import Field
 from sqlmodel import Relationship
 from sqlmodel import SQLModel
-from litestash.utils import mk_table_names
 
 class StashModel(SQLModel):
     """Stash: Base Model
