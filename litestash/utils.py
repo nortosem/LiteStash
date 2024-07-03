@@ -7,10 +7,11 @@ from litestash.config import Num
 from litestash.config import LowerCase
 from litestash.config import UpperCase
 
-def make_tables():
-    """Make Tables
+def mk_table_names():
+    """Make Table Names
 
     Generate names for all tables in cache
+    Return a generator.
     """
     for i in [Num,LowerCase,UpperCase]
     for table_name in (
