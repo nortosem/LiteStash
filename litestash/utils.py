@@ -112,9 +112,14 @@ def mk_table_names() -> Generator[str, None, None]:
            yield f'{TableName.ROOT.value}{suffix.value}'
 
 
-def mk_tables() -> Generator[Table, None, None]:
-    """
+def mk_tables(metadata: Metadata) -> Generator[Table, None, None]:
+    """Make Tables
 
-
+    Create all tables using preset columns and names.
     """
-    pass
+    for table_name in mk_table_names():
+        yield Table(
+            table_name,
+            metadata,
+            *(column for column in mk_columns())
+        )
