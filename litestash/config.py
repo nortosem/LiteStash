@@ -11,6 +11,14 @@ class Valid(Enum):
     pass
 
 
+class StashSlots(Valid):
+    """all slots for the LiteStash"""
+    DB = f'db'
+    ENGINE = f'engine'
+    METADATA = f'metadata'
+    DB_SESSION = f'db_session'
+
+
 class SetupDB(Valid):
     """SetupDB
 
@@ -54,9 +62,9 @@ class SetupDB(Valid):
 
 
 class Pragma(Valid):
-    """
+    """Sqlite Pragma
 
-
+    The default pragma configuration.
     """
     PRAGMA = f'PRAGMA'
     JOURNAL_MODE = f'journal_mode=WAL'
@@ -74,6 +82,18 @@ class Pragma(Valid):
     @staticmethod
     def foreign_keys() -> str:
         return f'{Pragma.PRAGMA.value} {Pragma.FOREIGN_KEYS.value}'
+
+
+class ColumnSetup(Valid):
+    """The Column Setup
+
+    Define the column attributes for each table
+    """
+    ROW_ID = f'rowid'
+    HASH = f'key_hash'
+    KEY = f'key'
+    VALUE = f'value'
+    DATE_CREATED = f'date_created'
 
 
 class TableName(Valid):
