@@ -13,6 +13,7 @@ from sqlalchemy import Integer
 from sqlalchemy import Text
 from sqlalchemy import JSON
 from sqlalchemy.schema import Column
+from sqlalchemy.schema import Table
 from typing import Literal
 
 
@@ -40,7 +41,7 @@ class LiteStashStore(LiteStashData):
 
 
 @dataclass(slots=True)
-class LiteStasher:
+class StashColumns:
     """Valid LiteStash Column
 
     Definition for sqlite database columns.
@@ -54,7 +55,7 @@ class LiteStasher:
     unique: bool = False
     nullable: bool = False
 
-    def column(self) -> Column:
+    def get_column(self) -> Column:
         """Create columns for database tables"""
         return Column(
             self.name,
@@ -65,4 +66,20 @@ class LiteStasher:
             nullable=self.nullable
         )
 
+@dataclass(slots=True)
+class StashTables:
+    """A LiteStash Table Definition
 
+    Create and return a valid Table for the LiteStash Db.
+    """
+    name: str
+    metadata: Metadata
+    columns: list[StashColumns]
+
+    def get_table(self) -> Table:
+        """Create and return a valid table for the database."""
+        return Table(
+            name=self.name,
+            metadata=self.metadat,
+            *self.columns
+        )
