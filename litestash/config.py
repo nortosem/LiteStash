@@ -4,10 +4,76 @@ The config module enumerates the common required strings.
 """
 from enum import Enum
 from enum import unique
+from typing import Self
 
 class Valid(Enum):
     """Valid Root"""
     pass
+
+
+class SetupDB(Valid):
+    """SetupDB
+
+    Provide the configuation to setup a database engine.
+    """
+    SQLITE = f'sqlite://'
+    FILENAME = f'litestash.db'
+    MEMORY = f':memory:'
+    ECHO = True
+    FUTURE = True
+    NO_ECHO = False
+    NO_FUTURE = False
+
+    @staticmethod
+    def sqlite() -> str:
+        return f'{SetupDB.SQLITE.value}'
+
+    @staticmethod
+    def filename() -> str:
+        return f'{SetupDB.FILENAME.value}'
+
+    @staticmethod
+    def memory() -> str:
+        return f'{SetupDB.MEMORY.value}'
+
+    @staticmethod
+    def echo() -> str:
+        return f'{SetupDB.ECHO.value}'
+
+    @staticmethod
+    def future() -> str:
+        return f'{SetupDB.FUTURE.value}'
+
+    @staticmethod
+    def no_echo() -> str:
+        return f'{SetupDB.NO_ECHO.value}'
+
+    @staticmethod
+    def no_future() -> str:
+        return f'{SetupDB.NO_FUTURE.value}'
+
+
+class Pragma(Valid):
+    """
+
+
+    """
+    PRAGMA = f'PRAGMA'
+    JOURNAL_MODE = f'journal_mode=WAL'
+    SYNCHRONOUS = f'synchronous=NORMAL'
+    FOREIGN_KEYS = f'foreign_keys=ON'
+
+    @staticmethod
+    def journal_mode() -> str:
+        return f'{Pragma.PRAGMA.value} {Pragma.JOURNAL_MODE.value}'
+
+    @staticmethod
+    def synchronous() -> str:
+        return f'{Pragma.PRAGMA.value} {Pragma.SYNCHRONOUS.value}'
+
+    @staticmethod
+    def foreign_keys() -> str:
+        return f'{Pragma.PRAGMA.value} {Pragma.FOREIGN_KEYS.value}'
 
 
 class TableName(Valid):
