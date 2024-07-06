@@ -1,6 +1,6 @@
 """The Models
 
-The base and table models for a stash.
+The column and data models for keeping a stash.
 """
 from typing import Literal
 from datetime import datetime
@@ -33,7 +33,7 @@ class LiteStashStore(LiteStashData):
     The database storage class.  Defines all columns and column types in db.
     Only used by the Stash Manager and the database interface.
     """
-    hash_key: StrictStr | None = Field(default=None, unique=True, index=True)
+    key_hash: StrictStr | None = Field(default=None, unique=True, index=True)
     key: StrictStr = Field(default=None, unique=True, index=True)
     value: JSON = Field(default=None)
     date_created: datetime | None = Field(default=datetime.now())
