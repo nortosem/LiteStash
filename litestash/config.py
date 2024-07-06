@@ -13,7 +13,7 @@ class Valid(Enum):
 
 class StashSlots(Valid):
     """all slots for the LiteStash"""
-    DB = f'db'
+    DB_NAME = f'db_name'
     ENGINE = f'engine'
     METADATA = f'metadata'
     DB_SESSION = f'db_session'
@@ -96,24 +96,32 @@ class ColumnSetup(Valid):
     DATE_CREATED = f'date_created'
 
 
-class TableName(Valid):
-    """The Root of a Table Name
+class TableFiles(Valid):
+    """Table & File Names
 
-    Arg:
-        ROOT (str): LiteCache
+    Default file names for each group of tables.
+    And the sufficx for each table in database file.
     """
-    ROOT = f'LiteCache_'
+    ROOT = f'_hash'
 
-class Num(Valid):
-    """The numeric characters
 
-    For hashes that begin with a digit.
+class ZF_Tables(Valid):
+    """Zero to Four
+
+    The tables for hashes that start with zero, one, two, three, and four.
     """
     ZERO = f'0'
     ONE = f'1'
     TWO = f'2'
     THREE = f'3'
     FOUR = f'4'
+
+
+class FN_Tables(Valid):
+    """Five to Nine tables
+
+    The tables for hashes that start with five, six, seven, eight, and nine.
+    """
     FIVE = f'5'
     SIX = f'6'
     SEVEN = f'7'
@@ -121,10 +129,10 @@ class Num(Valid):
     NINE = f'9'
 
 
-class LowerCase(Valid):
-    """The Lowercase charaters
+class AM_Lower(Valid):
+    """am lower
 
-    For hashes that begin with lowercase letters.
+    For hashes that begin with lowercase letters a through m.
     """
     A = f'a'
     B = f'b'
@@ -139,6 +147,13 @@ class LowerCase(Valid):
     K = f'k'
     L = f'l'
     M = f'm'
+
+
+class NZ_Lower(Valid):
+    """nz lower
+
+    For hashes that begin with lowercase letters n through z.
+    """
     N = f'n'
     O = f'o'
     P = f'p'
@@ -154,10 +169,10 @@ class LowerCase(Valid):
     Z = f'z'
 
 
-class UpperCase(Valid):
-    """The Uppercase Characters
+class AM_Upper(Valid):
+    """AM Upper
 
-    For hashes that begin with an uppercase char.
+    For hashes that begin with uppercase letters A through M.
     """
     A = f'A'
     B = f'B'
@@ -172,6 +187,13 @@ class UpperCase(Valid):
     K = f'K'
     L = f'L'
     M = f'M'
+
+
+class NZ_Upper(Valid):
+    """NZ Upper
+
+    For hashes that begin with uppercase letters N through Z.
+    """
     N = f'N'
     O = f'O'
     P = f'P'
