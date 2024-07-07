@@ -25,8 +25,7 @@ class SetupDB(Valid):
     Provide the configuation to setup a database engine.
     """
     SQLITE = f'sqlite://'
-    FILENAME = f'litestash.db'
-    MEMORY = f':memory:'
+    DIR_NAME = f'litestash'
     ECHO = True
     FUTURE = True
     NO_ECHO = False
@@ -37,12 +36,8 @@ class SetupDB(Valid):
         return f'{SetupDB.SQLITE.value}'
 
     @staticmethod
-    def filename() -> str:
-        return f'{SetupDB.FILENAME.value}'
-
-    @staticmethod
-    def memory() -> str:
-        return f'{SetupDB.MEMORY.value}'
+    def dirname() -> str:
+        return f'{SetupDB.DIR_NAME.value}'
 
     @staticmethod
     def echo() -> str:
@@ -93,46 +88,136 @@ class ColumnSetup(Valid):
     HASH = f'key_hash'
     KEY = f'key'
     VALUE = f'value'
-    DATE_CREATED = f'date_created'
+    TIME = f'timedate'
 
 
-class TableFiles(Valid):
+class Names(Valid):
     """Table & File Names
 
-    Default file names for each group of tables.
-    And the sufficx for each table in database file.
+    Default filenames for each database.
+    And suffix for each table in database file.
     """
-    ROOT = f'_hash'
+    HASH = f'_hash'
+    ZFT = f'zft.db'
+    FNT = f'fnt.db'
+    AEL = f'ael.db'
+    FIL = f'fil.db'
+    JML = f'jml.db'
+    NRL = f'nrl.db'
+    SVL = f'svl.db'
+    WZL = f'wzl.db'
+    AEU = f'nzl.db'
+    FIU = f'amu.db'
+    JMU = f'nzu.db'
+    NRU = f'nru.db'
+    SVU = f'svu.db'
+    WZU = f'wzu.db'
 
 
-class ZF_Tables(Valid):
-    """Zero to Four
+    @staticmethod
+    def db_zft():
+        """Filename for database with hashes that start with 0-4"""
+        return f'{Names.ZFT.value}'
 
-    The tables for hashes that start with zero, one, two, three, and four.
+    @staticmethod
+    def db_fnt():
+        """Filename for database with hashes that start with 5-9"""
+        return f'{Names.FNT.value}'
+
+    @staticmethod
+    def db_ael():
+        """Filename for database with hashes that start with a-e"""
+        return f'{Names.AEL.value}'
+
+    @staticmethod
+    def db_fil():
+        """Filename for database with hashes that start with f-i"""
+        return f'{Names.FIL.value}'
+
+    @staticmethod
+    def db_jml():
+        """Filename for database with hashes that start with j-m"""
+        return f'{Names.JML.value}'
+
+    @staticmethod
+    def db_nrl():
+        """Filename for database with hashes that start with n-r"""
+        return f'{Names.NRL.value}'
+
+
+
+
+class Digitables(Valid)
+    """Digitables
+
+    The table prefix for hashes that start with a digit.
     """
     ZERO = f'0'
     ONE = f'1'
     TWO = f'2'
     THREE = f'3'
     FOUR = f'4'
-
-
-class FN_Tables(Valid):
-    """Five to Nine tables
-
-    The tables for hashes that start with five, six, seven, eight, and nine.
-    """
     FIVE = f'5'
     SIX = f'6'
     SEVEN = f'7'
     EIGHT = f'8'
     NINE = f'9'
 
+    @staticmethod
+    def zero() -> str:
+        """Get the full table name for hash[0:]"""
+        return f'{Digitables.ZERO.value}{Names.HASH.value}'
 
-class AM_Lower(Valid):
-    """am lower
+    @staticmethod
+    def one() -> str:
+        """Get the full table name for hash[1:]"""
+        return f'{Digitables.ONE.value}{Names.HASH.value}'
 
-    For hashes that begin with lowercase letters a through m.
+    @staticmethod
+    def two() -> str:
+        """Get the full table name for hash[2:]"""
+        return f'{Digitables.TWO.value}{Names.HASH.value}'
+
+    @staticmethod
+    def three() -> str:
+        """Get the full table name for hash[3:]"""
+        return f'{Digitables.THREE.value}{Names.HASH.value}'
+
+    @staticmethod
+    def four() -> str:
+        """Get the full table name for hash[4:]"""
+        return f'{Digitables.FOUR.value}{Names.HASH.value}'
+
+    @staticmethod
+    def five() -> str:
+        """Get the full table name for hash[5:]"""
+        return f'{Digitables.FIVE.value}{Names.HASH.value}'
+
+    @staticmethod
+    def six() -> str:
+        """Get the full table name for hash[6:]"""
+        return f'{Digitables.SIX.value}{Names.HASH.value}'
+
+    @staticmethod
+    def seven() -> str:
+        """Get the full table name for hash[7:]"""
+        return f'{Digitables.SEVEN.value}{Names.HASH.value}'
+
+    @staticmethod
+    def eight() -> str:
+        """Get the full table name for hash[8:]"""
+        return f'{Digitables.EIGHT.value}{Names.HASH.value}'
+
+    @staticmethod
+    def nine() -> str:
+        """Get the full table name for hash[9:]"""
+        return f'{Digitables.NINE.value}{Names.HASH.value}'
+
+
+class LowerTables(Valid):
+    """Lowertables
+
+    The table prefix for hashes that start with a lowercase letter.
     """
     A = f'a'
     B = f'b'
@@ -147,13 +232,6 @@ class AM_Lower(Valid):
     K = f'k'
     L = f'l'
     M = f'm'
-
-
-class NZ_Lower(Valid):
-    """nz lower
-
-    For hashes that begin with lowercase letters n through z.
-    """
     N = f'n'
     O = f'o'
     P = f'p'
@@ -168,11 +246,141 @@ class NZ_Lower(Valid):
     Y = f'y'
     Z = f'z'
 
+    @staticmethod
+    def a_low() -> str:
+        """Get the full table name for hash[a:]"""
+        return f'{LowerTables.A.value}{Names.HASH.value}'
 
-class AM_Upper(Valid):
-    """AM Upper
+    @staticmethod
+    def b_low() -> str:
+        """Get the full table name for hash[b:]"""
+        return f'{LowerTables.B.value}{Names.HASH.value}'
 
-    For hashes that begin with uppercase letters A through M.
+    @staticmethod
+    def c_low() -> str:
+        """Get the full table name for hash[c:]"""
+        return f'{LowerTables.C.value}{Names.HASH.value}'
+
+    @staticmethod
+    def d_low() -> str:
+        """Get the full table name for hash[d:]"""
+        return f'{LowerTables.D.value}{Names.HASH.value}'
+
+    @staticmethod
+    def e_low() -> str:
+        """Get the full table name for hash[e:]"""
+        return f'{LowerTables.E.value}{Names.HASH.value}'
+
+    @staticmethod
+    def f_low() -> str:
+        """Get the full table name for hash[f:]"""
+        return f'{LowerTables.F.value}{Names.HASH.value}'
+
+    @staticmethod
+    def g_low() -> str:
+        """Get the full table name for hash[g:]"""
+        return f'{LowerTables.G.value}{Names.HASH.value}'
+
+    @staticmethod
+    def h_low() -> str:
+        """Get the full table name for hash[h:]"""
+        return f'{LowerTables.H.value}{Names.HASH.value}'
+
+    @staticmethod
+    def i_low() -> str:
+        """Get the full table name for hash[i:]"""
+        return f'{LowerTables.I.value}{Names.HASH.value}'
+
+    @staticmethod
+    def j_low() -> str:
+        """Get the full table name for hash[j:]"""
+        return f'{LowerTables.J.value}{Names.HASH.value}'
+
+    @staticmethod
+    def k_low() -> str:
+        """Get the full table name for hash[k:]"""
+        return f'{LowerTables.K.value}{Names.HASH.value}'
+
+    @staticmethod
+    def l_low() -> str:
+        """Get the full table name for hash[l:]"""
+        return f'{LowerTables.L.value}{Names.HASH.value}'
+
+    @staticmethod
+    def m_low() -> str:
+        """Get the full table name for hash[m:]"""
+        return f'{LowerTables.M.value}{Names.HASH.value}'
+
+    @staticmethod
+    def n_low() -> str:
+        """Get the full table name for hash[n:]"""
+        return f'{LowerTables.N.value}{Names.HASH.value}'
+
+    @staticmethod
+    def o_low() -> str:
+        """Get the full table name for hash[o:]"""
+        return f'{LowerTables.O.value}{Names.HASH.value}'
+
+    @staticmethod
+    def p_low() -> str:
+        """Get the full table name for hash[p:]"""
+        return f'{LowerTables.P.value}{Names.HASH.value}'
+
+    @staticmethod
+    def q_low() -> str:
+        """Get the full table name for hash[q:]"""
+        return f'{LowerTables.Q.value}{Names.HASH.value}'
+
+    @staticmethod
+    def r_low() -> str:
+        """Get the full table name for hash[r:]"""
+        return f'{LowerTables.R.value}{Names.HASH.value}'
+
+    @staticmethod
+    def s_low()v -> str:
+        """Get the full table name for hash[s:]"""
+        return f'{LowerTables.S.value}{Names.HASH.value}'
+
+    @staticmethod
+    def t_low() -> str:
+        """Get the full table name for hash[t:]"""
+        return f'{LowerTables.T.value}{Names.HASH.value}'
+
+    @staticmethod
+    def u_low() -> str:
+        """Get the full table name for hash[u:]"""
+        return f'{LowerTables.U.value}{Names.HASH.value}'
+
+    @staticmethod
+    def v_low() -> str:
+        """Get the full table name for hash[v:]"""
+        return f'{LowerTables.V.value}{Names.HASH.value}'
+
+    @staticmethod
+    def w_low() -> str:
+        """Get the full table name for hash[w:]"""
+        return f'{LowerTables.W.value}{Names.HASH.value}'
+
+    @staticmethod
+    def x_low() -> str:
+        """Get the full table name for hash[x:]"""
+        return f'{LowerTables.X.value}{Names.HASH.value}'
+
+    @staticmethod
+    def y_low() -> str:
+        """Get the full table name for hash[y:]"""
+        return f'{LowerTables.Y.value}{Names.HASH.value}'
+
+    @staticmethod
+    def z_low() -> str:
+        """Get the full table name for hash[z:]"""
+        return f'{LowerTables.Z.value}{Names.HASH.value}'
+
+
+class Uppertables(Valid):
+    """Uppertables
+
+    The table prefix for hashes that start with an uppercase letter.
     """
     A = f'A'
     B = f'B'
@@ -187,13 +395,6 @@ class AM_Upper(Valid):
     K = f'K'
     L = f'L'
     M = f'M'
-
-
-class NZ_Upper(Valid):
-    """NZ Upper
-
-    For hashes that begin with uppercase letters N through Z.
-    """
     N = f'N'
     O = f'O'
     P = f'P'
@@ -207,3 +408,134 @@ class NZ_Upper(Valid):
     X = f'X'
     Y = f'Y'
     Z = f'Z'
+
+
+    @staticmethod
+    def A_upper() -> str:
+        """Get the full table name for hash[A:]"""
+        return f'{LowerTables.A.value}{Names.HASH.value}'
+
+    @staticmethod
+    def B_upper() -> str:
+        """Get the full table name for hash[B:]"""
+        return f'{LowerTables.B.value}{Names.HASH.value}'
+
+    @staticmethod
+    def c_upper() -> str:
+        """Get the full table name for hash[C:]"""
+        return f'{LowerTables.C.value}{Names.HASH.value}'
+
+    @staticmethod
+    def d_upper() -> str:
+        """Get the full table name for hash[D:]"""
+        return f'{LowerTables.D.value}{Names.HASH.value}'
+
+    @staticmethod
+    def e_upper() -> str:
+        """Get the full table name for hash[E:]"""
+        return f'{LowerTables.E.value}{Names.HASH.value}'
+
+    @staticmethod
+    def f_upper() -> str:
+        """Get the full table name for hash[F:]"""
+        return f'{LowerTables.F.value}{Names.HASH.value}'
+
+    @staticmethod
+    def g_upper() -> str:
+        """Get the full table name for hash[G:]"""
+        return f'{LowerTables.G.value}{Names.HASH.value}'
+
+    @staticmethod
+    def h_upper() -> str:
+        """Get the full table name for hash[H:]"""
+        return f'{LowerTables.H.value}{Names.HASH.value}'
+
+    @staticmethod
+    def i_upper() -> str:
+        """Get the full table name for hash[I:]"""
+        return f'{LowerTables.I.value}{Names.HASH.value}'
+
+    @staticmethod
+    def j_upper() -> str:
+        """Get the full table name for hash[J:]"""
+        return f'{LowerTables.J.value}{Names.HASH.value}'
+
+    @staticmethod
+    def k_upper() -> str:
+        """Get the full table name for hash[K:]"""
+        return f'{LowerTables.K.value}{Names.HASH.value}'
+
+    @staticmethod
+    def l_upper() -> str:
+        """Get the full table name for hash[L:]"""
+        return f'{LowerTables.L.value}{Names.HASH.value}'
+
+    @staticmethod
+    def m_upper() -> str:
+        """Get the full table name for hash[M:]"""
+        return f'{LowerTables.M.value}{Names.HASH.value}'
+
+    @staticmethod
+    def n_upper() -> str:
+        """Get the full table name for hash[N:]"""
+        return f'{LowerTables.N.value}{Names.HASH.value}'
+
+    @staticmethod
+    def o_upper() -> str:
+        """Get the full table name for hash[O:]"""
+        return f'{LowerTables.O.value}{Names.HASH.value}'
+
+    @staticmethod
+    def p_upper() -> str:
+        """Get the full table name for hash[P:]"""
+        return f'{LowerTables.P.value}{Names.HASH.value}'
+
+    @staticmethod
+    def q_upper() -> str:
+        """Get the full table name for hash[Q:]"""
+        return f'{LowerTables.Q.value}{Names.HASH.value}'
+
+    @staticmethod
+    def r_upper() -> str:
+        """Get the full table name for hash[R:]"""
+        return f'{LowerTables.R.value}{Names.HASH.value}'
+
+    @staticmethod
+    def s_upper()v -> str:
+        """Get the full table name for hash[S:]"""
+        return f'{LowerTables.S.value}{Names.HASH.value}'
+
+    @staticmethod
+    def t_upper() -> str:
+        """Get the full table name for hash[T:]"""
+        return f'{LowerTables.T.value}{Names.HASH.value}'
+
+    @staticmethod
+    def u_upper() -> str:
+        """Get the full table name for hash[U:]"""
+        return f'{LowerTables.U.value}{Names.HASH.value}'
+
+    @staticmethod
+    def v_upper() -> str:
+        """Get the full table name for hash[V:]"""
+        return f'{LowerTables.V.value}{Names.HASH.value}'
+
+    @staticmethod
+    def w_upper() -> str:
+        """Get the full table name for hash[W:]"""
+        return f'{LowerTables.W.value}{Names.HASH.value}'
+
+    @staticmethod
+    def x_upper() -> str:
+        """Get the full table name for hash[X:]"""
+        return f'{LowerTables.X.value}{Names.HASH.value}'
+
+    @staticmethod
+    def y_upper() -> str:
+        """Get the full table name for hash[Y:]"""
+        return f'{LowerTables.Y.value}{Names.HASH.value}'
+
+    @staticmethod
+    def z_upper() -> str:
+        """Get the full table name for hash[Z:]"""
+        return f'{LowerTables.Z.value}{Names.HASH.value}'
