@@ -2,53 +2,71 @@
 
 
 """
+import orjson
+from os import getcwd
+from hashlib import blake2b
+from pathlib import Path
+from litestash.config import Utils
 from litestash.config import TableName
-from litestash.config import Num
-from litestash.config import LowerCase
-from litestash.config import UpperCase
+from litestash.config import Digitables
+from litestash.config import LowerTables
+from litestash.config import UpperTables
 from litestash.config import SetupDB
 from litestash.config import ColumnSetup
 from litestash.models import StashColumns
-from sqlalchemy.schema import Table
-from sqlalchemy.schema import Metadata
+from sqlalchemy.orm.session import sessionmaker
+from sqlalchemy.orm.session import Session
+from sqlalchemy import Table
+from sqlalchemy import Column
+from sqlalchemy import Metadata
 from sqlalchemy import Integer
 from sqlalchemy import Text
 from sqlalchemy import JSON
 from typing import Generator
 
-def setupDB_file(db: str | None):
+
+def setup_db_file(db: str | None):
     """Setup Database file
 
     Prepare default cache file, or custom name.
     TODO: Path customize && check
     """
-    pass
-
-
-def setupDB_memory():
-    """Setup in memory temporary database."""
-    pass
+    if db is None:
+        return
+    return
 
 
 def setupDB(db: str | None):
     """Handle correct setupDB function call"""
-    if db is None:
-        return setupDB_memory()
     return setupDB_file(db)
 
 
-def mk_id() -> Column:
-    """Return the unique id column"""
-    return StashColumns.column(
-        ColumnSetup.ROW_ID.value,
-        Integer,
-        primary_key=True
+def setup_engine(engine_name: str) -> Engine:
+    """Setup up engine"""
+    return create_engine(
+        f'{SetupDB.sqlite()}{getcwd()}{SetupDB.filename()}',
+        echo=SetupDB.echo.value
     )
 
 
-def mk_hash() -> Column:
+def setup_session(engine: Engine):
+    """Setup a session"""
+    return sessionmaker(bind=self.engine)
+
+
+def hash_key(key: str) -> str:
+    """Get the hashed str for given key"""
+    return blake2b(key.encode(), digest_size=Utils.SIZE.value).hexdigest()
+
+def get_hash_table(key: str): -> ?:
+    """Given a hashed key return the table and database for the hash."""
+    table_name = ''
+    db_name = ''
+
+
+def mk_hash_column() -> Column:
     """Return a Column for the hash"""
-    return     return StashColumns.column(
+    return StashColumns.column(
         ColumnSetup.HASH.value,
         Text,
         index=True,
@@ -57,7 +75,7 @@ def mk_hash() -> Column:
     )
 
 
-def mk_key() -> Column:
+def mk_key_column() -> Column:
     """Return a Column for the key being stored."""
     return StashColumns.column(
         ColumnSetup.KEY.value,
@@ -68,7 +86,7 @@ def mk_key() -> Column:
     )
 
 
-def mk_value() -> Column:
+def mk_value_column() -> Column:
     """Return a Column for the value being stored."""
     return StashColumns.column(
         ColumnSetup.VALUE.value,
@@ -77,7 +95,7 @@ def mk_value() -> Column:
     )
 
 
-def mk_date_created() -> Column:
+def mk_date_column() -> Column:
     """Return a Column for the date the data was added."""
     return StashColumns.get_column(
         ColumnSetup.DATE_CREATED.value,
@@ -92,7 +110,6 @@ def mk_columns() -> Generator[Column, None, None]:
     Return a generator for all columns used in each table.
     """
     for column in (
-        mk_id(),
         mk_hash(),
         mk_key(),
         mk_val(),
@@ -109,7 +126,7 @@ def mk_table_names() -> Generator[str, None, None]:
     """
     for chars in (Num,LowerCase,UpperCase):
         for suffix in chars:
-           yield f'{TableName.ROOT.value}{suffix.value}'
+            yield f'{TableName.ROOT.value}{suffix.value}'
 
 
 def mk_tables(metadata: Metadata) -> Generator[Table, None, None]:
