@@ -1,22 +1,54 @@
 """Package Configuration
 
 The config module enumerates the common required strings.
+#from pydantic import ValidationError, validator
 """
 from enum import Enum
-from enum import unique
-from typing import Self
 
 class Valid(Enum):
     """Valid Root"""
     pass
 
 
+class Utils(Valid):
+    """Defaults for util functions"""
+    SIZE = 17
+
+
+class DataScheme(Valid):
+    """LiteStashData Scheme
+
+    Define the config and schema for the data transfer object.
+    """
+    TITLE = 'Data'
+    DESCRIPTION = 'The key name and JSON data for the given key.'
+    MIN_LENGTH = 4
+    MAX_LENGTH = 256
+    FORBID_EXTRA = 'forbid'
+
+
+class MetaSlots(Valid):
+    """Slots for the LiteStashMetadata"""
+    ZFD = 'zfd'
+    FND = 'fnd'
+    AEL = 'ael'
+    FIL = 'fil'
+    JML = 'jml'
+    NRL = 'nrl'
+    SVL = 'svl'
+    WZL = 'wzl'
+    AEU = 'nzl'
+    FIU = 'amu'
+    JMU = 'jmu'
+    NRU = 'nru'
+    SVU = 'svu'
+    WZU = 'wzu'
+
 class StashSlots(Valid):
     """all slots for the LiteStash"""
-    DB_NAME = f'db_name'
-    ENGINE = f'engine'
-    METADATA = f'metadata'
-    DB_SESSION = f'db_session'
+    ENGINE = 'engine'
+    METADATA = 'metadata'
+    DB_SESSION = 'db_session'
 
 
 class SetupDB(Valid):
@@ -24,8 +56,8 @@ class SetupDB(Valid):
 
     Provide the configuation to setup a database engine.
     """
-    SQLITE = f'sqlite://'
-    DIR_NAME = f'litestash'
+    SQLITE = 'sqlite://'
+    DIR_NAME = 'litestash'
     ECHO = True
     FUTURE = True
     NO_ECHO = False
@@ -61,10 +93,10 @@ class Pragma(Valid):
 
     The default pragma configuration.
     """
-    PRAGMA = f'PRAGMA'
-    JOURNAL_MODE = f'journal_mode=WAL'
-    SYNCHRONOUS = f'synchronous=NORMAL'
-    FOREIGN_KEYS = f'foreign_keys=ON'
+    PRAGMA = 'PRAGMA'
+    JOURNAL_MODE = 'journal_mode=WAL'
+    SYNCHRONOUS = 'synchronous=NORMAL'
+    FOREIGN_KEYS = 'foreign_keys=ON'
 
     @staticmethod
     def journal_mode() -> str:
@@ -84,45 +116,43 @@ class ColumnSetup(Valid):
 
     Define the column attributes for each table
     """
-    ROW_ID = f'rowid'
-    HASH = f'key_hash'
-    KEY = f'key'
-    VALUE = f'value'
-    TIME = f'timedate'
+    HASH = 'key_hash'
+    KEY = 'key'
+    VALUE = 'value'
+    TIME = 'timedate'
 
 
 class Names(Valid):
-    """Table & File Names
+    """Database filenames
 
     Default filenames for each database.
-    And suffix for each table in database file.
+    Also the Table name suffix as HASH
     """
-    HASH = f'_hash'
-    ZFT = f'zft.db'
-    FNT = f'fnt.db'
-    AEL = f'ael.db'
-    FIL = f'fil.db'
-    JML = f'jml.db'
-    NRL = f'nrl.db'
-    SVL = f'svl.db'
-    WZL = f'wzl.db'
-    AEU = f'nzl.db'
-    FIU = f'amu.db'
-    JMU = f'nzu.db'
-    NRU = f'nru.db'
-    SVU = f'svu.db'
-    WZU = f'wzu.db'
-
+    HASH = '_hash'
+    ZFD = 'zfd.db'
+    FND = 'fnd.db'
+    AEL = 'ael.db'
+    FIL = 'fil.db'
+    JML = 'jml.db'
+    NRL = 'nrl.db'
+    SVL = 'svl.db'
+    WZL = 'wzl.db'
+    AEU = 'nzl.db'
+    FIU = 'amu.db'
+    JMU = 'jmu.db'
+    NRU = 'nru.db'
+    SVU = 'svu.db'
+    WZU = 'wzu.db'
 
     @staticmethod
     def db_zft():
         """Filename for database with hashes that start with 0-4"""
-        return f'{Names.ZFT.value}'
+        return f'{Names.ZFD.value}'
 
     @staticmethod
     def db_fnt():
         """Filename for database with hashes that start with 5-9"""
-        return f'{Names.FNT.value}'
+        return f'{Names.FND.value}'
 
     @staticmethod
     def db_ael():
@@ -144,24 +174,44 @@ class Names(Valid):
         """Filename for database with hashes that start with n-r"""
         return f'{Names.NRL.value}'
 
+    @staticmethod
+    def db_svl():
+        """Filename for database with hashes that start with s-v"""
+        return f'{Names.SVL.value}'
+
+    @staticmethod
+    def db_wzl():
+        """Filename for database with hashes that start with w-z"""
+        return f'{Names.WZL.value}'
 
 
-
-class Digitables(Valid)
+class Digitables(Valid):
     """Digitables
 
     The table prefix for hashes that start with a digit.
     """
-    ZERO = f'0'
-    ONE = f'1'
-    TWO = f'2'
-    THREE = f'3'
-    FOUR = f'4'
-    FIVE = f'5'
-    SIX = f'6'
-    SEVEN = f'7'
-    EIGHT = f'8'
-    NINE = f'9'
+    ZERO = '0'
+    ONE = '1'
+    TWO = '2'
+    THREE = '3'
+    FOUR = '4'
+    ZFT = (f'{ZERO}',
+            f'{ONE}',
+            f'{TWO}',
+            f'{THREE}',
+            f'{FOUR}'
+           )
+    FIVE = '5'
+    SIX = '6'
+    SEVEN = '7'
+    EIGHT = '8'
+    NINE = '9'
+    FND = (f'{FIVE}',
+           f'{SIX}',
+           f'{SEVEN}',
+           f'{EIGHT}',
+           f'{NINE}'
+          )
 
     @staticmethod
     def zero() -> str:
@@ -219,32 +269,32 @@ class LowerTables(Valid):
 
     The table prefix for hashes that start with a lowercase letter.
     """
-    A = f'a'
-    B = f'b'
-    C = f'c'
-    D = f'd'
-    E = f'e'
-    F = f'f'
-    G = f'g'
-    H = f'h'
-    I = f'i'
-    J = f'j'
-    K = f'k'
-    L = f'l'
-    M = f'm'
-    N = f'n'
-    O = f'o'
-    P = f'p'
-    Q = f'q'
-    R = f'r'
-    S = f's'
-    T = f't'
-    U = f'u'
-    V = f'v'
-    W = f'w'
-    X = f'x'
-    Y = f'y'
-    Z = f'z'
+    A = 'a'
+    B = 'b'
+    C = 'c'
+    D = 'd'
+    E = 'e'
+    F = 'f'
+    G = 'g'
+    H = 'h'
+    I = 'i'
+    J = 'j'
+    K = 'k'
+    L = 'l'
+    M = 'm'
+    N = 'n'
+    O = 'o'
+    P = 'p'
+    Q = 'q'
+    R = 'r'
+    S = 's'
+    T = 't'
+    U = 'u'
+    V = 'v'
+    W = 'w'
+    X = 'x'
+    Y = 'y'
+    Z = 'z'
 
     @staticmethod
     def a_low() -> str:
@@ -337,7 +387,7 @@ class LowerTables(Valid):
         return f'{LowerTables.R.value}{Names.HASH.value}'
 
     @staticmethod
-    def s_low()v -> str:
+    def s_low() -> str:
         """Get the full table name for hash[s:]"""
         return f'{LowerTables.S.value}{Names.HASH.value}'
 
@@ -382,33 +432,32 @@ class Uppertables(Valid):
 
     The table prefix for hashes that start with an uppercase letter.
     """
-    A = f'A'
-    B = f'B'
-    C = f'C'
-    D = f'D'
-    E = f'E'
-    F = f'F'
-    G = f'G'
-    H = f'H'
-    I = f'I'
-    J = f'J'
-    K = f'K'
-    L = f'L'
-    M = f'M'
-    N = f'N'
-    O = f'O'
-    P = f'P'
-    Q = f'Q'
-    R = f'R'
-    S = f'S'
-    T = f'T'
-    U = f'U'
-    V = f'V'
-    W = f'W'
-    X = f'X'
-    Y = f'Y'
-    Z = f'Z'
-
+    A = 'A'
+    B = 'B'
+    C = 'C'
+    D = 'D'
+    E = 'E'
+    F = 'F'
+    G = 'G'
+    H = 'H'
+    I = 'I'
+    J = 'J'
+    K = 'K'
+    L = 'L'
+    M = 'M'
+    N = 'N'
+    O = 'O'
+    P = 'P'
+    Q = 'Q'
+    R = 'R'
+    S = 'S'
+    T = 'T'
+    U = 'U'
+    V = 'V'
+    W = 'W'
+    X = 'X'
+    Y = 'Y'
+    Z = 'Z'
 
     @staticmethod
     def A_upper() -> str:
@@ -501,7 +550,7 @@ class Uppertables(Valid):
         return f'{LowerTables.R.value}{Names.HASH.value}'
 
     @staticmethod
-    def s_upper()v -> str:
+    def s_upper() -> str:
         """Get the full table name for hash[S:]"""
         return f'{LowerTables.S.value}{Names.HASH.value}'
 
