@@ -4,39 +4,54 @@ The column and data models for keeping a stash.
 """
 from typing import Literal
 from datetime import datetime
+import orjson
 from pydantic import Json
 from pydantic import StrictStr
-from pydantic import StrictInt
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 from sqlalchemy import Integer
 from sqlalchemy import Text
 from sqlalchemy import JSON
 from sqlalchemy.schema import Column
-from typing import Literal
+from litestash.config import DataScheme
 
-
-@dataclass(slots=True)
+@dataclass(frozen=True, slots=True)
 class LiteStashData:
     """The LiteStash Data
 
     This class defines a class of data for use with the LiteStash database.
     """
-    key: StrictStr
-    value: Json
+    key: StrictStr = Field(...,
+                           min_length=DataScheme.MIN_LENGTH.value,
+                           max_length=DataScheme.MAX_LENGTH.value,
+                     )
+    value: Json | None = Field(default=None)
 
+    class Config:
+        """Define data config attributes"""
+        orm_mode = False
+        extra = f'{DataScheme.FORBID_EXTRA.value}'
+        json_loads = orjson.loads
+        json_dumps = orjson_dumps
 
 @dataclass(slots=True)
-class LiteStashStore(LiteStashData):
+class LiteStashStore:
     """LiteStash Database Fields
 
     The database storage class.  Defines all columns and column types in db.
     Only used by the Stash Manager and the database interface.
     """
-    key_hash: StrictStr | None = Field(default=None, unique=True, index=True)
-    key: StrictStr = Field(default=None, unique=True, index=True)
-    value: JSON = Field(default=None)
-    date_created: datetime | None = Field(default=datetime.now())
+    key_hash: StrictStr = Field(..., primary_key=True, index=True)
+    key: StrictStr = Field(..., unique=True, index=True)
+    value: Json= Field(...)
+    time: datetime | None = Field(default=datetime.now())
+
+    class Config:
+        """LiteStashStore Config"""
+        orm_mode = True
+        extra = f'{DataScheme.FORBID_EXTRA.value}'
+        json_loads = orjson.loads
+        json_dumps = orjson_dumps
 
 
 @dataclass(slots=True)
