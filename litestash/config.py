@@ -11,7 +11,10 @@ class Valid(Enum):
 
 
 class Utils(Valid):
-    """Defaults for util functions"""
+    """Defaults for util functions
+
+    SIZE (int): digest_size for hash_key
+    """
     SIZE = 17
 
 
@@ -25,6 +28,14 @@ class DataScheme(Valid):
     MIN_LENGTH = 4
     MAX_LENGTH = 256
     FORBID_EXTRA = 'forbid'
+
+
+class EngineStash(Valid):
+    """"""
+    TYPE_NAME = 'StashEngine'
+    DB_NAME = 'db_name'
+    ENGINE = 'engine'
+    VALUE_ERROR = 'No such engine found'
 
 
 class MetaSlots(Valid):
