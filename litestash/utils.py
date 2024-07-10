@@ -109,7 +109,7 @@ def check_key(key: str) -> bytes:
         raise ValueError(DataScheme.ASCII_ERROR.value)
 
 
-def hash_key(key: str) -> str:
+def hash_key(key: str) -> bytes:
     """Get the hashed str bytes for a key"""
     return blake2b(key, digest_size=Utils.SIZE.value).hexdigest().encode()
 
