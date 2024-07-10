@@ -44,10 +44,11 @@ def setup_engine(engine_name: str) -> Engine:
                 )
             )
 
-StashEngine = namedtuple(EngineStash.TYPE_NAME.value,
-                         [EngineStash.DB_NAME.value,
-                          EngineStash.ENGINE.value]
-                         )
+StashEngine = namedtuple(
+    EngineStash.TYPE_NAME.value,
+    [EngineStash.DB_NAME.value,
+    EngineStash.ENGINE.value]
+)
 StashEngine.__doc__ = EngineStash.DOC.value
 
 
@@ -65,10 +66,11 @@ def setup_metadata(stash: LiteStashEngine, slot: str):
     return (name, metadata)
 
 
-StashMeta = namedtuple(MetaStash.TYPE_NAME.value,
-                                 [MetaStash.DB_NAME.value,
-                                  MetaStash.METADATA.value]
-                                )
+StashMeta = namedtuple(
+    MetaStash.TYPE_NAME.value,
+    [MetaStash.DB_NAME.value,
+    MetaStash.METADATA.value]
+)
 StashMeta.__doc__ = MetaStash.DOC.value
 
 
@@ -89,10 +91,11 @@ def setup_sessions(stash: LiteStashEngine, slot: str):
     return (name, session)
 
 
-StashSession = namedtuple(Sessionstash.TYPE_NAME.value,
-                                 [SessionStash.DB_NAME.value,
-                                  SessionStash.SESSION.value]
-                                )
+StashSession = namedtuple(
+    Sessionstash.TYPE_NAME.value,
+    [SessionStash.DB_NAME.value,
+    SessionStash.SESSION.value]
+)
 StashSession.__doc__ = SessionStash.DOC.value
 
 def check_key(key: str) -> bytes:
@@ -126,7 +129,7 @@ def mk_hash_column() -> Column:
     """Return a Column for the hash"""
     return StashColumns.column(
         ColumnSetup.HASH.value,
-        Text,
+        BLOB,
         index=True,
         unique=True,
         nullable=False
@@ -137,7 +140,7 @@ def mk_key_column() -> Column:
     """Return a Column for the key being stored."""
     return StashColumns.column(
         ColumnSetup.KEY.value,
-        Text,
+        BLOB,
         unique=True,
         index=True,
         nullable=False
