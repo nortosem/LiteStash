@@ -9,7 +9,7 @@ from pydantic import Json
 from pydantic import StrictStr
 from pydantic import Field
 from pydantic.dataclasses import dataclass
-from sqlalchemy import Integer
+from sqlalchemy import BLOB
 from sqlalchemy import Text
 from sqlalchemy import JSON
 from sqlalchemy.schema import Column
@@ -32,7 +32,7 @@ class LiteStashData:
         orm_mode = False
         extra = f'{DataScheme.FORBID_EXTRA.value}'
         json_loads = orjson.loads
-        json_dumps = orjson_dumps
+        json_dumps = orjson.dumps
 
 @dataclass(slots=True)
 class LiteStashStore:
@@ -41,8 +41,8 @@ class LiteStashStore:
     The database storage class.  Defines all columns and column types in db.
     Only used by the Stash Manager and the database interface.
     """
-    key_hash: StrictStr = Field(..., primary_key=True, index=True)
-    key: StrictStr = Field(..., unique=True, index=True)
+    key_hash: StrictBytes = Field(..., primary_key=True, index=True)
+    key: StrictBytes = Field(..., unique=True, index=True)
     value: Json= Field(...)
     time: datetime | None = Field(default=datetime.now())
 
@@ -51,7 +51,7 @@ class LiteStashStore:
         orm_mode = True
         extra = f'{DataScheme.FORBID_EXTRA.value}'
         json_loads = orjson.loads
-        json_dumps = orjson_dumps
+        json_dumps = orjson.dumps
 
 
 @dataclass(slots=True)
@@ -63,7 +63,7 @@ class StashColumns:
     TODO
     """
     name: str
-    type_: Literal[Text,Integer,JSON]
+    type_: Literal[BLOB,JSON]
     primary_key: bool = False
     index: bool = False
     unique: bool = False
