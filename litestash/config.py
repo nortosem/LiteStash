@@ -35,7 +35,27 @@ class EngineStash(Valid):
     TYPE_NAME = 'StashEngine'
     DB_NAME = 'db_name'
     ENGINE = 'engine'
+    DOC = '''Defines a named tuple for tuple returned by utils.setup_engine.
+    Attributes:
+        db_name (str): name of the database for this engine
+        engine (Engine): the sqlalchemy engine itself
+    '''
     VALUE_ERROR = 'No such engine found'
+
+
+class MetaStash(Valid):
+    """"""
+    TYPE_NAME = 'StashMeta'
+    DB_NAME = f'{EngineStash.DB_NAME.value}'
+    METADATA = 'metadata'
+    DOC = '''todo'''
+
+class SessionStash(Valid):
+    """"""
+    TYPE_NAME = 'StashSession'
+    DB_NAME = f'{EngineStash.DB_NAME.value}'
+    SESSION = 'session'
+    VALUE_ERROR = 'Invalid database: no tables found'
 
 
 class MetaSlots(Valid):
