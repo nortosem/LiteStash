@@ -6,7 +6,7 @@ from typing import Literal
 from datetime import datetime
 import orjson
 from pydantic import Json
-from pydantic import StrictStr
+from pydantic import StrictBytes
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 from sqlalchemy import BLOB
@@ -21,10 +21,11 @@ class LiteStashData:
 
     This class defines a class of data for use with the LiteStash database.
     """
-    key: StrictStr = Field(...,
-                           min_length=DataScheme.MIN_LENGTH.value,
-                           max_length=DataScheme.MAX_LENGTH.value,
-                     )
+    key: StrictBytes = Field(
+        ...,
+        min_length=DataScheme.MIN_LENGTH.value,
+        max_length=DataScheme.MAX_LENGTH.value,
+    )
     value: Json | None = Field(default=None)
 
     class Config:
