@@ -31,7 +31,7 @@ class DataScheme(Valid):
 
 
 class EngineStash(Valid):
-    """"""
+    """The namedtuple config for all engine attributes of a LiteStash"""
     TYPE_NAME = 'StashEngine'
     DB_NAME = 'db_name'
     ENGINE = 'engine'
@@ -44,14 +44,14 @@ class EngineStash(Valid):
 
 
 class MetaStash(Valid):
-    """"""
+    """The namedtuple config for all metadata attributes of a LiteStash"""
     TYPE_NAME = 'StashMeta'
     DB_NAME = f'{EngineStash.DB_NAME.value}'
     METADATA = 'metadata'
     DOC = '''todo'''
 
 class SessionStash(Valid):
-    """"""
+    """The namedtuple config for all session attribues of a LiteStash """
     TYPE_NAME = 'StashSession'
     DB_NAME = f'{EngineStash.DB_NAME.value}'
     SESSION = 'session'
@@ -68,8 +68,8 @@ class MetaSlots(Valid):
     NRL = 'nrl'
     SVL = 'svl'
     WZL = 'wzl'
-    AEU = 'nzl'
-    FIU = 'amu'
+    AEU = 'aeu'
+    FIU = 'fiu'
     JMU = 'jmu'
     NRU = 'nru'
     SVU = 'svu'
@@ -435,7 +435,7 @@ class LowerTables(Valid):
     @staticmethod
     def u_low() -> str:
         """Get the full table name for hash[u:]"""
-          return f'{LowerTables.U.value}{Names.HASH.value}'
+        return f'{LowerTables.U.value}{Names.HASH.value}'
 
     @staticmethod
     def v_low() -> str:
@@ -463,7 +463,7 @@ class LowerTables(Valid):
         return f'{LowerTables.Z.value}{Names.HASH.value}'
 
 
-class Uppertables(Valid):
+class UpperTables(Valid):
     """Uppertables
 
     The table prefix for hashes that start with an uppercase letter.
