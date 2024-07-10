@@ -3,11 +3,12 @@
 Define the LiteStash key-value database object.
 LiteStash is a text key with JSON value key value store.
 """
-from pathlib import Path
-from collections import namedtuple
-#from litestash.model import
-from litestash.utils import mk_hash
+from litestash.model import LiteStashData
+#from litestash.utils import mk_hash
 from litestash.utils import setup_engine
+from litestash.utils import setup_metadata
+from litestash.utils import setup_sessions
+from litestash.utils import setup_fts
 from litestash.utils import hash_key
 from litestash.utils import check_key
 from litestash.config import Pragma
@@ -16,13 +17,7 @@ from litestash.config import MetaSlots
 from litestash.utils import StashEngine
 from litestash.utils import StashMeta
 from litestash.utils import StashSession
-from litestash.config import EngineStash
-from litestash.config import MetaStash
-from litestash.config import SessionStash
 from sqlalchemy import event
-from sqlalchemy.engine import Engine
-from sqlalchemy.schema import Metadata
-from sqlalchemy.orm import Session
 from pydantic import ValidationError
 
 class LiteStash:
@@ -46,7 +41,7 @@ class LiteStash:
         self.db_session = LiteStashSession(self.engine)
 
 
-    def set(self, key: , value: ) -> None:
+    def set(self, key: str, value: str) -> None:
         """LiteStash Key Setter
 
         Add a new key to the database.
@@ -59,26 +54,18 @@ class LiteStash:
 
         Given a key return the value stored.
         """
-        key = check_key(key)
         key_data = ''
+
         try:
-            dto = LiteStashData(key=key)
+            dto = LiteStashData(key=check_key(key))
         except ValidationError as e:
-            raise ValidationError(f"Invalid key: {e}")
+            print(f'Invalid key: {e}')
 
         hashed_key = hash_key(dto.key)
-
-
-
-    def import(self, ) -> None:
-        """"""
         pass
 
-    def export(self, ) -> json:
-        """"""
-        pass
 
-    def delete(self) -> bool:
+    def delete(self):
         """LiteStash Delete
 
         Remove a give key and its value from the database.
@@ -86,7 +73,7 @@ class LiteStash:
         pass
 
     def keys(self) -> Generator[tuple(str)]:
-        """"""
+        """ListStash Keys"""
         pass
 
     def values(self) -> Generator[tuple([str,str])]:
@@ -102,11 +89,11 @@ class LiteStash:
         pass
 
     def __repr__(self) -> str:
-        """"""""
+        """Detailed string representation"""
         pass
 
     def __str__(self) -> str:
-        """"""
+        """Quick and minimal string"""
         pass
 
 
@@ -114,10 +101,11 @@ class LiteStashEngine:
     """LiteStash Engine
 
     Each database file defines its own dedicated sqlalchemy engine.
-    The LiteStashEngine class encapsualtes the setup and access to these engines.
+    The LiteStashEngine class encapsulates the setup
+    and access to these engines.
     """
-    __slots__ = (MetaSlots.ZFN.value,
-                 MetaSlots.FNN.value,
+    __slots__ = (MetaSlots.ZFD.value,
+                 MetaSlots.FND.value,
                  MetaSlots.AEL.value,
                  MetaSlots.FIL.value,
                  MetaSlots.JML.value,
@@ -138,12 +126,11 @@ class LiteStashEngine:
 
         Each database stored as name, engine.
         """
-        self.zfn = setup_fts(
-            StashEngine(
-                *setup_engine(MetaSlots.ZFN.value)
+        self.zfd = StashEngine(
+            *setup_engine(MetaSlots.ZFD.value)
         )
-        self.fnn = StashEngine(
-            *setup_engine(MetaSlots.FNN.value)
+        self.fnd = StashEngine(
+            *setup_engine(MetaSlots.FND.value)
         )
         self.ael = StashEngine(
             *setup_engine(MetaSlots.AEL.value)
@@ -202,8 +189,8 @@ class LiteStashMeta:
     Encapsulate metadata for all of the sqlite databases.
     This handles the setup of new metadata and enables access.
     """
-    __slots__ = (MetaSlots.ZFN.value,
-                 MetaSlots.FNN.value,
+    __slots__ = (MetaSlots.ZFD.value,
+                 MetaSlots.FND.value,
                  MetaSlots.AEL.value,
                  MetaSlots.FIL.value,
                  MetaSlots.JML.value,
@@ -223,113 +210,113 @@ class LiteStashMeta:
 
         Create metadata objects for all of the databases
         """
-        self.zfn = StashMeta(
-            setup_fts(
-                *setup_metadata(
+        self.zfd = StashMeta(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
-                    MetaSlots.ZFN.value
+                    MetaSlots.ZFD.value
                 )
             )
         )
-        self.fnn = StashMeta(
-            setup_fts(
-                *setup_metadata(
+        self.fnd = StashMeta(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
-                    MetaSlots.FNN.value
+                    MetaSlots.FND.value
                 )
             )
         )
         self.ael = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.AEN.value
                 )
             )
         )
         self.fil = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.FIL.value
                 )
             )
         )
         self.jml = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.JML.value
                 )
             )
         )
         self.nrl = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.NRL.value
                 )
             )
         )
         self.svl = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.SVL.value
                 )
             )
         )
         self.wzl = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.EZL.value
                 )
             )
         )
         self.aeu = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.AEU.value
                 )
             )
         )
         self.fiu = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.FIU.value
                 )
             )
         )
         self.jmu = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.JMU.value
                 )
             )
         )
         self.nru = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.NRU.value
                 )
             )
         )
         self.svu = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.SVU.value
                 )
             )
         )
         self.wzu = StashMeta(
-            setup_fts(
-                *setup_metadata(
+            *setup_fts(
+                setup_metadata(
                     lite_stash_engine,
                     MetaSlots.WZU.value
                 )
@@ -346,6 +333,7 @@ class LiteStashMeta:
         Detailed Metadata Info for all the database tables.
         todo: with logger
         """
+        repr_str = ''
         repr_str += f'{StashSlots.METADATA.value}  Tables:\n'
         for prefix, metadata in self.metadata.items():
             repr_str += f'    {prefix}:\n'
@@ -363,7 +351,7 @@ class LiteStashMeta:
         for prefix, metadata in self.metadata.items():
             metadata_str += f'    {prefix}:\n'
             for table_name, table in metadata.tables.items():
-                metadata_str += f'      - {table_name}: {table.columns.keys()}\n'
+                metadata_str += f'   - {table_name}: {table.columns.keys()}\n'
         return metadata_str
 
 
@@ -374,8 +362,8 @@ class LiteStashSession:
     The LiteStashSession class encapsulates the creation and access to these
     factories.
     """
-    __slots__ = (MetaSlots.ZFN.value,
-                 MetaSlots.FNN.value,
+    __slots__ = (MetaSlots.ZFD.value,
+                 MetaSlots.FND.value,
                  MetaSlots.AEL.value,
                  MetaSlots.FIL.value,
                  MetaSlots.JML.value,
@@ -395,16 +383,16 @@ class LiteStashSession:
 
         TODO: docs
         """
-        self.zfn = StashSession(
+        self.zfd = StashSession(
             *setup_sessions(
                 lite_stash_engine,
-                MetaSlots.ZFN.value
+                MetaSlots.ZFD.value
             )
         )
-        self.fnn = StashSession(
+        self.fnd = StashSession(
             *setup_sessions(
                 lite_stash_engine,
-                MetaSlots.FNN.value
+                MetaSlots.FND.value
             )
         )
         self.ael = StashSession(
@@ -493,7 +481,8 @@ class LiteStashSession:
         pass
 
 
-@event.listens_for(Engine, "connect")
+'''
+@event.listens_for(Engine, 'connect')
 def pragma_setup(db_connection, connection):
     """Pragma setup
 
@@ -505,3 +494,4 @@ def pragma_setup(db_connection, connection):
     cursor.execute(Pragma.synchronous())
     cursor.execute(Pragma.foreign_keys())
     cursor.close()
+'''
