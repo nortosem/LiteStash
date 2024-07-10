@@ -226,23 +226,25 @@ class Digitables(Valid):
     TWO = '2'
     THREE = '3'
     FOUR = '4'
-    ZFT = (f'{ZERO}',
-            f'{ONE}',
-            f'{TWO}',
-            f'{THREE}',
-            f'{FOUR}'
-           )
+    ZFT = (
+        f'{ZERO}',
+        f'{ONE}',
+        f'{TWO}',
+        f'{THREE}',
+        f'{FOUR}'
+    )
     FIVE = '5'
     SIX = '6'
     SEVEN = '7'
     EIGHT = '8'
     NINE = '9'
-    FND = (f'{FIVE}',
-           f'{SIX}',
-           f'{SEVEN}',
-           f'{EIGHT}',
-           f'{NINE}'
-          )
+    FND = (
+        f'{FIVE}',
+        f'{SIX}',
+        f'{SEVEN}',
+        f'{EIGHT}',
+        f'{NINE}'
+    )
 
     @staticmethod
     def zero() -> str:
