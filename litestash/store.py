@@ -138,8 +138,9 @@ class LiteStashEngine:
 
         Each database stored as name, engine.
         """
-        self.zfn = StashEngine(
-            *setup_engine(MetaSlots.ZFN.value)
+        self.zfn = setup_fts(
+            StashEngine(
+                *setup_engine(MetaSlots.ZFN.value)
         )
         self.fnn = StashEngine(
             *setup_engine(MetaSlots.FNN.value)
@@ -223,87 +224,115 @@ class LiteStashMeta:
         Create metadata objects for all of the databases
         """
         self.zfn = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.ZFN.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.ZFN.value
+                )
             )
         )
         self.fnn = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.FNN.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.FNN.value
+                )
             )
         )
         self.ael = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.AEN.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.AEN.value
+                )
             )
         )
         self.fil = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.FIL.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.FIL.value
+                )
             )
         )
         self.jml = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.JML.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.JML.value
+                )
             )
         )
         self.nrl = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.NRL.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.NRL.value
+                )
             )
         )
         self.svl = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.SVL.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.SVL.value
+                )
             )
         )
         self.wzl = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.EZL.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.EZL.value
+                )
             )
         )
         self.aeu = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.AEU.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.AEU.value
+                )
             )
         )
         self.fiu = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.FIU.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.FIU.value
+                )
             )
         )
         self.jmu = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.JMU.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.JMU.value
+                )
             )
         )
         self.nru = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.NRU.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.NRU.value
+                )
             )
         )
         self.svu = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.SVU.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.SVU.value
+                )
             )
         )
         self.wzu = StashMeta(
-            *setup_metadata(
-                lite_stash_engine,
-                MetaSlots.WZU.value
+            setup_fts(
+                *setup_metadata(
+                    lite_stash_engine,
+                    MetaSlots.WZU.value
+                )
             )
         )
 
