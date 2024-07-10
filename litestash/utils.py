@@ -161,8 +161,7 @@ def mk_time_column() -> Column:
     return StashColumns.get_column(
         ColumnSetup.TIME.value,
         Integer,
-        primary_key=True
-    )
+        )
 
 
 def mk_columns() -> Generator[Column, None, None]:
