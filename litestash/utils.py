@@ -95,16 +95,26 @@ StashSession = namedtuple(Sessionstash.TYPE_NAME.value,
                                 )
 StashSession.__doc__ = SessionStash.DOC.value
 
+def check_key(key: str) -> bytes:
+    """Validates and encodes an ASCII string key to bytes."""
+    if key.isacii():
+        if key.isalnum():
+            return key.encode()
+        else:
+            raise ValueError(DataScheme.ALNUM_ERROR.value)
+    else:
+        raise ValueError(DataScheme.ASCII_ERROR.value)
+
 
 def hash_key(key: str) -> str:
-    """Get the hashed str for given key"""
-    return blake2b(key.encode(), digest_size=Utils.SIZE.value).hexdigest()
+    """Get the hashed str bytes for a key"""
+    return blake2b(key, digest_size=Utils.SIZE.value).hexdigest().encode()
 
-def get_hash_table(key: str): -> ?:
+def get_hash_table(key: bytes): -> ?:
     """Given a hashed key return the table and database for the hash.
 
     Args:
-        key (str): user provided key for the key-value pair
+        key (bytes): user provided key for the key-value pair
     """
 
     table_name = ''
