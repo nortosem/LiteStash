@@ -14,30 +14,86 @@ from litestash.config import LowerTables
 from litestash.config import UpperTables
 from litestash.config import SetupDB
 from litestash.config import ColumnSetup
+from litestash.config import SessionStash
 from litestash.models import StashColumns
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy import inspect
 from sqlalchemy import Table
 from sqlalchemy import Column
 from sqlalchemy import Metadata
+from sqlalchemy import Engine
 from sqlalchemy import Integer
 from sqlalchemy import Text
 from sqlalchemy import JSON
 from typing import Generator
 
 def setup_engine(engine_name: str) -> Engine:
-    """Setup up engine
+    """Setup engine
 
     Args:
         engine_name (str): match with sqlite.db filename
 
     Return a tuple of (name, engine)
     """
-    return create_engine(
-        f'{SetupDB.sqlite()}{SetupDB.dirname()}{name}.db',
-        echo=SetupDB.echo.value
-    )#TODO confirm this conf and setup process
+    return (name,
+            create_engine(
+                f'{SetupDB.sqlite()}{SetupDB.dirname()}{name}.db',
+                echo=SetupDB.echo.value
+                )
+            )
+
+StashEngine = namedtuple(EngineStash.TYPE_NAME.value,
+                         [EngineStash.DB_NAME.value,
+                          EngineStash.ENGINE.value]
+                         )
+StashEngine.__doc__ = EngineStash.DOC.value
+
+
+def setup_metadata(stash: LiteStashEngine, slot: str):
+    """Setup Metadata & Tables
+
+    Args:
+        stash (LiteStashEngine):  Retrieve name & engine to setup from
+        slot (str): datable named attribute slot
+    """
+    name, engine = getattr(stash, slot)
+    metadata = Metadata()
+    metadata = mk_tables(metadata)
+    metadata.create_all(bind=engine, checkfirst=True)
+    return (name, metadata)
+
+
+StashMeta = namedtuple(MetaStash.TYPE_NAME.value,
+                                 [MetaStash.DB_NAME.value,
+                                  MetaStash.METADATA.value]
+                                )
+StashMeta.__doc__ = MetaStash.DOC.value
+
+
+def setup_sessions(stash: LiteStashEngine, slot: str):
+    """Make a sesssion
+
+    Given a LiteStashEngine make a session factory for a database engine.
+
+    Args:
+        slot (str): database name slot
+        stash (LiteStashEngine): An Engine with Metadata already setup
+    """
+    name, engine = getattr(stash, slot)
+    if inspect(engine).get_table_name():
+        session = sessionmaker(engine)
+    else:
+        raise ValueError(f'{SessionStash.VALUE_ERROR.value}')
+    return (name, session)
+
+
+StashSession = namedtuple(Sessionstash.TYPE_NAME.value,
+                                 [SessionStash.DB_NAME.value,
+                                  SessionStash.SESSION.value]
+                                )
+StashSession.__doc__ = SessionStash.DOC.value
 
 
 def hash_key(key: str) -> str:
