@@ -8,10 +8,7 @@ Functions:
 
 """
 from collections import namedtuple
-import orjson
-from os import getcwd
 from hashlib import blake2b
-from pathlib import Path
 from litestash.config import Utils
 from litestash.config import TableName
 from litestash.config import Digitables
@@ -19,23 +16,28 @@ from litestash.config import LowerTables
 from litestash.config import UpperTables
 from litestash.config import SetupDB
 from litestash.config import ColumnSetup as Col
+from litestash.config import EngineStash
+from litestash.config import MetaStash
 from litestash.config import SessionStash
+from litestash.config import DataScheme
 from litestash.config import FTS5
 from litestash.models import StashColumns
-from sqlalchemy.engine import Engine
+from litestash.store import LiteStashEngine
 from sqlalchemy.orm.session import sessionmaker
-from sqlalchemy.orm.session import Session
 from sqlalchemy import inspect
 from sqlalchemy import Table
 from sqlalchemy import Column
 from sqlalchemy import MetaData
 from sqlalchemy import Engine
 from sqlalchemy import Integer
-from sqlalchemy import Text
 from sqlalchemy import JSON
+from sqlalchemy import BLOB
+from sqlalchemy import text
+from sqlalchemy import create_engine
 from typing import Generator
+from typing import Tuple
 
-def setup_engine(engine_name: str) -> Engine:
+def setup_engine(name: str) -> Engine:
     """Setup engine
 
     Args:
@@ -66,7 +68,7 @@ def setup_metadata(stash: LiteStashEngine, slot: str):
         slot (str): datable named attribute slot
     """
     name, engine = getattr(stash, slot)
-    metadata = Metadata()
+    metadata = MetaData()
     metadata = mk_tables(metadata)
     metadata.create_all(bind=engine, checkfirst=True)
     return (name, metadata, engine)
@@ -89,7 +91,7 @@ def setup_fts(data: Tuple[str, MetaData, Engine]):
     name, metadata, engine = data
     with engine.connect() as connection:
         for table in metadata.sorted_tables:
-            fts = f'fts_{table_name}'
+            fts = f'fts_{table.name}'
             connection.execute(text(f"""
                 {FTS5.MK_TABLE.value} {fts} {FTS5.USING.value} {FTS5.OPEN.value}
                     {Col.KEY.value}, {Col.VALUE.value}, {Col.TIME.value},
@@ -98,31 +100,34 @@ def setup_fts(data: Tuple[str, MetaData, Engine]):
                 {FTS5.CLOSE.value}
             """))
             connection.execute(text(f"""
-                {FTS5.MK_TRIGGER.value} {table.name}_ai {FTS5.AFTER_INSERT.value}
-                {table.name} {FTS5.BEGIN_INSERT.value} {fts}(
+                {FTS5.MK_TRIGGER.value} {table.name}_ai
+                {FTS5.AFTER_INSERT.value} {table.name}
+                {FTS5.BEGIN_INSERT.value} {fts}(
                     {Col.KEY.value}, {Col.VALUE.value}, {Col.TIME.value},
                 ) {FTS5.VALUES.value} (
                     {FTS5.NEW.value}{Col.KEY.value},
-                    {FTS5.NEW.value}{{Col.VALUE.value},
-                    {FTS5.NEW.value}{{Col.TIME.value},
+                    {FTS5.NEW.value}{Col.VALUE.value},
+                    {FTS5.NEW.value}{Col.TIME.value},
                     );
                 {FTS5.END.value}
-                {FTS5.MK_TRIGGER.value} {table.name}_ai {FTS5.AFTER_UPDATE.value}
-                {table.name} {FTS5.BEGIN_INSERT.value} {fts}(
+                {FTS5.MK_TRIGGER.value} {table.name}_ai
+                {FTS5.AFTER_UPDATE.value} {table.name}
+                {FTS5.BEGIN_INSERT.value} {fts}(
                     {Col.KEY.value}, {Col.VALUE.value}, {Col.TIME.value},
                 ) {FTS5.VALUES.value} (
                     {FTS5.NEW.value}{Col.KEY.value},
-                    {FTS5.NEW.value}{{Col.VALUE.value},
-                    {FTS5.NEW.value}{{Col.TIME.value},
+                    {FTS5.NEW.value}{Col.VALUE.value},
+                    {FTS5.NEW.value}{Col.TIME.value},
                     );
                 {FTS5.END.value}
-                {FTS5.MK_TRIGGER.value} {table.name}_ai {FTS5.AFTER_DELETE.value}
-                {table.name} {FTS5.BEGIN_INSERT.value} {fts}(
+                {FTS5.MK_TRIGGER.value} {table.name}_ai
+                {FTS5.AFTER_DELETE.value} {table.name}
+                {FTS5.BEGIN_INSERT.value} {fts}(
                     {Col.KEY.value}, {Col.VALUE.value}, {Col.TIME.value},
                 ) {FTS5.VALUES.value} (
                     {FTS5.NEW.value}{Col.KEY.value},
-                    {FTS5.NEW.value}{{Col.VALUE.value},
-                    {FTS5.NEW.value}{{Col.TIME.value},
+                    {FTS5.NEW.value}{Col.VALUE.value},
+                    {FTS5.NEW.value}{Col.TIME.value},
                     );
                 {FTS5.END.value}
             """))
@@ -147,7 +152,7 @@ def setup_sessions(stash: LiteStashEngine, slot: str):
 
 
 StashSession = namedtuple(
-    Sessionstash.TYPE_NAME.value,
+    SessionStash.TYPE_NAME.value,
     [SessionStash.DB_NAME.value,
     SessionStash.SESSION.value]
 )
@@ -168,15 +173,15 @@ def hash_key(key: bytes) -> bytes:
     """Get the hashed str bytes for a key"""
     return blake2b(key, digest_size=Utils.SIZE.value).hexdigest().encode()
 
-def get_hash_table(key: bytes): -> ?:
+def get_hash_table(key: bytes):
     """Given a hashed key return the table and database for the hash.
 
     Args:
         key (bytes): user provided key for the key-value pair
     """
-
-    table_name = ''
-    db_name = ''
+    pass
+#    table_name = ''
+#    db_name = ''
     #TODO implement for the app class LiteStash
 
 
@@ -227,11 +232,29 @@ def mk_columns() -> Generator[Column, None, None]:
     for column in (
         mk_hash_column(),
         mk_key_column(),
-        mk_val_column(),
+        mk_value_column(),
         mk_time_column()
     ):
         yield column
 
+
+def zf_db() -> Generator[str,None,None]:
+    """Prefix generator for zero through four database"""
+    for n in (Digitables.ZERO.value,
+              Digitables.ONE.value,
+              Digitables.TWO.value,
+              Digitables.THREE.value,
+              Digitables.FOUR.value
+              ):
+        yield n
+
+def fn_db() -> Generator[str,None,None]:
+    """Prefix generator for five throught nine database"""
+    pass
+
+def get_db_name(prefix: bytes) -> Generator[str, None, None]:
+    """Get all database names"""
+    pass
 
 def mk_table_names() -> Generator[str, None, None]:
     """Make all valid Table names
@@ -244,7 +267,7 @@ def mk_table_names() -> Generator[str, None, None]:
             yield f'{TableName.ROOT.value}{suffix.value}'
 
 
-def mk_tables(metadata: Metadata) -> Metadata:
+def mk_tables(metadata: MetaData) -> MetaData:
     """Make Tables
 
     Create all tables using preset columns and names.
