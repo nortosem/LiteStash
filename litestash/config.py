@@ -119,6 +119,23 @@ class SetupDB(Valid):
         return f'{SetupDB.NO_FUTURE.value}'
 
 
+class FTS5(Valid):
+    """SQL Text for FTS5 setup"""
+    MK_TABLE = 'CREATE VIRTUAL TABLE IF NOT EXISTS'
+    USING = 'USING'
+    OPEN = 'fts5('
+    CONTENT = 'content='
+    ROW_ID = 'content_rowid='
+    CLOSE = ');'
+    MK_TRIGGER = 'CREATE TRIGGER IF NOT EXISTS'
+    NEW = 'new.'
+    AFTER_INSERT = 'AFTER INSERT ON'
+    AFTER_UPDATE = 'AFTER UPDATE ON'
+    AFTER_DELETE = 'AFTER DELETE ON'
+    BEGIN_INSERT = 'BEGIN INSERT INTO'
+    VALUES = 'VALUES'
+    END = 'END;'
+
 class Pragma(Valid):
     """Sqlite Pragma
 
