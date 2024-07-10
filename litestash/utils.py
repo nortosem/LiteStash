@@ -1,5 +1,10 @@
 """The Utilities
 
+Functions:
+    setup_engine
+    setup_metadata
+    setup_sessions
+    check_key
 
 """
 from collections import namedtuple
@@ -130,7 +135,6 @@ def mk_hash_column() -> Column:
     return StashColumns.column(
         ColumnSetup.HASH.value,
         BLOB,
-        index=True,
         primary_key=True,
         nullable=False
     )
@@ -152,7 +156,7 @@ def mk_value_column() -> Column:
     return StashColumns.column(
         ColumnSetup.VALUE.value,
         JSON,
-        nullable-False
+        nullable=True
     )
 
 
@@ -161,6 +165,7 @@ def mk_time_column() -> Column:
     return StashColumns.get_column(
         ColumnSetup.TIME.value,
         Integer,
+        nullable=True
         )
 
 
