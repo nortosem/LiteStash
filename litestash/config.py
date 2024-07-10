@@ -243,25 +243,11 @@ class Digitables(Valid):
     TWO = '2'
     THREE = '3'
     FOUR = '4'
-    ZFT = (
-        f'{ZERO}',
-        f'{ONE}',
-        f'{TWO}',
-        f'{THREE}',
-        f'{FOUR}'
-    )
     FIVE = '5'
     SIX = '6'
     SEVEN = '7'
     EIGHT = '8'
     NINE = '9'
-    FND = (
-        f'{FIVE}',
-        f'{SIX}',
-        f'{SEVEN}',
-        f'{EIGHT}',
-        f'{NINE}'
-    )
 
     @staticmethod
     def zero() -> str:
@@ -449,7 +435,7 @@ class LowerTables(Valid):
     @staticmethod
     def u_low() -> str:
         """Get the full table name for hash[u:]"""
-        return f'{LowerTables.U.value}{Names.HASH.value}'
+          return f'{LowerTables.U.value}{Names.HASH.value}'
 
     @staticmethod
     def v_low() -> str:
@@ -512,129 +498,129 @@ class Uppertables(Valid):
     @staticmethod
     def A_upper() -> str:
         """Get the full table name for hash[A:]"""
-        return f'{LowerTables.A.value}{Names.HASH.value}'
+        return f'{UpperTables.A.value}{Names.HASH.value}'
 
     @staticmethod
     def B_upper() -> str:
         """Get the full table name for hash[B:]"""
-        return f'{LowerTables.B.value}{Names.HASH.value}'
+        return f'{UpperTables.B.value}{Names.HASH.value}'
 
     @staticmethod
     def c_upper() -> str:
         """Get the full table name for hash[C:]"""
-        return f'{LowerTables.C.value}{Names.HASH.value}'
+        return f'{UpperTables.C.value}{Names.HASH.value}'
 
     @staticmethod
     def d_upper() -> str:
         """Get the full table name for hash[D:]"""
-        return f'{LowerTables.D.value}{Names.HASH.value}'
+        return f'{UpperTables.D.value}{Names.HASH.value}'
 
     @staticmethod
     def e_upper() -> str:
         """Get the full table name for hash[E:]"""
-        return f'{LowerTables.E.value}{Names.HASH.value}'
+        return f'{UpperTables.E.value}{Names.HASH.value}'
 
     @staticmethod
     def f_upper() -> str:
         """Get the full table name for hash[F:]"""
-        return f'{LowerTables.F.value}{Names.HASH.value}'
+        return f'{UpperTables.F.value}{Names.HASH.value}'
 
     @staticmethod
     def g_upper() -> str:
         """Get the full table name for hash[G:]"""
-        return f'{LowerTables.G.value}{Names.HASH.value}'
+        return f'{UpperTables.G.value}{Names.HASH.value}'
 
     @staticmethod
     def h_upper() -> str:
         """Get the full table name for hash[H:]"""
-        return f'{LowerTables.H.value}{Names.HASH.value}'
+        return f'{UpperTables.H.value}{Names.HASH.value}'
 
     @staticmethod
     def i_upper() -> str:
         """Get the full table name for hash[I:]"""
-        return f'{LowerTables.I.value}{Names.HASH.value}'
+        return f'{UpperTables.I.value}{Names.HASH.value}'
 
     @staticmethod
     def j_upper() -> str:
         """Get the full table name for hash[J:]"""
-        return f'{LowerTables.J.value}{Names.HASH.value}'
+        return f'{UpperTables.J.value}{Names.HASH.value}'
 
     @staticmethod
     def k_upper() -> str:
         """Get the full table name for hash[K:]"""
-        return f'{LowerTables.K.value}{Names.HASH.value}'
+        return f'{UpperTables.K.value}{Names.HASH.value}'
 
     @staticmethod
     def l_upper() -> str:
         """Get the full table name for hash[L:]"""
-        return f'{LowerTables.L.value}{Names.HASH.value}'
+        return f'{UpperTables.L.value}{Names.HASH.value}'
 
     @staticmethod
     def m_upper() -> str:
         """Get the full table name for hash[M:]"""
-        return f'{LowerTables.M.value}{Names.HASH.value}'
+        return f'{UpperTables.M.value}{Names.HASH.value}'
 
     @staticmethod
     def n_upper() -> str:
         """Get the full table name for hash[N:]"""
-        return f'{LowerTables.N.value}{Names.HASH.value}'
+        return f'{UpperTables.N.value}{Names.HASH.value}'
 
     @staticmethod
     def o_upper() -> str:
         """Get the full table name for hash[O:]"""
-        return f'{LowerTables.O.value}{Names.HASH.value}'
+        return f'{UpperTables.O.value}{Names.HASH.value}'
 
     @staticmethod
     def p_upper() -> str:
         """Get the full table name for hash[P:]"""
-        return f'{LowerTables.P.value}{Names.HASH.value}'
+        return f'{UpperTables.P.value}{Names.HASH.value}'
 
     @staticmethod
     def q_upper() -> str:
         """Get the full table name for hash[Q:]"""
-        return f'{LowerTables.Q.value}{Names.HASH.value}'
+        return f'{UpperTables.Q.value}{Names.HASH.value}'
 
     @staticmethod
     def r_upper() -> str:
         """Get the full table name for hash[R:]"""
-        return f'{LowerTables.R.value}{Names.HASH.value}'
+        return f'{UpperTables.R.value}{Names.HASH.value}'
 
     @staticmethod
     def s_upper() -> str:
         """Get the full table name for hash[S:]"""
-        return f'{LowerTables.S.value}{Names.HASH.value}'
+        return f'{UpperTables.S.value}{Names.HASH.value}'
 
     @staticmethod
     def t_upper() -> str:
         """Get the full table name for hash[T:]"""
-        return f'{LowerTables.T.value}{Names.HASH.value}'
+        return f'{UpperTables.T.value}{Names.HASH.value}'
 
     @staticmethod
     def u_upper() -> str:
         """Get the full table name for hash[U:]"""
-        return f'{LowerTables.U.value}{Names.HASH.value}'
+        return f'{UpperTables.U.value}{Names.HASH.value}'
 
     @staticmethod
     def v_upper() -> str:
         """Get the full table name for hash[V:]"""
-        return f'{LowerTables.V.value}{Names.HASH.value}'
+        return f'{UpperTables.V.value}{Names.HASH.value}'
 
     @staticmethod
     def w_upper() -> str:
         """Get the full table name for hash[W:]"""
-        return f'{LowerTables.W.value}{Names.HASH.value}'
+        return f'{UpperTables.W.value}{Names.HASH.value}'
 
     @staticmethod
     def x_upper() -> str:
         """Get the full table name for hash[X:]"""
-        return f'{LowerTables.X.value}{Names.HASH.value}'
+        return f'{UpperTables.X.value}{Names.HASH.value}'
 
     @staticmethod
     def y_upper() -> str:
         """Get the full table name for hash[Y:]"""
-        return f'{LowerTables.Y.value}{Names.HASH.value}'
+        return f'{UpperTables.Y.value}{Names.HASH.value}'
 
     @staticmethod
     def z_upper() -> str:
         """Get the full table name for hash[Z:]"""
-        return f'{LowerTables.Z.value}{Names.HASH.value}'
+        return f'{UpperTables.Z.value}{Names.HASH.value}'
