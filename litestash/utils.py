@@ -131,7 +131,7 @@ def mk_hash_column() -> Column:
         ColumnSetup.HASH.value,
         BLOB,
         index=True,
-        unique=True,
+        primary_key=True,
         nullable=False
     )
 
