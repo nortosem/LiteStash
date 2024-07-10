@@ -18,8 +18,9 @@ from litestash.config import Digitables
 from litestash.config import LowerTables
 from litestash.config import UpperTables
 from litestash.config import SetupDB
-from litestash.config import ColumnSetup
+from litestash.config import ColumnSetup as Col
 from litestash.config import SessionStash
+from litestash.config import FTS5
 from litestash.models import StashColumns
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm.session import sessionmaker
@@ -27,7 +28,7 @@ from sqlalchemy.orm.session import Session
 from sqlalchemy import inspect
 from sqlalchemy import Table
 from sqlalchemy import Column
-from sqlalchemy import Metadata
+from sqlalchemy import MetaData
 from sqlalchemy import Engine
 from sqlalchemy import Integer
 from sqlalchemy import Text
@@ -68,7 +69,7 @@ def setup_metadata(stash: LiteStashEngine, slot: str):
     metadata = Metadata()
     metadata = mk_tables(metadata)
     metadata.create_all(bind=engine, checkfirst=True)
-    return (name, metadata)
+    return (name, metadata, engine)
 
 
 StashMeta = namedtuple(
@@ -77,6 +78,55 @@ StashMeta = namedtuple(
     MetaStash.METADATA.value]
 )
 StashMeta.__doc__ = MetaStash.DOC.value
+
+
+def setup_fts(data: Tuple[str, MetaData, Engine]):
+    """Setup Full Text Search
+
+    Given the engine stash and metadata stash:
+        Add the FTS5 virtual tbles and connections to the database.
+    """
+    name, metadata, engine = data
+    with engine.connect() as connection:
+        for table in metadata.sorted_tables:
+            fts = f'fts_{table_name}'
+            connection.execute(text(f"""
+                {FTS5.MK_TABLE.value} {fts} {FTS5.USING.value} {FTS5.OPEN.value}
+                    {Col.KEY.value}, {Col.VALUE.value}, {Col.TIME.value},
+                    {FTS5.CONTENT.value}{table.name},
+                    {FTS5.ROW_ID.value}{Col.HASH.value}
+                {FTS5.CLOSE.value}
+            """))
+            connection.execute(text(f"""
+                {FTS5.MK_TRIGGER.value} {table.name}_ai {FTS5.AFTER_INSERT.value}
+                {table.name} {FTS5.BEGIN_INSERT.value} {fts}(
+                    {Col.KEY.value}, {Col.VALUE.value}, {Col.TIME.value},
+                ) {FTS5.VALUES.value} (
+                    {FTS5.NEW.value}{Col.KEY.value},
+                    {FTS5.NEW.value}{{Col.VALUE.value},
+                    {FTS5.NEW.value}{{Col.TIME.value},
+                    );
+                {FTS5.END.value}
+                {FTS5.MK_TRIGGER.value} {table.name}_ai {FTS5.AFTER_UPDATE.value}
+                {table.name} {FTS5.BEGIN_INSERT.value} {fts}(
+                    {Col.KEY.value}, {Col.VALUE.value}, {Col.TIME.value},
+                ) {FTS5.VALUES.value} (
+                    {FTS5.NEW.value}{Col.KEY.value},
+                    {FTS5.NEW.value}{{Col.VALUE.value},
+                    {FTS5.NEW.value}{{Col.TIME.value},
+                    );
+                {FTS5.END.value}
+                {FTS5.MK_TRIGGER.value} {table.name}_ai {FTS5.AFTER_DELETE.value}
+                {table.name} {FTS5.BEGIN_INSERT.value} {fts}(
+                    {Col.KEY.value}, {Col.VALUE.value}, {Col.TIME.value},
+                ) {FTS5.VALUES.value} (
+                    {FTS5.NEW.value}{Col.KEY.value},
+                    {FTS5.NEW.value}{{Col.VALUE.value},
+                    {FTS5.NEW.value}{{Col.TIME.value},
+                    );
+                {FTS5.END.value}
+            """))
+        return (name, metadata)
 
 
 def setup_sessions(stash: LiteStashEngine, slot: str):
@@ -133,7 +183,7 @@ def get_hash_table(key: bytes): -> ?:
 def mk_hash_column() -> Column:
     """Return a Column for the hash"""
     return StashColumns.column(
-        ColumnSetup.HASH.value,
+        Col.HASH.value,
         BLOB,
         primary_key=True,
         nullable=False
@@ -143,7 +193,7 @@ def mk_hash_column() -> Column:
 def mk_key_column() -> Column:
     """Return a Column for the key being stored."""
     return StashColumns.column(
-        ColumnSetup.KEY.value,
+        Col.KEY.value,
         BLOB,
         unique=True,
         index=True,
@@ -154,7 +204,7 @@ def mk_key_column() -> Column:
 def mk_value_column() -> Column:
     """Return a Column for the value being stored."""
     return StashColumns.column(
-        ColumnSetup.VALUE.value,
+        Col.VALUE.value,
         JSON,
         nullable=True
     )
@@ -163,7 +213,7 @@ def mk_value_column() -> Column:
 def mk_time_column() -> Column:
     """Return a Column for the date the data was added."""
     return StashColumns.get_column(
-        ColumnSetup.TIME.value,
+        Col.TIME.value,
         Integer,
         nullable=True
         )
@@ -200,7 +250,7 @@ def mk_tables(metadata: Metadata) -> Metadata:
     Create all tables using preset columns and names.
     """
     for table_name in mk_table_names():
-        yield Table(
+        Table(
             table_name,
             metadata,
             *(column for column in mk_columns())
