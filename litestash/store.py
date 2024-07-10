@@ -9,7 +9,7 @@ from collections import namedtuple
 from litestash.utils import mk_hash
 from litestash.utils import setup_engine
 from litestash.utils import hash_key
-from litestash.utils import mk_tables
+from litestash.utils import check_key
 from litestash.config import Pragma
 from litestash.config import StashSlots
 from litestash.config import MetaSlots
@@ -59,13 +59,14 @@ class LiteStash:
 
         Given a key return the value stored.
         """
+        key = check_key(key)
         key_data = ''
         try:
-            get_key = LiteStashData(key=key)
+            dto = LiteStashData(key=key)
         except ValidationError as e:
             raise ValidationError(f"Invalid key: {e}")
 
-        hashed_key = hash_key(key)
+        hashed_key = hash_key(dto.key)
 
 
 
