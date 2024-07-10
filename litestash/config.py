@@ -26,7 +26,7 @@ class DataScheme(Valid):
     TITLE = 'Data'
     DESCRIPTION = 'The key name and JSON data for the given key.'
     MIN_LENGTH = 4
-    MAX_LENGTH = 256
+    MAX_LENGTH = 41
     FORBID_EXTRA = 'forbid'
 
 
