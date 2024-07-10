@@ -10,7 +10,7 @@ from pydantic import StrictStr
 from pydantic import Field
 from pydantic.dataclasses import dataclass
 from sqlalchemy import BLOB
-from sqlalchemy import Text
+from sqlalchemy import INTEGER
 from sqlalchemy import JSON
 from sqlalchemy.schema import Column
 from litestash.config import DataScheme
@@ -43,7 +43,7 @@ class LiteStashStore:
     """
     key_hash: StrictBytes = Field(..., primary_key=True, index=True)
     key: StrictBytes = Field(..., unique=True, index=True)
-    value: Json= Field(...)
+    value: Json | None = Field(default=None)
     time: datetime | None = Field(default=datetime.now())
 
     class Config:
@@ -63,7 +63,7 @@ class StashColumns:
     TODO
     """
     name: str
-    type_: Literal[BLOB,JSON]
+    type_: Literal[BLOB, INTEGER, JSON]
     primary_key: bool = False
     index: bool = False
     unique: bool = False
