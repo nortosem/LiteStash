@@ -65,12 +65,12 @@ class StashColumns:
     """
     name: str
     type_: Literal[BLOB, INTEGER, JSON]
-    primary_key: bool = False
-    index: bool = False
-    unique: bool = False
-    nullable: bool = False
+    primary_key: bool = False | None
+    index: bool = False | None
+    unique: bool = False | None
+    nullable: bool = False | None
 
-    def get_column(self) -> Column:
+    def get_column(self, *args, **kwargs) -> Column:
         """Create columns for database tables"""
         return Column(
             self.name,
