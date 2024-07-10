@@ -13,7 +13,12 @@ from litestash.utils import mk_tables
 from litestash.config import Pragma
 from litestash.config import StashSlots
 from litestash.config import MetaSlots
-from litestash.confim import EngineStash
+from litestash.utils import StashEngine
+from litestash.utils import StashMeta
+from litestash.utils import StashSession
+from litestash.config import EngineStash
+from litestash.config import MetaStash
+from litestash.config import SessionStash
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from sqlalchemy.schema import Metadata
@@ -37,16 +42,9 @@ class LiteStash:
         Creates a new empty cache by default.
         """
         self.engine = LiteStashEngine()
-        self.metadata = build_db(self.engine)
-        self.db_session = LiteStashSession()
+        self.metadata = LiteStashMeta(self.engine)
+        self.db_session = LiteStashSession(self.engine)
 
-    def build_db(self, engine: LiteStashEngine):
-        """Initiate all database files.
-
-        Arg:
-            engine (LiteStashEngine): The engines for the stash
-        """
-        return(LiteStashMeta(engine))
 
     def set(self, key: , value: ) -> None:
         """LiteStash Key Setter
@@ -111,6 +109,91 @@ class LiteStash:
         pass
 
 
+class LiteStashEngine:
+    """LiteStash Engine
+
+    Each database file defines its own dedicated sqlalchemy engine.
+    The LiteStashEngine class encapsualtes the setup and access to these engines.
+    """
+    __slots__ = (MetaSlots.ZFN.value,
+                 MetaSlots.FNN.value,
+                 MetaSlots.AEL.value,
+                 MetaSlots.FIL.value,
+                 MetaSlots.JML.value,
+                 MetaSlots.NRL.value,
+                 MetaSlots.SVL.value,
+                 MetaSlots.WZL.value,
+                 MetaSlots.AEU.value,
+                 MetaSlots.FIU.value,
+                 MetaSlots.JMU.value,
+                 MetaSlots.NRU.value,
+                 MetaSlots.SVU.value,
+                 MetaSlots.WZU.value,
+                )
+
+
+    def __init__(self):
+        """Default DB & Engine setup
+
+        Each database stored as name, engine.
+        """
+        self.zfn = StashEngine(
+            *setup_engine(MetaSlots.ZFN.value)
+        )
+        self.fnn = StashEngine(
+            *setup_engine(MetaSlots.FNN.value)
+        )
+        self.ael = StashEngine(
+            *setup_engine(MetaSlots.AEL.value)
+        )
+        self.fil = StashEngine(
+            *setup_engine(MetaSlots.FIL.value)
+        )
+        self.jml = StashEngine(
+            *setup_engine(MetaSlots.JML.value)
+        )
+        self.nrl = StashEngine(
+            *setup_engine(MetaSlots.NRL.value)
+        )
+        self.svl = StashEngine(
+            *setup_engine(MetaSlots.SVL.value)
+        )
+        self.wzl = StashEngine(
+            *setup_engine(MetaSlots.WZL.value)
+        )
+        self.aeu = StashEngine(
+            *setup_engine(MetaSlots.AEU.value)
+        )
+        self.fiu = StashEngine(
+            *setup_engine(MetaSlots.FIU.value)
+        )
+        self.jmu = StashEngine(
+            *setup_engine(MetaSlots.JMU.value)
+        )
+        self.nru = StashEngine(
+            *setup_engine(MetaSlots.NRU.value)
+        )
+        self.svu = StashEngine(
+            *setup_engine(MetaSlots.SVU.value)
+        )
+        self.wzu = StashEngine(
+            *setup_engine(MetaSlots.WFU.value)
+        )
+
+
+    def __iter__(self):
+        """Iterator for all database engines"""
+        yield from (getattr(self, slot) for slot in self.__slots__)
+
+    def __repr__(self):
+        """"""
+        pass
+
+    def __str__(self):
+        """"""
+        pass
+
+
 class LiteStashMeta:
     """LiteStash Metadata
 
@@ -133,40 +216,98 @@ class LiteStashMeta:
                  MetaSlots.WZU.value,
                 )
 
-    def __init__(self, engine_stash: LiteStashEngine):
+    def __init__(self, lite_stash_engine: LiteStashEngine):
         """LiteStash Metadata __init__
 
-        Create fresh empty metadata objects for all of the databases
+        Create metadata objects for all of the databases
         """
-        self.zfn = bond_to_engine(engine_stash.get_engine(MetaSlots.ZFN.value))
-        self.fnn = bond_to_engine(engine_stash.get_engine(MetaSlots.FNN.value))
-        self.ael = bond_to_engine(engine_stash.get_engine(MetaSlots.AEN.value))
-        self.fil = bond_to_engine(engine_stash.get_engine(MetaSlots.FIL.value))
-        self.jml = bond_to_engine(engine_stash.get_engine(MetaSlots.JML.value))
-        self.nrl = bond_to_engine(engine_stash.get_engine(MetaSlots.NRL.value))
-        self.svl = bond_to_engine(engine_stash.get_engine(MetaSlots.SVL.value))
-        self.wzl = bond_to_engine(engine_stash.get_engine(MetaSlots.EZL.value))
-        self.aeu = bond_to_engine(engine_stash.get_engine(MetaSlots.AEU.value))
-        self.fiu = bond_to_engine(engine_stash.get_engine(MetaSlots.FIU.value))
-        self.jmu = bond_to_engine(engine_stash.get_engine(MetaSlots.JMU.value))
-        self.nru = bond_to_engine(engine_stash.get_engine(MetaSlots.NRU.value))
-        self.svu = bond_to_engine(engine_stash.get_engine(MetaSlots.SVU.value))
-        self.wzu = bond_to_engine(engine_stash.get_engine(MetaSlots.WZU.value))
-
-    def bond_to_engine(self, engine: Engine) -> Metadata:
-        """Bond with specific engine
-
-        Used to specify a bind to an engine and create tables for that engine.
-
-        Args (Engine): The engine to create tables for
-        """
-        metadata = Metadata()
-        metadata = mk_tables(metadata)
-        metadata.create_all(bind=engine, checkfirst=True)
-        return metadata
+        self.zfn = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.ZFN.value
+            )
+        )
+        self.fnn = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.FNN.value
+            )
+        )
+        self.ael = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.AEN.value
+            )
+        )
+        self.fil = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.FIL.value
+            )
+        )
+        self.jml = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.JML.value
+            )
+        )
+        self.nrl = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.NRL.value
+            )
+        )
+        self.svl = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.SVL.value
+            )
+        )
+        self.wzl = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.EZL.value
+            )
+        )
+        self.aeu = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.AEU.value
+            )
+        )
+        self.fiu = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.FIU.value
+            )
+        )
+        self.jmu = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.JMU.value
+            )
+        )
+        self.nru = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.NRU.value
+            )
+        )
+        self.svu = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.SVU.value
+            )
+        )
+        self.wzu = StashMeta(
+            *setup_metadata(
+                lite_stash_engine,
+                MetaSlots.WZU.value
+            )
+        )
 
     def __iter__(self):
-        """Iterator for all database metadata"""
+        """Iterator for all database metadata objects"""
         yield from (getattr(self, slot) for slot in self.__slots__)
 
     def __repr__(self):
@@ -196,79 +337,6 @@ class LiteStashMeta:
         return metadata_str
 
 
-class LiteStashEngine:
-    """LiteStash Engine
-
-    Each database file defines its own dedicated sqlalchemy engine.
-    The LiteStashEngine class encapsualtes the setup and access to these engines.
-    """
-    __slots__ = (MetaSlots.ZFN.value,
-                 MetaSlots.FNN.value,
-                 MetaSlots.AEL.value,
-                 MetaSlots.FIL.value,
-                 MetaSlots.JML.value,
-                 MetaSlots.NRL.value,
-                 MetaSlots.SVL.value,
-                 MetaSlots.WZL.value,
-                 MetaSlots.AEU.value,
-                 MetaSlots.FIU.value,
-                 MetaSlots.JMU.value,
-                 MetaSlots.NRU.value,
-                 MetaSlots.SVU.value,
-                 MetaSlots.WZU.value,
-                )
-
-
-    def __init__(self):
-        """Default DB & Engine setup"""
-        StashEngine = namedtuple(EngineStash.TYPE_NAME.value,
-                                 [EngineStash.DB_NAME.value,
-                                  EngineStash.ENGINE.value
-                                 ]
-                                )
-        self.zfn = StashEngine(*setup_engine(MetaSlots.ZFN.value))
-        self.fnn = StashEngine(*setup_engine(MetaSlots.FNN.value))
-        self.ael = StashEngine(*setup_engine(MetaSlots.AEL.value))
-        self.fil = StashEngine(*setup_engine(MetaSlots.FIL.value))
-        self.jml = StashEngine(*setup_engine(MetaSlots.JML.value))
-        self.nrl = StashEngine(*setup_engine(MetaSlots.NRL.value))
-        self.svl = StashEngine(*setup_engine(MetaSlots.SVL.value))
-        self.wzl = StashEngine(*setup_engine(MetaSlots.WZL.value))
-        self.aeu = StashEngine(*setup_engine(MetaSlots.AEU.value))
-        self.fiu = StashEngine(*setup_engine(MetaSlots.FIU.value))
-        self.jmu = StashEngine(*setup_engine(MetaSlots.JMU.value))
-        self.nru = StashEngine(*setup_engine(MetaSlots.NRU.value))
-        self.svu = StashEngine(*setup_engine(MetaSlots.SVU.value))
-        self.wzu = StashEngine(*setup_engine(MetaSlots.WFU.value))
-
-
-    def get_engine(self, name: str):
-        """Get DB Engine by name
-
-        Args:
-            name (str): database filename & db engine
-        """
-        if hasattr(self, name):
-            return getattr(getattr(self, name),
-                            EngineStash.ENGINE.value
-                            )
-        else:
-            raise ValueError(f'{EngineStash.VALUE_ERROR.value}')
-
-
-    def __iter__(self):
-        """Iterator for all database engines"""
-        yield from (getattr(self, slot) for slot in self.__slots__)
-
-    def __repr__(self):
-        """"""
-        pass
-
-    def __str__(self):
-        """"""
-        pass
-
-
 class LiteStashSession:
     """LiteStash Sessions
 
@@ -292,46 +360,106 @@ class LiteStashSession:
                  MetaSlots.WZU.value,
                 )
 
-    def __init__(self, engine_stash: LiteStashEngine):
+    def __init__(self, lite_stash_engine: LiteStashEngine):
         """Default init
 
-        Given an instance of the LiteStashEngine match
-        all
+        TODO: docs
         """
-        self.zfn =
-        self.fnn = getattr(engine_stash, MetaSlots.FNN.value)
-        self.ael = getattr(engine_stash, MetaSlots.AEL.value)
-        self.fil = getattr(engine_stash, MetaSlots.FIL.value)
-        self.jml = getattr(engine_stash, MetaSlots.JML.value)
-        self.nrl = getattr(engine_stash, MetaSlots.NRL.value)
-        self.svl = getattr(engine_stash, MetaSlots.SVL.value)
-        self.wzl = getattr(engine_stash, MetaSlots.WZL.value)
-        self.aeu = getattr(engine_stash, MetaSlots.AEU.value)
-        self.fiu = getattr(engine_stash, MetaSlots.FIU.value)
-        self.jmu = getattr(engine_stash, MetaSlots.JMU.value)
-        self.nru = getattr(engine_stash, MetaSlots.NRU.value)
-        self.svu = getattr(engine_stash, MetaSlots.SVU.value)
-        self.wzu = getattr(engine_stash, MetaSlots.WFU.value)
-
-
-    def mk_session(self, engine_stash: LiteStashEngine) -> Session:
-        """Make a sesssion
-
-        Given a LiteStashEngine instance make a session factory
-        for each database engine.
-        """
-        getattr(engine_stash, MetaSlots.ZFN.value)
+        self.zfn = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.ZFN.value
+            )
+        )
+        self.fnn = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.FNN.value
+            )
+        )
+        self.ael = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.AEL.value
+            )
+        )
+        self.fil = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.FIL.value
+            )
+        )
+        self.jml = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.JML.value
+            )
+        )
+        self.nrl = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.NRL.value
+            )
+        )
+        self.svl = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.SVL.value
+            )
+        )
+        self.wzl = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.WZL.value
+            )
+        )
+        self.aeu = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.AEU.value
+            )
+        )
+        self.fiu = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.FIU.value
+            )
+        )
+        self.jmu = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.JMU.value
+            )
+        )
+        self.nru = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.NRUvalue
+            )
+        )
+        self.svu = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.SVU.value
+            )
+        )
+        self.wzu = StashSession(
+            *setup_sessions(
+                lite_stash_engine,
+                MetaSlots.WZU.value
+            )
+        )
 
     def __iter__(self):
         """Iterator for all database session factories"""
         yield from (getattr(self, slot) for slot in self.__slots__)
 
     def __repr__(self):
-        """"""
+        """TODO"""
         pass
 
     def __str__(self):
-        """"""
+        """TODO"""
         pass
 
 
