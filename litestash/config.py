@@ -369,7 +369,7 @@ class LowerTables(Valid):
     Z = b'z'
 
     @staticmethod
-    def get_table -> str:
+    def get_table(char: bytes) -> str:
         """Get the table name by match on given char"""
         match char:
             case LowerTables.A.value:
@@ -591,7 +591,7 @@ class UpperTables(Valid):
     Z = b'Z'
 
     @staticmethod
-    def get_table -> str:
+    def get_table(char: bytes) -> str:
         """Get the table name by match on given char"""
         match char:
             case UpperTables.A.value:
