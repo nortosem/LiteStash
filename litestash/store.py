@@ -12,6 +12,7 @@ from litestash.utils import setup_fts
 from litestash.utils import hash_key
 from litestash.utils import check_key
 from litestash.utils import get_db_name
+from litestash.utils import get_table_name
 from litestash.config import Pragma
 from litestash.config import StashSlots
 from litestash.config import MetaSlots
@@ -56,19 +57,39 @@ class LiteStash:
         """LiteStash Get a value.
 
         Given a key return the value stored.
+        Returns the key,value as LiteStashData.
+        Args:
+            key (str): The key for the json data
         """
-        key_data = ''
+        # update with logger and review validation
         try:
+            # create the LSD DTO with given str
             dto = LiteStashData(key=check_key(key))
         except ValidationError as e:
             print(f'Invalid key: {e}')
-
+        # return hash byte with utils.hash_key function
         hashed_key = hash_key(dto.key)
+        # utils find db name for the given key hash (strip .db off)
         db_name = get_db_name(hashed_key[0])[:3].decode()
-
-
-
-        pass
+        # utils get the table name
+        table_name = get_table_name(hashed_key)
+        # extract metadata for db_name
+        metadata = getattr(self.metadata, db_name).metadata
+        # the table for the select
+        table = metadata.tables[table_name]
+        # assemble the sql
+        sql_statement = select(table).where(table.c.key_hash == hashed_key)
+        # extract session for db_name
+        session = getattr(self.db_session, db_name).session
+        # get the data
+        data = session.execute(sql_statement)
+        if data:
+            return LiteStashData(
+                key=data.key,
+                value=data.value
+            )
+        else:
+            return None
 
 
     def delete(self):
@@ -123,7 +144,7 @@ class LiteStashEngine:
                  MetaSlots.JMU.value,
                  MetaSlots.NRU.value,
                  MetaSlots.SVU.value,
-                 MetaSlots.WZU.value,
+                     MetaSlots.WZU.value,
                 )
 
 
@@ -156,7 +177,7 @@ class LiteStashEngine:
         self.wzl = StashEngine(
             *setup_engine(MetaSlots.WZL.value)
         )
-        self.aeu = StashEngine(
+            self.aeu = StashEngine(
             *setup_engine(MetaSlots.AEU.value)
         )
         self.fiu = StashEngine(
@@ -446,11 +467,6 @@ class LiteStashSession:
                 getattr(lite_stash_engine, MetaSlots.WZU.value)
             )
         )
-
-    def get_session(db_name: bytes):
-        """Given a database name return a a session"""
-        return getattr(self.__slots__, db_name.decode())
-
 
     def __iter__(self):
         """Iterator for all database session factories"""
