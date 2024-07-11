@@ -56,6 +56,7 @@ class SessionStash(Valid):
     DB_NAME = f'{EngineStash.DB_NAME.value}'
     SESSION = 'session'
     VALUE_ERROR = 'Invalid database: no tables found'
+    DOC = '''todo'''
 
 
 class MetaSlots(Valid):
