@@ -36,80 +36,80 @@ class Session:
                  MetaSlots.WZU.value,
                 )
 
-    def __init__(self, lite_stash_engine: LiteStashEngine):
+    def __init__(self, engine: Engine):
         """Default init
 
         TODO: docs
         """
         self.zfd = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.ZFD.value)
+                getattr(engine, MetaSlots.ZFD.value)
             )
         )
         self.fnd = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.FND.value)
+                getattr(engine, MetaSlots.FND.value)
             )
         )
         self.ael = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.AEL.value)
+                getattr(engine, MetaSlots.AEL.value)
             )
         )
         self.fil = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.FIL.value)
+                getattr(engine, MetaSlots.FIL.value)
             )
         )
         self.jml = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.JML.value)
+                getattr(engine, MetaSlots.JML.value)
             )
         )
         self.nrl = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine,
+                getattr(engine,
                 MetaSlots.NRL.value)
             )
         )
         self.svl = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.SVL.value)
+                getattr(engine, MetaSlots.SVL.value)
             )
         )
         self.wzl = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.WZL.value)
+                getattr(engine, MetaSlots.WZL.value)
             )
         )
         self.aeu = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.AEU.value)
+                getattr(engine, MetaSlots.AEU.value)
             )
         )
         self.fiu = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.FIU.value)
+                getattr(engine, MetaSlots.FIU.value)
             )
         )
         self.jmu = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.JMU.value)
+                getattr(engine, MetaSlots.JMU.value)
             )
         )
         self.nru = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.NRUvalue
+                getattr(engine, MetaSlots.NRUvalue
             )
         )
         self.svu = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.SVU.value)
+                getattr(engine, MetaSlots.SVU.value)
             )
         )
         self.wzu = StashSession(
             *setup_sessions(
-                getattr(lite_stash_engine, MetaSlots.WZU.value)
+                getattr(engine, MetaSlots.WZU.value)
             )
         )
 
