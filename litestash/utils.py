@@ -399,8 +399,8 @@ def mk_table_names() -> Generator[str, None, None]:
     Return a generator.
     """
     for chars in (Digitables,LowerTables,UpperTables):
-        for suffix in chars:
-            yield f'{TableName.ROOT.value}{suffix.value}'
+        for char in chars:
+            yield f'{char.value}{Names.HASH.value}'
 
 
 def mk_tables(metadata: MetaData) -> MetaData:
