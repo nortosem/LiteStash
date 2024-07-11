@@ -263,27 +263,27 @@ class Digitables(Valid):
         """Match on char and return table name"""
         match char:
             case Digitables.ZERO.value:
-                return zero()
+                return Digitables.zero()
             case Digitables.ONE.value:
-                return one()
+                return Digitables.one()
             case Digitables.TWO.value:
-                return two()
+                return Digitables.two()
             case Digitables.THREE.value:
-                return three()
+                return Digitables.three()
             case Digitables.FOUR.value:
-                return four()
+                return Digitables.four()
             case Digitables.FIVE.value:
-                return five()
+                return Digitables.five()
             case Digitables.SIX.value:
-                return six()
+                return Digitables.six()
             case Digitables.SEVEN.value:
-                return seven()
+                return Digitables.seven()
             case Digitables.EIGHT.value:
-                return eight()
+                return Digitables.eight()
             case Digitables.NINE.value:
-                return nine()
+                return Digitables.nine()
             case _:
-                raise ValueError("NO!")
+                raise ValueError('NO!')
 
     @staticmethod
     def zero() -> str:
@@ -373,59 +373,59 @@ class LowerTables(Valid):
         """Get the table name by match on given char"""
         match char:
             case LowerTables.A.value:
-                return a_low()
+                return LowerTables.a_low()
             case LowerTables.B.value:
-                return b_low()
+                return LowerTables.b_low()
             case LowerTables.C.value:
-                return c_low()
+                return LowerTables.c_low()
             case LowerTables.D.value:
-                return d_low()
+                return LowerTables.d_low()
             case LowerTables.E.value:
-                return e_low()
+                return LowerTables.e_low()
             case LowerTables.F.value:
-                return f_low()
+                return LowerTables.f_low()
             case LowerTables.G.value:
-                return g_low()
+                return LowerTables.g_low()
             case LowerTables.H.value:
-                return h_low()
+                return LowerTables.h_low()
             case LowerTables.I.value:
-                return i_low()
+                return LowerTables.i_low()
             case LowerTables.J.value:
-                return j_low()
+                return LowerTables.j_low()
             case LowerTables.K.value:
-                return k_low()
+                return LowerTables.k_low()
             case LowerTables.L.value:
-                return l_low()
+                return LowerTables.l_low()
             case LowerTables.M.value:
-                return m_low()
+                return LowerTables.m_low()
             case LowerTables.N.value:
-                return n_low()
+                return LowerTables.n_low()
             case LowerTables.O.value:
-                return o_low()
+                return LowerTables.o_low()
             case LowerTables.P.value:
-                return p_low()
+                return LowerTables.p_low()
             case LowerTables.Q.value:
-                return q_low()
+                return LowerTables.q_low()
             case LowerTables.R.value:
-                return r_low()
+                return LowerTables.r_low()
             case LowerTables.S.value:
-                return s_low()
+                return LowerTables.s_low()
             case LowerTables.T.value:
-                return t_low()
+                return LowerTables.t_low()
             case LowerTables.U.value:
-                return u_low()
+                return LowerTables.u_low()
             case LowerTables.V.value:
-                return v_low()
+                return LowerTables.v_low()
             case LowerTables.W.value:
-                return w_low()
+                return LowerTables.w_low()
             case LowerTables.X.value:
-                return x_low()
+                return LowerTables.x_low()
             case LowerTables.Y.value:
-                return y_low()
+                return LowerTables.y_low()
             case LowerTables.Z.value:
-                return z_low()
+                return LowerTables.z_low()
             case _:
-                raise ValueError("NO!")
+                raise ValueError('NO!')
 
     @staticmethod
     def a_low() -> str:
@@ -595,59 +595,59 @@ class UpperTables(Valid):
         """Get the table name by match on given char"""
         match char:
             case UpperTables.A.value:
-                return a_low()
+                return UpperTables.a_upper()
             case UpperTables.B.value:
-                return b_low()
+                return UpperTables.b_upper()
             case UpperTables.C.value:
-                return c_low()
+                return UpperTables.c_upper()
             case UpperTables.D.value:
-                return d_low()
+                return UpperTables.d_upper()
             case UpperTables.E.value:
-                return e_low()
+                return UpperTables.e_upper()
             case UpperTables.F.value:
-                return f_low()
+                return UpperTables.f_upper()
             case UpperTables.G.value:
-                return g_low()
+                return UpperTables.g_upper()
             case UpperTables.H.value:
-                return h_low()
+                return UpperTables.h_upper()
             case UpperTables.I.value:
-                return i_low()
+                return UpperTables.i_upper()
             case UpperTables.J.value:
-                return j_low()
+                return UpperTables.j_upper()
             case UpperTables.K.value:
-                return k_low()
+                return UpperTables.k_upper()
             case UpperTables.L.value:
-                return l_low()
+                return UpperTables.l_upper()
             case UpperTables.M.value:
-                return m_low()
+                return UpperTables.m_upper()
             case UpperTables.N.value:
-                return n_low()
+                return UpperTables.n_upper()
             case UpperTables.O.value:
-                return o_low()
+                return UpperTables.o_upper()
             case UpperTables.P.value:
-                return p_low()
+                return UpperTables.p_upper()
             case UpperTables.Q.value:
-                return q_low()
+                return UpperTables.q_upper()
             case UpperTables.R.value:
-                return r_low()
+                return UpperTables.r_upper()
             case UpperTables.S.value:
-                return s_low()
+                return UpperTables.s_upper()
             case UpperTables.T.value:
-                return t_low()
+                return UpperTables.t_upper()
             case UpperTables.U.value:
-                return u_low()
+                return UpperTables.u_upper()
             case UpperTables.V.value:
-                return v_low()
+                return UpperTables.v_upper()
             case UpperTables.W.value:
-                return w_low()
+                return UpperTables.w_upper()
             case UpperTables.X.value:
-                return x_low()
+                return UpperTables.x_upper()
             case UpperTables.Y.value:
-                return y_low()
+                return UpperTables.y_upper()
             case UpperTables.Z.value:
-                return z_low()
+                return UpperTables.z_upper()
             case _:
-                raise ValueError("NO!")
+                raise ValueError('NO!')
 
     @staticmethod
     def a_upper() -> str:
