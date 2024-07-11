@@ -19,6 +19,9 @@ from litestash.utils import StashEngine
 from litestash.utils import StashMeta
 from litestash.utils import StashSession
 from sqlalchemy import event
+from sqlalchemy import table
+from sqlalchemy import column
+from sqlalchemy import select
 from pydantic import ValidationError
 
 class LiteStash:
@@ -26,8 +29,7 @@ class LiteStash:
 
     TODO
     """
-    __slots__ = (StashSlots.DB.value,
-                 StashSlots.ENGINE.value,
+    __slots__ = (StashSlots.ENGINE.value,
                  StashSlots.METADATA.value,
                  StashSlots.DB_SESSION.value
     )
@@ -63,6 +65,7 @@ class LiteStash:
 
         hashed_key = hash_key(dto.key)
         db_name = get_db_name(hashed_key[0])[:3].decode()
+
 
 
         pass
