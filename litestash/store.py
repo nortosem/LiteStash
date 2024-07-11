@@ -11,6 +11,7 @@ from litestash.utils import setup_sessions
 from litestash.utils import setup_fts
 from litestash.utils import hash_key
 from litestash.utils import check_key
+from litestash.utils import get_db_name
 from litestash.config import Pragma
 from litestash.config import StashSlots
 from litestash.config import MetaSlots
@@ -49,19 +50,20 @@ class LiteStash:
         """
         pass
 
-    def get(self, key: str) -> str | None:
+    def get(self, key: str) -> LiteStashData | None:
         """LiteStash Get a value.
 
         Given a key return the value stored.
         """
         key_data = ''
-
         try:
             dto = LiteStashData(key=check_key(key))
         except ValidationError as e:
             print(f'Invalid key: {e}')
 
         hashed_key = hash_key(dto.key)
+        db_name = get_db_name(hashed_key[0])[:3].decode()
+
 
         pass
 
@@ -441,6 +443,11 @@ class LiteStashSession:
                 getattr(lite_stash_engine, MetaSlots.WZU.value)
             )
         )
+
+    def get_session(db_name: bytes):
+        """Given a database name return a a session"""
+        return getattr(self.__slots__, db_name.decode())
+
 
     def __iter__(self):
         """Iterator for all database session factories"""
