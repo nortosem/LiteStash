@@ -91,7 +91,7 @@ def setup_fts(*args):
     name, metadata, engine = data
     with engine.connect() as connection:
         for table in metadata.sorted_tables:
-            fts = f'fts_{table.name}'
+            fts = f'{FTS5.TABLE_PREFIX.value}{table.name}'
             connection.execute(text(f"""
                 {FTS5.MK_TABLE.value} {fts} {FTS5.USING.value} {FTS5.OPEN.value}
                     {Col.KEY.value}, {Col.VALUE.value}, {Col.TIME.value},
@@ -173,17 +173,6 @@ def hash_key(key: bytes) -> bytes:
     """Get the hashed str bytes for a key"""
     return blake2b(key, digest_size=Utils.SIZE.value).hexdigest().encode()
 
-def get_hash_table(key: bytes):
-    """Given a hashed key return the table and database for the hash.
-
-    Args:
-        key (bytes): user provided key for the key-value pair
-    """
-    pass
-#    table_name = ''
-#    db_name = ''
-    #TODO implement for the app class LiteStash
-
 
 def mk_hash_column() -> Column:
     """Return a Column for the hash"""
@@ -238,32 +227,171 @@ def mk_columns() -> Generator[Column, None, None]:
         yield column
 
 
-def zf_db() -> Generator[str,None,None]:
+def zf_db() -> Generator[bytes,None,None]:
     """Prefix generator for zero through four database"""
     for n in (Digitables.ZERO.value,
               Digitables.ONE.value,
               Digitables.TWO.value,
               Digitables.THREE.value,
               Digitables.FOUR.value
-              ):
+    ):
         yield n
 
-def fn_db() -> Generator[str,None,None]:
-    """Prefix generator for five throught nine database"""
+def fn_db() -> Generator[bytes,None,None]:
+    """Prefix generator for five through nine database"""
     for n in (Digitables.FIVE.value,
               Digitables.SIX.value,
               Digitables.SEVEN.value,
               Digitables.EIGHT.value,
               Digitables.NINE.value
-              ):
+    ):
         yield n
 
-def ael_db() -> Generator[str,None,None]:
-    pass
+def ael_db() -> Generator[bytes,None,None]:
+    """Prefix generator for a through e database"""
+    for l in (LowerTables.A.value,
+              LowerTables.B.value,
+              LowerTables.C.value,
+              LowerTables.D.value,
+              LowerTables.E.value
+    ):
+        yield l
 
-def get_db_name(prefix: bytes) -> Generator[str, None, None]:
-    """Get all database names"""
-    pass
+def fil_db() -> Generator[bytes,None,None]:
+    """Prefix generator for five throught nine database"""
+    for l in (LowerTables.F.value,
+              LowerTables.G.value,
+              LowerTables.H.value,
+              LowerTables.I.value
+    ):
+        yield l
+
+def jml_db() -> Generator[bytes,None,None]:
+    """Prefix generator for five throught nine database"""
+    for l in (LowerTables.J.value,
+              LowerTables.K.value,
+              LowerTables.L.value,
+              LowerTables.M.value
+    ):
+        yield l
+
+def nrl_db() -> Generator[bytes,None,None]:
+    """Prefix generator for five throught nine database"""
+    for l in (LowerTables.N.value,
+              LowerTables.O.value,
+              LowerTables.P.value,
+              LowerTables.Q.value,
+              LowerTables.R.value
+    ):
+        yield l
+
+def svl_db() -> Generator[bytes,None,None]:
+    """Prefix generator for five throught nine database"""
+    for l in (LowerTables.S.value,
+              LowerTables.T.value,
+              LowerTables.U.value,
+              LowerTables.V.value
+    ):
+        yield l
+
+def wzl_db() -> Generator[bytes,None,None]:
+"""Prefix generator for five throught nine database"""
+    for l in (LowerTables.W.value,
+              LowerTables.X.value,
+              LowerTables.Y.value,
+              LowerTables.Z.value
+    ):
+        yield l
+
+def aeu_db() -> Generator[bytes,None,None]:
+"""Prefix generator for five throught nine database"""
+    for l in (UpperTables.A.value,
+              UpperTables.B.value,
+              UpperTables.C.value,
+              UpperTables.D.value,
+              UpperTables.E.value
+    ):
+        yield l
+
+def fiu_db() -> Generator[bytes,None,None]:
+"""Prefix generator for five throught nine database"""
+    for l in (UpperTables.F.value,
+              UpperTables.G.value,
+              UpperTables.H.value,
+              UpperTables.I.value
+    ):
+        yield l
+
+def jmu_db() -> Generator[bytes,None,None]:
+"""Prefix generator for five throught nine database"""
+    for l in (UpperTables.J.value,
+              UpperTables.K.value,
+              UpperTables.L.value,
+              UpperTables.M.value
+    ):
+        yield l
+
+def nru_db() -> Generator[bytes,None,None]:
+"""Prefix generator for five throught nine database"""
+    for l in (UpperTables.N.value,
+              UpperTables.O.value,
+              UpperTables.P.value,
+              UpperTables.Q.value,
+              UpperTables.R.value
+    ):
+        yield l
+
+def svu_db() -> Generator[bytes,None,None]:
+"""Prefix generator for five throught nine database"""
+    for l in (UpperTables.S.value,
+              UpperTables.T.value,
+              UpperTables.U.value,
+              UpperTables.V.value
+    ):
+        yield l
+
+def wzu_db() -> Generator[bytes,None,None]:
+"""Prefix generator for five throught nine database"""
+    for l in (UpperTables.W.value,
+              UpperTables.X.value,
+              UpperTables.Y.value,
+              UpperTables.Z.value
+    ):
+        yield l
+
+def get_db_name(prefix: bytes) -> bytes:
+    """Find database for given prefix"""
+    match prefix:
+        case char if char in zf_db():
+            return Names.ZFD.value
+        case char if char in :
+            return Names.FND.value
+        case char if char in :
+            return Names.AEL.value
+        case char if char in :
+            return Names.FIL.value
+        case char if char in :
+            return Names.JML.value
+        case char if char in :
+            return Names.NRL.value
+        case char if char in :
+            return Names.SVL.value
+        case char if char in :
+            return Names.WZL.value
+        case char if char in :
+            return Names.AEU.value
+        case char if char in :
+            return Names.FIU.value
+        case char if char in :
+            return Names.JMU.value
+        case char if char in :
+            return Names.NRU.value
+        case char if char in :
+            return Names.SVU.value
+        case char if char in :
+            return Names.WZU.value
+        case _:
+            raise ValueError(Utils.DB_NAME_ERROR.value)
 
 def mk_table_names() -> Generator[str, None, None]:
     """Make all valid Table names
