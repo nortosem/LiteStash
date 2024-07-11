@@ -16,6 +16,7 @@ class Utils(Valid):
     SIZE (int): digest_size for hash_key
     """
     SIZE = 17
+    DB_NAME_ERROR = 'Invalid character'
 
 
 class DataScheme(Valid):
@@ -261,27 +262,27 @@ class Digitables(Valid):
     def get_table(char: bytes) -> str:
         """Match on char and return table name"""
         match char:
-            case char Digitables.ZERO.value:
+            case Digitables.ZERO.value:
                 return zero()
-            case char Digitables.ONE.value:
+            case Digitables.ONE.value:
                 return one()
-            case char Digitables.TWO.value:
+            case Digitables.TWO.value:
                 return two()
-            case char Digitables.THREE.value:
+            case Digitables.THREE.value:
                 return three()
-            case char Digitables.FOUR.value:
+            case Digitables.FOUR.value:
                 return four()
-            case char Digitables.FIVE.value:
+            case Digitables.FIVE.value:
                 return five()
-            case char Digitables.SIX.value:
+            case Digitables.SIX.value:
                 return six()
-            case char Digitables.SEVEN.value:
+            case Digitables.SEVEN.value:
                 return seven()
-            case char Digitables.EIGHT.value:
+            case Digitables.EIGHT.value:
                 return eight()
-            case char Digitables.NINE.value:
+            case Digitables.NINE.value:
                 return nine()
-            case char _:
+            case _:
                 raise ValueError("NO!")
 
     @staticmethod
@@ -366,6 +367,12 @@ class LowerTables(Valid):
     X = b'x'
     Y = b'y'
     Z = b'z'
+
+    @staticmethod
+    def get_table -> str:
+        """Get the table name by match on given char"""
+        match char:
+            case char in
 
     @staticmethod
     def a_low() -> str:
