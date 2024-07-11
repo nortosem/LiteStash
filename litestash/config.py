@@ -372,7 +372,60 @@ class LowerTables(Valid):
     def get_table -> str:
         """Get the table name by match on given char"""
         match char:
-            case char in
+            case LowerTables.A.value:
+                return a_low()
+            case LowerTables.B.value:
+                return b_low()
+            case LowerTables.C.value:
+                return c_low()
+            case LowerTables.D.value:
+                return d_low()
+            case LowerTables.E.value:
+                return e_low()
+            case LowerTables.F.value:
+                return f_low()
+            case LowerTables.G.value:
+                return g_low()
+            case LowerTables.H.value:
+                return h_low()
+            case LowerTables.I.value:
+                return i_low()
+            case LowerTables.J.value:
+                return j_low()
+            case LowerTables.K.value:
+                return k_low()
+            case LowerTables.L.value:
+                return l_low()
+            case LowerTables.M.value:
+                return m_low()
+            case LowerTables.N.value:
+                return n_low()
+            case LowerTables.O.value:
+                return o_low()
+            case LowerTables.P.value:
+                return p_low()
+            case LowerTables.Q.value:
+                return q_low()
+            case LowerTables.R.value:
+                return r_low()
+            case LowerTables.S.value:
+                return s_low()
+            case LowerTables.T.value:
+                return t_low()
+            case LowerTables.U.value:
+                return u_low()
+            case LowerTables.V.value:
+                return v_low()
+            case LowerTables.W.value:
+                return w_low()
+            case LowerTables.X.value:
+                return x_low()
+            case LowerTables.Y.value:
+                return y_low()
+            case LowerTables.Z.value:
+                return z_low()
+            case _:
+                raise ValueError("NO!")
 
     @staticmethod
     def a_low() -> str:
@@ -538,12 +591,71 @@ class UpperTables(Valid):
     Z = b'Z'
 
     @staticmethod
-    def A_upper() -> str:
+    def get_table -> str:
+        """Get the table name by match on given char"""
+        match char:
+            case UpperTables.A.value:
+                return a_low()
+            case UpperTables.B.value:
+                return b_low()
+            case UpperTables.C.value:
+                return c_low()
+            case UpperTables.D.value:
+                return d_low()
+            case UpperTables.E.value:
+                return e_low()
+            case UpperTables.F.value:
+                return f_low()
+            case UpperTables.G.value:
+                return g_low()
+            case UpperTables.H.value:
+                return h_low()
+            case UpperTables.I.value:
+                return i_low()
+            case UpperTables.J.value:
+                return j_low()
+            case UpperTables.K.value:
+                return k_low()
+            case UpperTables.L.value:
+                return l_low()
+            case UpperTables.M.value:
+                return m_low()
+            case UpperTables.N.value:
+                return n_low()
+            case UpperTables.O.value:
+                return o_low()
+            case UpperTables.P.value:
+                return p_low()
+            case UpperTables.Q.value:
+                return q_low()
+            case UpperTables.R.value:
+                return r_low()
+            case UpperTables.S.value:
+                return s_low()
+            case UpperTables.T.value:
+                return t_low()
+            case UpperTables.U.value:
+                return u_low()
+            case UpperTables.V.value:
+                return v_low()
+            case UpperTables.W.value:
+                return w_low()
+            case UpperTables.X.value:
+                return x_low()
+            case UpperTables.Y.value:
+                return y_low()
+            case UpperTables.Z.value:
+                return z_low()
+            case _:
+                raise ValueError("NO!")
+
+    @staticmethod
+    def a_upper() -> str:
         """Get the full table name for hash[A:]"""
         return f'{UpperTables.A.value.encode()}{Names.HASH.value}'
 
     @staticmethod
-    def B_upper() -> str:
+    def b_upper() -> str:
         """Get the full table name for hash[B:]"""
         return f'{UpperTables.B.value.encode()}{Names.HASH.value}'
 
