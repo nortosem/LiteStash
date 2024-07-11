@@ -358,9 +358,9 @@ def wzu_db() -> Generator[bytes,None,None]:
     ):
         yield l
 
-def get_db_name(prefix: bytes) -> bytes:
-    """Find database for given prefix"""
-    match prefix:
+def get_db_name(hcar: bytes) -> bytes:
+    """Find database for given char"""
+    match char:
         case char if char in zf_db():
             return Names.ZFD.value
         case char if char in :
@@ -391,6 +391,19 @@ def get_db_name(prefix: bytes) -> bytes:
             return Names.WZU.value
         case _:
             raise ValueError(Utils.DB_NAME_ERROR.value)
+
+
+def get_table_name(char: bytes) -> str:
+    """Given a char get the table's name"""
+    if char in Digitables:
+        return Digitables.get_table_name(char)
+    elif char in LowerTables:
+        return LowerTables.get_table_name(char)
+    elif char in UpperTables:
+        return UpperTables.get_table_name(char)
+    else:
+        raise ValueError("NO!")
+
 
 def mk_table_names() -> Generator[str, None, None]:
     """Make all valid Table names
