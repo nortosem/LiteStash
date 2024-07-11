@@ -11,6 +11,7 @@ This class is intended for use in a LiteStash:
 from litestash.core.engine import Engine
 from litestash.config import MetaSlots
 from litestash.utils import StashSession
+from litestash.utils import setup_sessions
 
 class Session:
     """The Session Manager
@@ -99,7 +100,7 @@ class Session:
         )
         self.nru = StashSession(
             *setup_sessions(
-                getattr(engine, MetaSlots.NRUvalue
+                getattr(engine, MetaSlots.NRUvalue)
             )
         )
         self.svu = StashSession(
