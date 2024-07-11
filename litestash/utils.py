@@ -10,7 +10,7 @@ Functions:
 from collections import namedtuple
 from hashlib import blake2b
 from litestash.config import Utils
-from litestash.config import TableName
+from litestash.config import Names
 from litestash.config import Digitables
 from litestash.config import LowerTables
 from litestash.config import UpperTables
@@ -22,7 +22,7 @@ from litestash.config import SessionStash
 from litestash.config import DataScheme
 from litestash.config import FTS5
 from litestash.models import StashColumns
-from litestash.store import LiteStashEngine
+#from litestash.store import LiteStashEngine
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy import inspect
 from sqlalchemy import Table
@@ -60,14 +60,14 @@ StashEngine = namedtuple(
 StashEngine.__doc__ = EngineStash.DOC.value
 
 
-def setup_metadata(stash: LiteStashEngine, slot: str):
+def setup_metadata(*args):
     """Setup Metadata & Tables
 
     Args:
         stash (LiteStashEngine):  Retrieve name & engine to setup from
         slot (str): datable named attribute slot
     """
-    name, engine = getattr(stash, slot)
+    name, engine = args
     metadata = MetaData()
     metadata = mk_tables(metadata)
     metadata.create_all(bind=engine, checkfirst=True)
@@ -82,7 +82,7 @@ StashMeta = namedtuple(
 StashMeta.__doc__ = MetaStash.DOC.value
 
 
-def setup_fts(data: Tuple[str, MetaData, Engine]):
+def setup_fts(*args):
     """Setup Full Text Search
 
     Given the engine stash and metadata stash:
@@ -134,7 +134,7 @@ def setup_fts(data: Tuple[str, MetaData, Engine]):
         return (name, metadata)
 
 
-def setup_sessions(stash: LiteStashEngine, slot: str):
+def setup_sessions(*args):
     """Make a sesssion
 
     Given a LiteStashEngine make a session factory for a database engine.
@@ -143,7 +143,7 @@ def setup_sessions(stash: LiteStashEngine, slot: str):
         slot (str): database name slot
         stash (LiteStashEngine): An Engine with Metadata already setup
     """
-    name, engine = getattr(stash, slot)
+    name, engine = args
     if inspect(engine).get_table_name():
         session = sessionmaker(engine)
     else:
@@ -250,6 +250,15 @@ def zf_db() -> Generator[str,None,None]:
 
 def fn_db() -> Generator[str,None,None]:
     """Prefix generator for five throught nine database"""
+    for n in (Digitables.FIVE.value,
+              Digitables.SIX.value,
+              Digitables.SEVEN.value,
+              Digitables.EIGHT.value,
+              Digitables.NINE.value
+              ):
+        yield n
+
+def ael_db() -> Generator[str,None,None]:
     pass
 
 def get_db_name(prefix: bytes) -> Generator[str, None, None]:
