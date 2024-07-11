@@ -303,7 +303,7 @@ def wzl_db() -> Generator[bytes,None,None]:
         yield l
 
 def aeu_db() -> Generator[bytes,None,None]:
-"""Prefix generator for five through nine database"""
+    """Prefix generator for five through nine database"""
     for l in (UpperTables.A.value,
               UpperTables.B.value,
               UpperTables.C.value,
@@ -313,7 +313,7 @@ def aeu_db() -> Generator[bytes,None,None]:
         yield l
 
 def fiu_db() -> Generator[bytes,None,None]:
-"""Prefix generator for five through nine database"""
+    """Prefix generator for five through nine database"""
     for l in (UpperTables.F.value,
               UpperTables.G.value,
               UpperTables.H.value,
@@ -322,7 +322,7 @@ def fiu_db() -> Generator[bytes,None,None]:
         yield l
 
 def jmu_db() -> Generator[bytes,None,None]:
-"""Prefix generator for five through nine database"""
+    """Prefix generator for five through nine database"""
     for l in (UpperTables.J.value,
               UpperTables.K.value,
               UpperTables.L.value,
@@ -331,7 +331,7 @@ def jmu_db() -> Generator[bytes,None,None]:
         yield l
 
 def nru_db() -> Generator[bytes,None,None]:
-"""Prefix generator for five through nine database"""
+    """Prefix generator for five through nine database"""
     for l in (UpperTables.N.value,
               UpperTables.O.value,
               UpperTables.P.value,
@@ -341,7 +341,7 @@ def nru_db() -> Generator[bytes,None,None]:
         yield l
 
 def svu_db() -> Generator[bytes,None,None]:
-"""Prefix generator for five through nine database"""
+    """Prefix generator for five through nine database"""
     for l in (UpperTables.S.value,
               UpperTables.T.value,
               UpperTables.U.value,
@@ -350,7 +350,7 @@ def svu_db() -> Generator[bytes,None,None]:
         yield l
 
 def wzu_db() -> Generator[bytes,None,None]:
-"""Prefix generator for W through Z database"""
+    """Prefix generator for W through Z database"""
     for l in (UpperTables.W.value,
               UpperTables.X.value,
               UpperTables.Y.value,
@@ -363,31 +363,31 @@ def get_db_name(hcar: bytes) -> bytes:
     match char:
         case char if char in zf_db():
             return Names.ZFD.value
-        case char if char in :
+        case char if char in fn_db():
             return Names.FND.value
-        case char if char in :
+        case char if char in ael_db():
             return Names.AEL.value
-        case char if char in :
+        case char if char in fil_db():
             return Names.FIL.value
-        case char if char in :
+        case char if char in jml_db():
             return Names.JML.value
-        case char if char in :
+        case char if char in nrl_db():
             return Names.NRL.value
-        case char if char in :
+        case char if char in svl_db():
             return Names.SVL.value
-        case char if char in :
+        case char if char in wzl_db():
             return Names.WZL.value
-        case char if char in :
+        case char if char in aeu_db():
             return Names.AEU.value
-        case char if char in :
+        case char if char in fiu_db():
             return Names.FIU.value
-        case char if char in :
+        case char if char in jmu_db():
             return Names.JMU.value
-        case char if char in :
+        case char if char in nru_db():
             return Names.NRU.value
-        case char if char in :
+        case char if char in svu_db():
             return Names.SVU.value
-        case char if char in :
+        case char if char in wzu_db():
             return Names.WZU.value
         case _:
             raise ValueError(Utils.DB_NAME_ERROR.value)
