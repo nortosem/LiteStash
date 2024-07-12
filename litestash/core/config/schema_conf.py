@@ -2,7 +2,7 @@
 
 TODO: docs
 """
-from litestash.config import Valid
+from litestash.core.config.root import Valid
 
 class MetaSlots(Valid):
     """Slots for the LiteStashMetadata"""
@@ -67,6 +67,7 @@ class ColumnConfig(Valid):
     BLOB = 'BLOB'
     INT = 'INTEGER'
     JSON = 'JSON'
+    STASH_COLUMN = 'type_'
     DOC = 'todo'
     ERROR = 'Value must be a valid column type'
 

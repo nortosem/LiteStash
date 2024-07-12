@@ -3,9 +3,9 @@
 TODO: docs
 """
 from typing import Generator
-from litestash.core.config.tables import Digitables
-from litestash.core.config.tables import LowerTables
-from litestash.core.config.tables import UpperTables
+from litestash.core.config.tables.digits import Digitables
+from litestash.core.config.tables.lowercase import LowerTables
+from litestash.core.config.tables.uppercase import UpperTables
 
 def zf_db() -> Generator[bytes,None,None]:
     """Prefix generator for zero through four database"""
