@@ -2,7 +2,7 @@
 
 TODO: docs
 """
-from litestash.config import Valid
+from litestash.core.config.root import Valid
 from litestash.config.core.config.schema import Names
 
 class UpperTables(Valid):
