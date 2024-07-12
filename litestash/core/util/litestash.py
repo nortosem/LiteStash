@@ -1,12 +1,21 @@
 """The LiteStash Core Utilities
 
+Functions:
+    setup_engine
+    setup_metadata
+    setup_sessions
+    check_key
 #TODO docs
 """
 from litestash.core.config import EngineAttr
 from litestash.core.config import MetaAttr
 from litestash.core.config import SessionAttr
 from litestash.core.config import EngineConf
+from litestash.core.config.litestash import DataScheme
+from litestash.core.config.litestash import Utils
+from litestash.core.util.schema import mk_tables
 from collections import namedtuple
+from hashlib import blake2b
 from sqlalchemy import create_engine
 from sqlalchemy import inspect
 from sqlalchemy import Engine
@@ -30,8 +39,10 @@ def setup_engine(name: str) -> Engine:
 
 EngineAttributes = namedtuple(
     EngineAttr.TYPE_NAME.value,
-    [EngineAttr.DB_NAME.value,
-    EngineAttr.ENGINE.value]
+    [
+        EngineAttr.DB_NAME.value,
+        EngineAttr.ENGINE.value
+    ]
 )
 EngineAttributes.__doc__ = EngineAttr.DOC.value
 
@@ -52,8 +63,10 @@ def setup_metadata(*args):
 
 MetaAttributes = namedtuple(
     MetaAttr.TYPE_NAME.value,
-    [MetaAttr.DB_NAME.value,
-    MetaAttr.METADATA.value]
+    [
+        MetaAttr.DB_NAME.value,
+        MetaAttr.METADATA.value
+    ]
 )
 MetaAttributes.__doc__ = MetaAttr.DOC.value
 
@@ -77,7 +90,25 @@ def setup_sessions(*args):
 
 SessionAttributes = namedtuple(
     SessionAttr.TYPE_NAME.value,
-    [SessionAttr.DB_NAME.value,
-    SessionAttr.SESSION.value]
+    [
+        SessionAttr.DB_NAME.value,
+        SessionAttr.SESSION.value
+    ]
 )
 SessionAttributes.__doc__ = SessionAttr.DOC.value
+
+
+def check_key(key: str) -> bytes:
+    """Validates and encodes an ASCII string key to bytes."""
+    if key.isacii():
+        if key.isalnum():
+            return key.encode()
+        else:
+            raise ValueError(DataScheme.ALNUM_ERROR.value)
+    else:
+        raise ValueError(DataScheme.ASCII_ERROR.value)
+
+
+def hash_key(key: bytes) -> bytes:
+    """Get the hashed str bytes for a key"""
+    return blake2b(key, digest_size=Utils.SIZE.value).hexdigest().encode()
