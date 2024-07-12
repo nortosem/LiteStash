@@ -4,6 +4,34 @@
 """
 from litestash.config import Valid
 
+class DataScheme(Valid):
+    """LiteStashData Scheme
+
+    Define the config and schema for the data transfer object.
+    """
+    TITLE = 'Data'
+    DESCRIPTION = 'The key name and JSON data for the given key.'
+    MIN_LENGTH = 4
+    MAX_LENGTH = 41
+    FORBID_EXTRA = 'forbid'
+
+
+class StashSlots(Valid):
+    """all slots for the LiteStash"""
+    ENGINE = 'engine'
+    METADATA = 'metadata'
+    DB_SESSION = 'db_session'
+
+
+class Utils(Valid):
+    """Defaults for util functions
+
+    SIZE (int): digest_size for hash_key
+    """
+    SIZE = 17
+    DB_NAME_ERROR = 'Invalid character'
+
+
 class EngineAttr(Valid):
     """The namedtuple config for all engine attributes of a LiteStash"""
     TYPE_NAME = 'EngineAttr'
