@@ -2,9 +2,9 @@
 
 
 """
-from litestash.config import MetaSlots
-from litestash.utils import setup_engine
-from litestash.utils import StashEngine
+from litestash.core.config.schema_conf import MetaSlots
+from litestash.core.util.litestash_util import setup_engine
+from litestash.core.util.litestash_util import EngineAttributes
 
 class Engine:
     """LiteStash Engine
@@ -35,46 +35,46 @@ class Engine:
 
         Each database stored as name, engine.
         """
-        self.zfd = StashEngine(
+        self.zfd = EngineAttributes(
             *setup_engine(MetaSlots.ZFD.value)
         )
-        self.fnd = StashEngine(
+        self.fnd = EngineAttributes(
             *setup_engine(MetaSlots.FND.value)
         )
-        self.ael = StashEngine(
+        self.ael = EngineAttributes(
             *setup_engine(MetaSlots.AEL.value)
         )
-        self.fil = StashEngine(
+        self.fil = EngineAttributes(
             *setup_engine(MetaSlots.FIL.value)
         )
-        self.jml = StashEngine(
+        self.jml = EngineAttributes(
             *setup_engine(MetaSlots.JML.value)
         )
-        self.nrl = StashEngine(
+        self.nrl = EngineAttributes(
             *setup_engine(MetaSlots.NRL.value)
         )
-        self.svl = StashEngine(
+        self.svl = EngineAttributes(
             *setup_engine(MetaSlots.SVL.value)
         )
-        self.wzl = StashEngine(
+        self.wzl = EngineAttributes(
             *setup_engine(MetaSlots.WZL.value)
         )
-        self.aeu = StashEngine(
+        self.aeu = EngineAttributes(
             *setup_engine(MetaSlots.AEU.value)
         )
-        self.fiu = StashEngine(
+        self.fiu = EngineAttributes(
             *setup_engine(MetaSlots.FIU.value)
         )
-        self.jmu = StashEngine(
+        self.jmu = EngineAttributes(
             *setup_engine(MetaSlots.JMU.value)
         )
-        self.nru = StashEngine(
+        self.nru = EngineAttributes(
             *setup_engine(MetaSlots.NRU.value)
         )
-        self.svu = StashEngine(
+        self.svu = EngineAttributes(
             *setup_engine(MetaSlots.SVU.value)
         )
-        self.wzu = StashEngine(
+        self.wzu = EngineAttributes(
             *setup_engine(MetaSlots.WFU.value)
         )
 
