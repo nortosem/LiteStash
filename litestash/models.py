@@ -2,18 +2,21 @@
 
 The column and data models for keeping a stash.
 """
-from litestash.core.config.litestash import DataScheme
-from litestash.core.util.table import valid_type
-from litestash.core.util.table import BlobType
-from litestash.core.util.table import IntegerType
-from litestash.core.util.table import JsonType
+from litestash.core.config.litestash_conf import DataScheme
+from litestash.core.config.schema_conf import ColumnConfig
 from pydantic.dataclasses import dataclass
+from pydantic import validator, ValidationError
 from pydantic import StrictBytes
 from pydantic import Json
 from pydantic import Field
+from collections import namedtuple
 from typing import Literal
+from typing import Union
 from datetime import datetime
 from sqlalchemy.schema import Column
+from sqlalchemy import Integer
+from sqlalchemy import JSON
+from sqlalchemy import BLOB
 import orjson
 
 
@@ -57,6 +60,21 @@ class LiteStashStore:
         json_dumps = orjson.dumps
 
 
+ColumnType = namedtuple(
+    ColumnConfig.TYPE_NAME.value,
+    [
+        ColumnConfig.TYPE_STR.value,
+        ColumnConfig.TYPE_DB.value
+    ]
+)
+ColumnType.__doc__ = ColumnConfig.DOC.value
+
+
+BlobType = ColumnType(ColumnConfig.BLOB.value, BLOB)
+IntegerType = ColumnType(ColumnConfig.INT.value, Integer)
+JsonType = ColumnType(ColumnConfig.JSON.value, JSON)
+
+
 @dataclass(slots=True)
 class StashColumn:
     """Valid LiteStash Column
@@ -65,19 +83,41 @@ class StashColumn:
     The DateTime is unix time int over now().
     """
     name: str
-    type_: Literal[BlobType.literal, IntegerType.literal, JsonType.literal]
+    type_: Literal[
+        BlobType.literal,
+        IntegerType.literal,
+        JsonType.literal
+    ] = Field(...)
     primary_key: bool = False
     index: bool = False
     unique: bool = False
 
+    @validator(ColumnConfig.STASH_COLUMN.value)
+    def valid_type(self, column_type: ColumnType) -> Union[BLOB,Integer,JSON]:
+        """Valid Type Function
+
+        Take a Literal and return sqlite column type.
+
+        Args:
+            column_type (ColumnType):
+                A namedtuple for blob, int, or json types.
+        """
+        match column_type:
+            case BlobType.literal:
+                return BlobType.sqlite
+            case IntegerType.literal:
+                return IntegerType.sqlite
+            case JsonType.literal:
+                return JsonType.sqlite
+            case _:
+                raise ValidationError(ColumnConfig.ERROR.value)
+
     def get_column(self) -> Column:
         """Create columns for database tables"""
-        column_type = valid_type(self.type_)
         return Column(
             self.name,
-            column_type,
+            self.type_,
             primary_key=self.primary_key,
             index=self.index,
             unique=self.unique,
-            nullable=self.nullable
         )
