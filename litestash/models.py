@@ -2,18 +2,20 @@
 
 The column and data models for keeping a stash.
 """
+from litestash.core.config.litestash import DataScheme
+from litestash.core.util.table import valid_type
+from litestash.core.util.table import BlobType
+from litestash.core.util.table import IntegerType
+from litestash.core.util.table import JsonType
+from pydantic.dataclasses import dataclass
+from pydantic import StrictBytes
+from pydantic import Json
+from pydantic import Field
 from typing import Literal
 from datetime import datetime
-import orjson
-from pydantic import Json
-from pydantic import StrictBytes
-from pydantic import Field
-from pydantic.dataclasses import dataclass
-from sqlalchemy import BLOB
-from sqlalchemy import INTEGER
-from sqlalchemy import JSON
 from sqlalchemy.schema import Column
-from litestash.config import DataScheme
+import orjson
+
 
 @dataclass(frozen=True, slots=True)
 class LiteStashData:
@@ -56,25 +58,24 @@ class LiteStashStore:
 
 
 @dataclass(slots=True)
-class StashColumns:
+class StashColumn:
     """Valid LiteStash Column
 
     Definition for sqlite database columns.
     The DateTime is unix time int over now().
-    TODO
     """
     name: str
-    type_: Literal[BLOB, INTEGER, JSON]
+    type_: Literal[BlobType.literal, IntegerType.literal, JsonType.literal]
     primary_key: bool = False
     index: bool = False
     unique: bool = False
-    nullable: bool = False
 
-    def get_column(self, *args, **kwargs) -> Column:
+    def get_column(self) -> Column:
         """Create columns for database tables"""
+        column_type = valid_type(self.type_)
         return Column(
             self.name,
-            self.type_,
+            column_type,
             primary_key=self.primary_key,
             index=self.index,
             unique=self.unique,
