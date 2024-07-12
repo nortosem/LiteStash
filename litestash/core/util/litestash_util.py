@@ -7,13 +7,13 @@ Functions:
     check_key
 #TODO docs
 """
-from litestash.core.config import EngineAttr
-from litestash.core.config import MetaAttr
-from litestash.core.config import SessionAttr
-from litestash.core.config import EngineConf
-from litestash.core.config.litestash import DataScheme
-from litestash.core.config.litestash import Utils
-from litestash.core.util.schema import mk_tables
+from litestash.core.config.litestash_conf import EngineAttr
+from litestash_conf.core.config.litestash_conf import MetaAttr
+from litestash.core.config.litestash_conf import SessionAttr
+from litestash.core.config.litestash_conf import EngineConf
+from litestash.core.config.litestash_conf import DataScheme
+from litestash.core.config.litestash_conf import Utils
+from litestash.core.util.schema_util import mk_tables
 from collections import namedtuple
 from hashlib import blake2b
 from sqlalchemy import create_engine

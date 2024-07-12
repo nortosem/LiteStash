@@ -2,7 +2,7 @@
 
 #TODO doc
 """
-from litestash.config import Valid
+from litestash.core.config.root import Valid
 
 class DataScheme(Valid):
     """LiteStashData Scheme
