@@ -56,6 +56,20 @@ class ColumnSetup(Valid):
     TIME = 'timedate'
 
 
+class ColumnConfig(Valid):
+    """The namedtuple Column config
+
+    A config for mapping literal type string to sqlite database type.
+    """
+    TYPE_NAME = 'ColumnTypes'
+    TYPE_STR = 'literal'
+    TYPE_DB = 'sqlite'
+    BLOB = 'BLOB'
+    INT = 'INTEGER'
+    JSON = 'JSON'
+    DOC = 'todo'
+    ERROR = 'Value must be a valid column type'
+
 class Names(Valid):
     """Database filenames
 
