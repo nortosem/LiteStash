@@ -9,9 +9,9 @@ This class is intended for use in a LiteStash:
         self.session = Session
 """
 from litestash.core.engine import Engine
-from litestash.config import MetaSlots
-from litestash.utils import StashSession
-from litestash.utils import setup_sessions
+from litestash.core.config.schema_conf import MetaSlots
+from litestash.core.util.litestash_util import SessionAttributes
+from litestash.core.util.litestash_util import setup_sessions
 
 class Session:
     """The Session Manager
@@ -42,73 +42,73 @@ class Session:
 
         TODO: docs
         """
-        self.zfd = StashSession(
+        self.zfd = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.ZFD.value)
             )
         )
-        self.fnd = StashSession(
+        self.fnd = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.FND.value)
             )
         )
-        self.ael = StashSession(
+        self.ael = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.AEL.value)
             )
         )
-        self.fil = StashSession(
+        self.fil = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.FIL.value)
             )
         )
-        self.jml = StashSession(
+        self.jml = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.JML.value)
             )
         )
-        self.nrl = StashSession(
+        self.nrl = SessionAttributes(
             *setup_sessions(
                 getattr(engine,
                 MetaSlots.NRL.value)
             )
         )
-        self.svl = StashSession(
+        self.svl = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.SVL.value)
             )
         )
-        self.wzl = StashSession(
+        self.wzl = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.WZL.value)
             )
         )
-        self.aeu = StashSession(
+        self.aeu = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.AEU.value)
             )
         )
-        self.fiu = StashSession(
+        self.fiu = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.FIU.value)
             )
         )
-        self.jmu = StashSession(
+        self.jmu = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.JMU.value)
             )
         )
-        self.nru = StashSession(
+        self.nru = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.NRUvalue)
             )
         )
-        self.svu = StashSession(
+        self.svu = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.SVU.value)
             )
         )
-        self.wzu = StashSession(
+        self.wzu = SessionAttributes(
             *setup_sessions(
                 getattr(engine, MetaSlots.WZU.value)
             )
