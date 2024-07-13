@@ -32,8 +32,7 @@ def setup_engine(name: str) -> Engine:
     """
     return (name,
             create_engine(
-                f'{EngineConf.sqlite()}{EngineConf.dirname()}{name}.db',
-                echo=EngineConf.echo.value
+                f'{EngineConf.sqlite()}{EngineConf.dirname()}/{name}.db'
                 )
             )
 

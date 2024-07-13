@@ -66,7 +66,7 @@ class EngineConf(Valid):
 
     Provide the configuation to setup a database engine.
     """
-    SQLITE = 'sqlite://'
+    SQLITE = 'sqlite:///'
     DIR_NAME = 'litestash'
     ECHO = True
     FUTURE = True
@@ -83,7 +83,7 @@ class EngineConf(Valid):
 
     @staticmethod
     def echo() -> str:
-        return f'{EngineConf.ECHO.value}'
+        return EngineConf.ECHO.value
 
     @staticmethod
     def future() -> str:
