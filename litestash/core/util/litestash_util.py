@@ -8,7 +8,7 @@ Functions:
 #TODO docs
 """
 from litestash.core.config.litestash_conf import EngineAttr
-from litestash_conf.core.config.litestash_conf import MetaAttr
+from litestash.conf.core.config.litestash_conf import MetaAttr
 from litestash.core.config.litestash_conf import SessionAttr
 from litestash.core.config.litestash_conf import EngineConf
 from litestash.core.config.litestash_conf import DataScheme

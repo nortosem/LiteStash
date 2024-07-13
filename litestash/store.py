@@ -3,20 +3,15 @@
 Define the LiteStash key-value database object.
 LiteStash is a text key with JSON value key value store.
 """
+from litestash.core.config.litestash_conf import StashSlots
 from litestash.core.engine import Engine
 from litestash.core.schema import Metadata
 from litestash.core.session import Session
 from litestash.models import LiteStashData
-from litestash.config import StashSlots
-#from litestash.utils import mk_hash
-from litestash.utils import hash_key
-from litestash.utils import check_key
-from litestash.utils import get_db_name
-from litestash.utils import get_table_name
-#from litestash.config import Pragma
-#from sqlalchemy import event
-#from sqlalchemy import table
-#from sqlalchemy import column
+from litestash.core.util.litestash_util import hash_key
+from litestash.core.util.litestash_util import check_key
+from litestash.core.util.schema_util import get_db_name
+from litestash.core.util.schema_util import get_table_name
 from sqlalchemy import select
 from pydantic import ValidationError
 from typing import Generator
