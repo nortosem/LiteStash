@@ -4,12 +4,15 @@ The column and data models for keeping a stash.
 """
 from litestash.core.config.litestash_conf import DataScheme
 from litestash.core.config.schema_conf import ColumnConfig
+from litestash.core.util.table_util import ColumnType
+from litestash.core.util.table_util import BlobType
+from litestash.core.util.table_util import IntegerType
+from litestash.core.util.table_util import JsonType
 from pydantic.dataclasses import dataclass
 from pydantic import validator, ValidationError
 from pydantic import StrictBytes
 from pydantic import Json
 from pydantic import Field
-from collections import namedtuple
 from typing import Literal
 from typing import Union
 from datetime import datetime
@@ -60,19 +63,7 @@ class LiteStashStore:
         json_dumps = orjson.dumps
 
 
-ColumnType = namedtuple(
-    ColumnConfig.TYPE_NAME.value,
-    [
-        ColumnConfig.TYPE_STR.value,
-        ColumnConfig.TYPE_DB.value
-    ]
-)
-ColumnType.__doc__ = ColumnConfig.DOC.value
 
-
-BlobType = ColumnType(ColumnConfig.BLOB.value, BLOB)
-IntegerType = ColumnType(ColumnConfig.INT.value, Integer)
-JsonType = ColumnType(ColumnConfig.JSON.value, JSON)
 
 
 @dataclass(slots=True)
