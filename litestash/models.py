@@ -4,10 +4,10 @@ The column and data models for keeping a stash.
 """
 from litestash.core.config.litestash_conf import DataScheme
 from litestash.core.config.schema_conf import ColumnConfig
-from litestash.core.util.table_util import ColumnType
-from litestash.core.util.table_util import BlobType
-from litestash.core.util.table_util import IntegerType
-from litestash.core.util.table_util import JsonType
+from litestash.core.util.model_util import ColumnType
+from litestash.core.util.model_util import BlobType
+from litestash.core.util.model_util import IntegerType
+from litestash.core.util.model_util import JsonType
 from pydantic.dataclasses import dataclass
 from pydantic import validator, ValidationError
 from pydantic import StrictBytes
