@@ -5,6 +5,7 @@
 from litestash.core.config.schema_conf import MetaSlots
 from litestash.core.util.litestash_util import setup_engine
 from litestash.core.util.litestash_util import EngineAttributes
+from sqlalchemy import Engine
 
 class Engine:
     """LiteStash Engine
@@ -75,9 +76,14 @@ class Engine:
             *setup_engine(MetaSlots.SVU.value)
         )
         self.wzu = EngineAttributes(
-            *setup_engine(MetaSlots.WFU.value)
+            *setup_engine(MetaSlots.WZU.value)
         )
 
+
+    def get(self, name: str) -> Engine:
+        """Given a name return the engine"""
+        attribute = getattr(self, name)
+        return attribute.engine
 
     def __iter__(self):
         """Iterator for all database engines"""
