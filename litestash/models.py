@@ -63,9 +63,6 @@ class LiteStashStore:
         json_dumps = orjson.dumps
 
 
-
-
-
 @dataclass(slots=True)
 class StashColumn:
     """Valid LiteStash Column
