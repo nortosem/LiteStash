@@ -9,14 +9,14 @@ from litestash.core.util.model_util import BlobType
 from litestash.core.util.model_util import IntegerType
 from litestash.core.util.model_util import JsonType
 from pydantic.dataclasses import dataclass
-from pydantic import validator, ValidationError
+from pydantic import validator
 from pydantic import StrictBytes
 from pydantic import Json
 from pydantic import Field
 from typing import Literal
 from typing import Union
 from datetime import datetime
-from sqlalchemy.schema import Column
+from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import JSON
 from sqlalchemy import BLOB
@@ -80,7 +80,6 @@ class StashColumn:
     index: bool = False
     unique: bool = False
 
-    @classmethod
     @validator(ColumnConfig.STASH_COLUMN.value)
     def valid_type(cls, column_type: ColumnType) -> Union[BLOB,Integer,JSON]:
         """Valid Type Function
@@ -99,14 +98,4 @@ class StashColumn:
             case JsonType.literal:
                 return JsonType.sqlite
             case _:
-                raise ValidationError(ColumnConfig.ERROR.value)
-
-    def get_column(self) -> Column:
-        """Create columns for database tables"""
-        return Column(
-            self.name,
-            self.type_,
-            primary_key=self.primary_key,
-            index=self.index,
-            unique=self.unique,
-        )
+                raise ValueError(ColumnConfig.ERROR.value)
