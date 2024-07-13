@@ -13,6 +13,7 @@ from litestash.core.config.litestash_conf import SessionAttr
 from litestash.core.config.litestash_conf import EngineConf
 from litestash.core.config.litestash_conf import DataScheme
 from litestash.core.config.litestash_conf import Utils
+from litestash.core.config.schema_conf import ColumnConfig
 from litestash.core.util.schema_util import mk_tables
 from collections import namedtuple
 from hashlib import blake2b
@@ -20,6 +21,9 @@ from sqlalchemy import create_engine
 from sqlalchemy import inspect
 from sqlalchemy import Engine
 from sqlalchemy import MetaData
+from sqlalchemy import Integer
+from sqlalchemy import JSON
+from sqlalchemy import BLOB
 from sqlalchemy.orm.session import sessionmaker
 
 def setup_engine(name: str) -> Engine:
@@ -112,3 +116,18 @@ def check_key(key: str) -> bytes:
 def hash_key(key: bytes) -> bytes:
     """Get the hashed str bytes for a key"""
     return blake2b(key, digest_size=Utils.SIZE.value).hexdigest().encode()
+
+
+ColumnType = namedtuple(
+    ColumnConfig.TYPE_NAME.value,
+    [
+        ColumnConfig.TYPE_STR.value,
+        ColumnConfig.TYPE_DB.value
+    ]
+)
+ColumnType.__doc__ = ColumnConfig.DOC.value
+
+
+BlobType = ColumnType(ColumnConfig.BLOB.value, BLOB)
+IntegerType = ColumnType(ColumnConfig.INT.value, Integer)
+JsonType = ColumnType(ColumnConfig.JSON.value, JSON)
