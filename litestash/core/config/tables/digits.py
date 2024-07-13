@@ -3,7 +3,7 @@
 TODO: docs
 """
 from litestash.core.config.root import Valid
-from litestash.config.core.config.schema import Names
+from litestash.config.core.config.schema_conf import Names
 
 class Digitables(Valid):
     """Digitables

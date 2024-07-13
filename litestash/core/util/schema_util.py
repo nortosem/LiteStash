@@ -2,7 +2,7 @@
 
 #TODO docs
 """
-from litestash.core.config.schema import Names
+from litestash.core.config.schema_conf import Names
 from litestash.core.config.tables.digits import Digitables
 from litestash.core.config.tables.lowercase import LowerTables
 from litestash.core.config.tables.uppercase import UpperTables
