@@ -78,6 +78,8 @@ class Names(Valid):
     Also the Table name suffix as HASH
     """
     HASH = '_hash'
+    LOW = '_lower'
+    UP = '_upper'
     ZFD = b'zfd.db'
     FND = b'fnd.db'
     AEL = b'ael.db'
