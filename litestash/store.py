@@ -14,7 +14,6 @@ from litestash.core.util.schema_util import get_db_name
 from litestash.core.util.schema_util import get_table_name
 from sqlalchemy import select
 from pydantic import ValidationError
-from typing import Generator
 
 class LiteStash:
     """The LiteStash
@@ -90,11 +89,11 @@ class LiteStash:
         """
         pass
 
-    def keys(self) -> Generator[tuple(str)]:
+    def keys(self):
         """ListStash Keys"""
         pass
 
-    def values(self) -> Generator[tuple([str,str])]:
+    def values(self):
         """Return all values from database in a dictionary."""
         pass
 
