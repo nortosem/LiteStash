@@ -1,5 +1,6 @@
 annotated-types
 astroid
+coverage
 dill
 greenlet
 iniconfig
