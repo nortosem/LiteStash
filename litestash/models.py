@@ -92,8 +92,9 @@ class StashColumn:
     index: bool = False
     unique: bool = False
 
+    @classmethod
     @validator(ColumnConfig.STASH_COLUMN.value)
-    def valid_type(self, column_type: ColumnType) -> Union[BLOB,Integer,JSON]:
+    def valid_type(cls, column_type: ColumnType) -> Union[BLOB,Integer,JSON]:
         """Valid Type Function
 
         Take a Literal and return sqlite column type.
