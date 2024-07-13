@@ -10,10 +10,41 @@ class Valid(Enum):
     pass
 
 
+class Main(Valid):
+    """The main __all__"""
+    CORE = 'core'
+    DATA = 'LiteStashData'
+    STORE = 'LiteStashStore'
+    STASH = 'LiteStash'
+
+
 class Core(Valid):
-    """The Core __all__ modules"""
+    """The core __all__"""
     CONFIG = 'config'
     UTIL = 'util'
     ENGINE = 'engine'
     SCHEMA = 'schema'
     SESSION = 'session'
+
+
+class Util(Valid):
+    """The util __all__"""
+    LITESTASH = 'litestash_util'
+    PREFIX = 'prefix_util'
+    SCHEMA = 'schema_util'
+    TABLE = 'table_util'
+
+
+class Config(Valid):
+    """The config subpackage __all__"""
+    LITESTASH = 'litestash_conf'
+    ROOT = 'root'
+    SCHEMA = 'schema_conf'
+    TABLES = 'tables'
+
+
+class Tables(Valid):
+    """The tables subpackage__all__"""
+    DIGITS = 'digits'
+    LOWER = 'lowercase'
+    UPPER = 'uppercase'
