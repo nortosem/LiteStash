@@ -69,8 +69,7 @@ class Session:
         )
         self.nrl = SessionAttributes(
             *setup_sessions(
-                getattr(engine,
-                MetaSlots.NRL.value)
+                getattr(engine, MetaSlots.NRL.value)
             )
         )
         self.svl = SessionAttributes(
@@ -100,7 +99,7 @@ class Session:
         )
         self.nru = SessionAttributes(
             *setup_sessions(
-                getattr(engine, MetaSlots.NRUvalue)
+                getattr(engine, MetaSlots.NRU.value)
             )
         )
         self.svu = SessionAttributes(
