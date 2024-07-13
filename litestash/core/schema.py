@@ -48,7 +48,7 @@ class Metadata:
         )
         self.ael = MetaAttributes(
             *setup_metadata(
-               getattr(engine, MetaSlots.AEN.value)
+               getattr(engine, MetaSlots.AEL.value)
             )
         )
         self.fil = MetaAttributes(
@@ -73,7 +73,7 @@ class Metadata:
         )
         self.wzl = MetaAttributes(
             *setup_metadata(
-                getattr(engine, MetaSlots.EZL.value)
+                getattr(engine, MetaSlots.WZL.value)
             )
         )
         self.aeu = MetaAttributes(
