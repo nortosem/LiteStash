@@ -4,7 +4,7 @@
 """
 from litestash.core.engine import Engine
 from litestash.core.config.schema_conf import MetaSlots
-from litestash.core.config.litestash_conf StashSlots
+from litestash.core.config.litestash_conf import StashSlots
 from litestash.core.util.litestash_util import setup_metadata
 from litestash.core.util.litestash_util import MetaAttributes
 
