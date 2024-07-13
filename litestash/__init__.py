@@ -3,7 +3,7 @@
 A unSQL key-value database for JSON data with string keys.
 
 Modules:
-    Core: The core compoenents of the LiteStash
+    Core: The core components of the LiteStash
     Models: The data models for a LiteStash
     Store: The LiteStash class module
 """
