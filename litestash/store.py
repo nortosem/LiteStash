@@ -82,7 +82,6 @@ class LiteStash:
             return None
 
 
-
     def delete(self):
         """LiteStash Delete
 

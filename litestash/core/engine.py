@@ -5,7 +5,7 @@
 from litestash.core.config.schema_conf import MetaSlots
 from litestash.core.util.litestash_util import setup_engine
 from litestash.core.util.litestash_util import EngineAttributes
-from sqlalchemy import Engine
+from sqlalchemy import Engine as SQL_Engine
 
 class Engine:
     """LiteStash Engine
@@ -80,7 +80,7 @@ class Engine:
         )
 
 
-    def get(self, name: str) -> Engine:
+    def get(self, name: str) -> SQL_Engine:
         """Given a name return the engine"""
         attribute = getattr(self, name)
         return attribute.engine

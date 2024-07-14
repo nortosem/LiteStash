@@ -2,11 +2,17 @@
 
 #TODO docs
 """
+from sqlalchemy import MetaData
+from sqlalchemy import Table
+
+from litestash.core.config.litestash_conf import Utils
 from litestash.core.config.schema_conf import MetaSlots
+from litestash.core.config.schema_conf import Names
 from litestash.core.config.tables.digits import Digitables
 from litestash.core.config.tables.lowercase import LowerTables
 from litestash.core.config.tables.uppercase import UpperTables
-from litestash.core.config.litestash_conf import Utils
+
+from litestash.core.util import prefix_util
 from litestash.core.util.table_util import mk_columns
 from litestash.core.util.table_util import create_zfd_tables
 from litestash.core.util.table_util import create_fnd_tables
@@ -22,10 +28,7 @@ from litestash.core.util.table_util import create_jmu_tables
 from litestash.core.util.table_util import create_nru_tables
 from litestash.core.util.table_util import create_svu_tables
 from litestash.core.util.table_util import create_wzu_tables
-from litestash.core.util import prefix_util
-from sqlalchemy import MetaData
-from sqlalchemy import Table
-from typing import Generator
+
 
 def mk_table_names(db_name: str):
     """Make valid Table names
