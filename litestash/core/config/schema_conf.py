@@ -72,7 +72,7 @@ class ColumnConfig(Valid):
     ERROR = 'Value must be a valid column type'
 
 class Names(Valid):
-    """Database filenames
+    """Various Names
 
     Default filenames for each database.
     Also the Table name suffix as HASH
@@ -80,20 +80,24 @@ class Names(Valid):
     HASH = '_hash'
     LOW = '_lower'
     UP = '_upper'
-    ZFD = b'zfd.db'
-    FND = b'fnd.db'
-    AEL = b'ael.db'
-    FIL = b'fil.db'
-    JML = b'jml.db'
-    NRL = b'nrl.db'
-    SVL = b'svl.db'
-    WZL = b'wzl.db'
-    AEU = b'ael.db'
-    FIU = b'fiu.db'
-    JMU = b'jmu.db'
-    NRU = b'nru.db'
-    SVU = b'svu.db'
-    WZU = b'wzu.db'
+    DB = '.db'
+    TABLES_03 = 'tables_0-3'
+    TABLES_47 = 'tables_4-7'
+    TABLES_89HU = 'tablee_89-_'
+    TABLES_AB = 'tables_aAbB'
+    TABLES_CD = 'tables_cCdD'
+    TABLES_EF = 'tables_eEfF'
+    TABLES_GH = 'tables_gGhH'
+    TABLES_IJ = 'tables_iIjJ'
+    TABLES_KL = 'tables_kKlL'
+    TABLES_MN = 'tables_mMnN'
+    TABLES_OP = 'tables_oOpP'
+    TABLES_QR = 'tables_qQrR'
+    TABLES_ST = 'tables_sStT'
+    TABLES_UV = 'tables_uUvV'
+    TABLES_WX = 'tables_wWxX'
+    TABLES_YZ = 'tables_yYzZ'
+
 
     @staticmethod
     def db_zft():
