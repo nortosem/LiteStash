@@ -99,129 +99,181 @@ class LowerTables(Valid):
     @staticmethod
     def a_low() -> str:
         """Get the full table name for hash[a:]"""
-        return f'{LowerTables.A.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.A.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def b_low() -> str:
         """Get the full table name for hash[b:]"""
-        return f'{LowerTables.B.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.B.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def c_low() -> str:
         """Get the full table name for hash[c:]"""
-        return f'{LowerTables.C.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.C.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def d_low() -> str:
         """Get the full table name for hash[d:]"""
-        return f'{LowerTables.D.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.D.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def e_low() -> str:
         """Get the full table name for hash[e:]"""
-        return f'{LowerTables.E.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.E.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def f_low() -> str:
         """Get the full table name for hash[f:]"""
-        return f'{LowerTables.F.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.F.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def g_low() -> str:
         """Get the full table name for hash[g:]"""
-        return f'{LowerTables.G.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.G.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def h_low() -> str:
         """Get the full table name for hash[h:]"""
-        return f'{LowerTables.H.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.H.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def i_low() -> str:
         """Get the full table name for hash[i:]"""
-        return f'{LowerTables.I.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.I.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def j_low() -> str:
         """Get the full table name for hash[j:]"""
-        return f'{LowerTables.J.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.J.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def k_low() -> str:
         """Get the full table name for hash[k:]"""
-        return f'{LowerTables.K.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.K.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def l_low() -> str:
         """Get the full table name for hash[l:]"""
-        return f'{LowerTables.L.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.L.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def m_low() -> str:
         """Get the full table name for hash[m:]"""
-        return f'{LowerTables.M.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.M.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def n_low() -> str:
         """Get the full table name for hash[n:]"""
-        return f'{LowerTables.N.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.N.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def o_low() -> str:
         """Get the full table name for hash[o:]"""
-        return f'{LowerTables.O.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.O.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def p_low() -> str:
         """Get the full table name for hash[p:]"""
-        return f'{LowerTables.P.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.P.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def q_low() -> str:
         """Get the full table name for hash[q:]"""
-        return f'{LowerTables.Q.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.Q.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def r_low() -> str:
         """Get the full table name for hash[r:]"""
-        return f'{LowerTables.R.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.R.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def s_low() -> str:
         """Get the full table name for hash[s:]"""
-        return f'{LowerTables.S.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.S.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def t_low() -> str:
         """Get the full table name for hash[t:]"""
-        return f'{LowerTables.T.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.T.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def u_low() -> str:
         """Get the full table name for hash[u:]"""
-        return f'{LowerTables.U.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.U.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def v_low() -> str:
         """Get the full table name for hash[v:]"""
-        return f'{LowerTables.V.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.V.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def w_low() -> str:
         """Get the full table name for hash[w:]"""
-        return f'{LowerTables.W.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.W.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def x_low() -> str:
         """Get the full table name for hash[x:]"""
-        return f'{LowerTables.X.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.X.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def y_low() -> str:
         """Get the full table name for hash[y:]"""
-        return f'{LowerTables.Y.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.Y.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )
 
     @staticmethod
     def z_low() -> str:
         """Get the full table name for hash[z:]"""
-        return f'{LowerTables.Z.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        return(
+            f'{LowerTables.Z.value.decode()}{Names.LOW.value}{Names.HASH.value}'
+        )

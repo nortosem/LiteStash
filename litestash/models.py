@@ -16,7 +16,6 @@ from pydantic import Field
 from typing import Literal
 from typing import Union
 from datetime import datetime
-from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import JSON
 from sqlalchemy import BLOB

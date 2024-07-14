@@ -21,7 +21,6 @@ from sqlalchemy import Engine
 from sqlalchemy import MetaData
 from collections import namedtuple
 from hashlib import blake2b
-from typing import Tuple
 
 def setup_engine(db_name: str) -> Engine:
     """Setup engine
