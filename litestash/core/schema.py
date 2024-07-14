@@ -107,6 +107,11 @@ class Metadata:
             )
         )
 
+    def get(self, db_name):
+        """Get metadata for a database"""
+        attribute = getattr(self, db_name)
+        return attribute.metadata
+
     def __iter__(self):
         """Iterator for all database metadata objects"""
         yield from (getattr(self, slot) for slot in self.__slots__)

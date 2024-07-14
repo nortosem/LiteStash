@@ -113,6 +113,11 @@ class Session:
             )
         )
 
+    def get(self, db_name):
+        """Get a session factory for the database name"""
+        attribute = getattr(self, db_name)
+        return attribute.session
+
     def __iter__(self):
         """Iterator for all database session factories"""
         yield from (getattr(self, slot) for slot in self.__slots__)
