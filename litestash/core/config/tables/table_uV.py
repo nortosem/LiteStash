@@ -16,21 +16,22 @@ class Tables_uV(Valid):
     def get_table_name(char: str) -> str:
         """Match on char and return table name"""
         match char:
-            case LowerTables.U.value:
-                return LowerTables.u_low()
-            case LowerTables.V.value:
-                return LowerTables.v_low()
-            case UpperTables.U.value:
-                return UpperTables.u_upper()
-            case UpperTables.V.value:
-                return UpperTables.v_upper()
-            case _:
+            case Tables_uV.U_LOW.value:
+                return Tables_uV.U_LOW_low()
+            case Tables_uV.V_LOW.value:
+                return Tables_uV.V_LOW_low()
+            case Tables_uV.U_UP.value:
+                return Tables_uV.U_UP_upper()
+            case Tables_uV.V_UP.value:
+                return Tables_uV.V_UP_upper()
+            case _f expand("%") == ""|browse confirm w|else|confirm w|endif
+            :
                 raise ValueError(Names.ERROR.value)
 
     @staticmethod
     def u_low() -> str:
         """Get the full table name for hash[u:]"""
-        return str(LowerTables.U.value
+        return str(Tables_uV.U_LOW.value
                    +Names.LOW.value
                    +Names.HASH.value
                    )
@@ -38,7 +39,7 @@ class Tables_uV(Valid):
     @staticmethod
     def v_low() -> str:
         """Get the full table name for hash[v:]"""
-        return str(LowerTables.V.value
+        return str(Tables_uV.V_LOW.value
                    +Names.LOW.value
                    +Names.HASH.value
                    )
@@ -46,7 +47,7 @@ class Tables_uV(Valid):
     @staticmethod
     def u_upper() -> str:
         """Get the full table name for hash[U:]"""
-        return str(UpperTables.U.value
+        return str(Tables_uV.U_UP.value
                    +Names.UP.value
                    +Names.HASH.value
                    )
@@ -54,7 +55,7 @@ class Tables_uV(Valid):
     @staticmethod
     def v_upper() -> str:
         """Get the full table name for hash[V:]"""
-        return str(UpperTables.V.value
+        return str(Tables_uV.V_UP.value
                    +Names.UP.value
                    +Names.HASH.value
                    )
