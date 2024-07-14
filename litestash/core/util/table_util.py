@@ -9,9 +9,6 @@ from litestash.core.config.tables.lowercase import LowerTables
 from litestash.core.config.tables.uppercase import UpperTables
 from litestash.models import StashColumn
 from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import JSON
-from sqlalchemy import BLOB
 from typing import Generator
 
 def create_zfd_tables() -> Generator[str, None, None]:
@@ -23,7 +20,6 @@ def create_zfd_tables() -> Generator[str, None, None]:
                  Digitables.FOUR.value
                  ):
         table_name = Digitables.get_table_name(char)
-        print(f'table name: {table_name}')
         yield table_name
 
 
