@@ -97,6 +97,7 @@ class Names(Valid):
     TABLES_UV = 'tables_uUvV'
     TABLES_WX = 'tables_wWxX'
     TABLES_YZ = 'tables_yYzZ'
+    ERROR = 'Invalid character request'
 
 
     @staticmethod

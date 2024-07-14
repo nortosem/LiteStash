@@ -45,6 +45,19 @@ class Config(Valid):
 
 class Tables(Valid):
     """The tables subpackage__all__"""
-    DIGITS = 'digits'
-    LOWER = 'lowercase'
-    UPPER = 'uppercase'
+    TABLES_03 = 'table_03'
+    TABLES_47 = 'table_47'
+    TABLES_89HU = 'table_89hu'
+    TABLES_AB = 'table_aB'
+    TABLES_CD = 'table_cD'
+    TABLES_EF = 'table_eF'
+    TABLES_GH = 'table_gH'
+    TABLES_IJ = 'table_iJ'
+    TABLES_KL = 'table_kL'
+    TABLES_MN = 'table_mN'
+    TABLES_OP = 'table_oP'
+    TABLES_QR = 'table_qR'
+    TABLES_ST = 'table_sT'
+    TABLES_UV = 'table_uV'
+    TABLES_WX = 'table_wX'
+    TABLES_YZ = 'table_yZ'
