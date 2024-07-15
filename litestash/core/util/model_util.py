@@ -6,7 +6,7 @@ from litestash.core.config.schema_conf import ColumnConfig
 from collections import namedtuple
 from sqlalchemy import Integer
 from sqlalchemy import JSON
-from sqlalchemy import BLOB
+from sqlalchemy import String
 
 # General Column KVS
 ColumnType = namedtuple(
@@ -19,6 +19,6 @@ ColumnType = namedtuple(
 ColumnType.__doc__ = ColumnConfig.DOC.value
 
 # sqlalchemy sqlite data types
-BlobType = ColumnType(ColumnConfig.BLOB.value, BLOB)
+StrType = ColumnType(ColumnConfig.BLOB.value, BLOB)
 IntegerType = ColumnType(ColumnConfig.INT.value, Integer)
 JsonType = ColumnType(ColumnConfig.JSON.value, JSON)
