@@ -33,6 +33,7 @@ class Util(Valid):
     PREFIX = 'prefix_util'
     SCHEMA = 'schema_util'
     TABLE = 'table_util'
+    MODEL = 'model_util'
 
 
 class Config(Valid):
