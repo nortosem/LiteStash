@@ -19,6 +19,6 @@ ColumnType = namedtuple(
 ColumnType.__doc__ = ColumnConfig.DOC.value
 
 # sqlalchemy sqlite data types
-StrType = ColumnType(ColumnConfig.BLOB.value, BLOB)
+StrType = ColumnType(ColumnConfig.STR.value, String)
 IntegerType = ColumnType(ColumnConfig.INT.value, Integer)
 JsonType = ColumnType(ColumnConfig.JSON.value, JSON)
