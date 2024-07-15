@@ -51,9 +51,12 @@ class ColumnSetup(Valid):
     Define the column attributes for each table
     """
     HASH = 'key_hash'
+    LOT = 'lot'
+    DIGEST = 'key_diges'
     KEY = 'key'
     VALUE = 'value'
-    TIME = 'timedate'
+    DATE_TIME = 'datetime'
+    MS_TIME = 'microseconds'
 
 
 class ColumnConfig(Valid):
@@ -98,44 +101,3 @@ class Names(Valid):
     TABLES_WX = 'tables_wx'
     TABLES_YZ = 'tables_yz'
     ERROR = 'Invalid character request'
-
-
-    @staticmethod
-    def db_zft():
-        """Filename for database with hashes that start with 0-4"""
-        return f'{Names.ZFD.value.decode()}'
-
-    @staticmethod
-    def db_fnt():
-        """Filename for database with hashes that start with 5-9"""
-        return f'{Names.FND.value.decode()}'
-
-    @staticmethod
-    def db_ael():
-        """Filename for database with hashes that start with a-e"""
-        return f'{Names.AEL.value.decode()}'
-
-    @staticmethod
-    def db_fil():
-        """Filename for database with hashes that start with f-i"""
-        return f'{Names.FIL.value.decode()}'
-
-    @staticmethod
-    def db_jml():
-        """Filename for database with hashes that start with j-m"""
-        return f'{Names.JML.value.decode()}'
-
-    @staticmethod
-    def db_nrl():
-        """Filename for database with hashes that start with n-r"""
-        return f'{Names.NRL.value.decode()}'
-
-    @staticmethod
-    def db_svl():
-        """Filename for database with hashes that start with s-v"""
-        return f'{Names.SVL.value.decode()}'
-
-    @staticmethod
-    def db_wzl():
-        """Filename for database with hashes that start with w-z"""
-        return f'{Names.WZL.value.decode()}'
