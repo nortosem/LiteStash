@@ -126,23 +126,23 @@ def digest_key(key: str) -> bytes:
     return blake2b(key.encode(), digest_size=Utils.SIZE.value).hexdigest().encode()
 
 
-def sow(size: int = 6) -> bytes:
-    """Sow Function
+def allot(size: int = 6) -> bytes:
+    """Allot Function
 
     Generate unique random set of bytes for efficient hash key distribution
     """
     return SystemRandom().randbytes(size)
 
 
-def hash_key(digested_key: bytes, seed: bytes) -> str:
+def hash_key(digested_key: bytes, lot: bytes) -> str:
     """Hash Key
 
     Generate a unique primary key for the key_named: json_data
     Args:
         digested_key:
             The unique digest of the string name for the json value
-        seed:
-            The seed sown by sow to generate distributed hash
+        lot:
+            Random value to distribute keys across storage
     Result:
         hashed_key:
             A string result to use as the unique key for json data
