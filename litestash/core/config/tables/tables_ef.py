@@ -5,7 +5,7 @@ Enumerate the valid chars for keys with hash[:0] equal to e,E,f,F.
 from litestash.core.config.root import Valid
 from litestash.core.config.schema_conf import Names
 
-class Tables_eF(Valid):
+class TablesEF(Valid):
     """Enumeration with access methods"""
     E_LOW = 'e'
     F_LOW = 'f'
@@ -16,21 +16,21 @@ class Tables_eF(Valid):
     def get_table_name(char: str) -> str:
         """Match on char and return table name"""
         match char:
-            case Tables_eF.E_LOW.value:
-                return Tables_eF.e_low()
-            case Tables_eF.F_LOW.value:
-                return Tables_eF.f_low()
-            case Tables_eF.E_UP.value:
-                return Tables_eF.e_upper()
-            case Tables_eF.F_UP.value:
-                return Tables_eF.f_upper()
+            case TablesEF.E_LOW.value:
+                return TablesEF.e_low()
+            case TablesEF.F_LOW.value:
+                return TablesEF.f_low()
+            case TablesEF.E_UP.value:
+                return TablesEF.e_upper()
+            case TablesEF.F_UP.value:
+                return TablesEF.f_upper()
             case _:
                 raise ValueError(Names.ERROR.value)
 
     @staticmethod
     def e_low() -> str:
         """Get the full table name for hash[e:]"""
-        return str(Tables_eF.E_LOW.value
+        return str(TablesEF.E_LOW.value
                    +Names.LOW.value
                    +Names.HASH.value
                    )
@@ -38,7 +38,7 @@ class Tables_eF(Valid):
     @staticmethod
     def f_low() -> str:
         """Get the full table name for hash[f:]"""
-        return str(Tables_eF.F_LOW.value
+        return str(TablesEF.F_LOW.value
                    +Names.LOW.value
                    +Names.HASH.value
                    )
@@ -46,7 +46,7 @@ class Tables_eF(Valid):
     @staticmethod
     def e_upper() -> str:
         """Get the full table name for hash[E:]"""
-        return str(Tables_eF.E_UP.value
+        return str(TablesEF.E_UP.value
                    +Names.UP.value
                    +Names.HASH.value
                    )
@@ -54,7 +54,7 @@ class Tables_eF(Valid):
     @staticmethod
     def f_upper() -> str:
         """Get the full table name for hash[F:]"""
-        return str(Tables_eF.F_UP.value
+        return str(TablesEF.F_UP.value
                    +Names.UP.value
                    +Names.HASH.value
                    )
