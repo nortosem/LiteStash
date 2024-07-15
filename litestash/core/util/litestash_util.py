@@ -7,13 +7,6 @@ Functions:
     check_key
 #TODO docs
 """
-from litestash.core.config.litestash_conf import EngineAttr
-from litestash.core.config.litestash_conf import MetaAttr
-from litestash.core.config.litestash_conf import SessionAttr
-from litestash.core.config.litestash_conf import EngineConf
-from litestash.core.config.litestash_conf import DataScheme
-from litestash.core.config.litestash_conf import Utils
-from litestash.core.util.schema_util import mk_tables
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy import inspect
@@ -21,6 +14,17 @@ from sqlalchemy import Engine
 from sqlalchemy import MetaData
 from collections import namedtuple
 from hashlib import blake2b
+from secrets import base64
+from secretes import token_bytes
+from secrets import SystemRandom
+from litestash.core.config.litestash_conf import EngineAttr
+from litestash.core.config.litestash_conf import MetaAttr
+from litestash.core.config.litestash_conf import SessionAttr
+from litestash.core.config.litestash_conf import EngineConf
+from litestash.core.config.litestash_conf import DataScheme
+from litestash.core.config.litestash_conf import Utils
+from litestash.core.util.schema_util import mk_tables
+
 
 def setup_engine(db_name: str) -> Engine:
     """Setup engine
@@ -99,7 +103,10 @@ SessionAttributes.__doc__ = SessionAttr.DOC.value
 
 
 def check_key(key: str) -> bytes:
-    """Validates and encodes an ASCII string key to bytes."""
+    """Check A Key
+
+    Validates and encodes an ASCII string name into bytes
+    """
     if key.isascii():
         if key.isalnum():
             return key.encode()
@@ -109,6 +116,39 @@ def check_key(key: str) -> bytes:
         raise ValueError(DataScheme.ASCII_ERROR.value)
 
 
-def hash_key(key: bytes) -> bytes:
-    """Get the hashed str bytes for a key"""
-    return blake2b(key, digest_size=Utils.SIZE.value).hexdigest().encode()
+def digest_key(key: str) -> bytes:
+    """Key Digest Generator
+
+    Create a unique hexidecimal digest name
+    Arg:
+        key (str): The text name to make a digest from
+    """
+    return blake2b(key.encode(), digest_size=Utils.SIZE.value).hexdigest().encode()
+
+
+def sow(size: int = 6) -> bytes:
+    """Sow Function
+
+    Generate unique random set of bytes for efficient hash key distribution
+    """
+    return SystemRandom().randbytes(size)
+
+
+def hash_key(digested_key: bytes, seed: bytes) -> str:
+    """Hash Key
+
+    Generate a unique primary key for the key_named: json_data
+    Args:
+        digested_key:
+            The unique digest of the string name for the json value
+        seed:
+            The seed sown by sow to generate distributed hash
+    Result:
+        hashed_key:
+            A string result to use as the unique key for json data
+    """
+    return base64.urlsafe_b64encode(seed+digested_key).decode()
+
+
+#def hash_match(hashed_key: str, key: str) -> bool:
+ #   base64.urlsafe_b64decode(hashed_key).decode()
