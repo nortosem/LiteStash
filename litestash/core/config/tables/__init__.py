@@ -7,19 +7,19 @@ Modules:
 from litestash.core.config.tables import table_03
 from litestash.core.config.tables import table_47
 from litestash.core.config.tables import table_89hu
-from litestash.core.config.tables import table_aB
-from litestash.core.config.tables import table_cD
-from litestash.core.config.tables import table_eF
-from litestash.core.config.tables import table_gH
-from litestash.core.config.tables import table_iJ
-from litestash.core.config.tables import table_kL
-from litestash.core.config.tables import table_mN
-from litestash.core.config.tables import table_oP
-from litestash.core.config.tables import table_qR
-from litestash.core.config.tables import table_sT
-from litestash.core.config.tables import table_uV
-from litestash.core.config.tables import table_wX
-from litestash.core.config.tables import table_yZ
+from litestash.core.config.tables import table_ab
+from litestash.core.config.tables import table_cd
+from litestash.core.config.tables import table_ef
+from litestash.core.config.tables import table_gh
+from litestash.core.config.tables import table_ij
+from litestash.core.config.tables import table_kl
+from litestash.core.config.tables import table_mn
+from litestash.core.config.tables import table_op
+from litestash.core.config.tables import table_qr
+from litestash.core.config.tables import table_st
+from litestash.core.config.tables import table_uv
+from litestash.core.config.tables import table_wx
+from litestash.core.config.tables import table_yz
 from litestash.core.config.root import Tables
 
 __all__ = [
