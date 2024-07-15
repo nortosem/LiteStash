@@ -4,22 +4,22 @@ Modules:
     Pull in the names of all databases and the access enumerations for the
     tables in each database.
 """
-from litestash.core.config.tables import table_03
-from litestash.core.config.tables import table_47
-from litestash.core.config.tables import table_89hu
-from litestash.core.config.tables import table_ab
-from litestash.core.config.tables import table_cd
-from litestash.core.config.tables import table_ef
-from litestash.core.config.tables import table_gh
-from litestash.core.config.tables import table_ij
-from litestash.core.config.tables import table_kl
-from litestash.core.config.tables import table_mn
-from litestash.core.config.tables import table_op
-from litestash.core.config.tables import table_qr
-from litestash.core.config.tables import table_st
-from litestash.core.config.tables import table_uv
-from litestash.core.config.tables import table_wx
-from litestash.core.config.tables import table_yz
+from litestash.core.config.tables.tables_03 import Tables03
+from litestash.core.config.tables.tables_47 import Tables47
+from litestash.core.config.tables.tables_89hu import Tables89hu
+from litestash.core.config.tables.tables_ab import TablesAB
+from litestash.core.config.tables.tables_cd import TablesCD
+from litestash.core.config.tables.tables_ef import TablesEF
+from litestash.core.config.tables.tables_gh import TablesGH
+from litestash.core.config.tables.tables_ij import TablesIJ
+from litestash.core.config.tables.tables_kl import TablesKL
+from litestash.core.config.tables.tables_mn import TablesMN
+from litestash.core.config.tables.tables_op import TablesOP
+from litestash.core.config.tables.tables_qr import TablesQR
+from litestash.core.config.tables.tables_st import TablesST
+from litestash.core.config.tables.tables_uv import TablesUV
+from litestash.core.config.tables.tables_wx import TablesWX
+from litestash.core.config.tables.tables_yz import TablesYZ
 from litestash.core.config.root import Tables
 
 __all__ = [
