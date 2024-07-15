@@ -100,7 +100,7 @@ SessionAttributes.__doc__ = SessionAttr.DOC.value
 
 def check_key(key: str) -> bytes:
     """Validates and encodes an ASCII string key to bytes."""
-    if key.isacii():
+    if key.isascii():
         if key.isalnum():
             return key.encode()
         else:
