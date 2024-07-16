@@ -24,113 +24,113 @@ from litestash.core.config.tables.tables_uv import TablesUV
 from litestash.core.config.tables.tables_wx import TablesWX
 from litestash.core.config.tables.tables_yz import TablesYZ
 
-def create_tables_03() -> Generator[str, None, None]:
+def get_tables_03() -> Generator[str, None, None]:
     """Generate all table names for 0-3"""
-    for char in (Tables03):
+    for char in Tables03:
         table_name = Tables03.get_table_name(char.value)
         yield table_name
 
 
-def create_tables_47() -> Generator[str, None, None]:
+def get_tables_47() -> Generator[str, None, None]:
     """Generate all table names for 4-7"""
-    for char in (Tables43):
+    for char in Tables47:
         table_name = Tables47.get_table_name(char.value)
         yield table_name
 
 
-def create_tables_89hu() -> Generator[str, None, None]:
+def get_tables_89hu() -> Generator[str, None, None]:
     """Generate all table names for 8,9,-,_"""
-    for char in (Tables89hu):
+    for char in Tables89hu:
         table_name = Tables89hu.get_table_name(char.value)
         yield table_name
 
 
-def create_tables_ab() -> Generator[str, None, None]:
+def get_tables_ab() -> Generator[str, None, None]:
     """Generate all table names for a,b,A,B"""
-    for char in (TablesAB):
+    for char in TablesAB:
         table_name = TablesAB.get_table_name(char.value)
         yield table_name
 
 
-def create_tables_cd() -> Generator[str, None, None]:
+def get_tables_cd() -> Generator[str, None, None]:
     """Generate all table names for c,d,C,D"""
-    for char in (TablesCD):
+    for char in TablesCD:
         table_name = TablesCD.get_table_name(char.value)
         yield table_name
 
 
-def create_tables_ef() -> Generator[str, None, None]:
+def get_tables_ef() -> Generator[str, None, None]:
     """Generate all table names for e,f,E,F"""
-    for char in (TablesEF):
+    for char in TablesEF:
         table_name = TablesEF.get_table_name(char.value)
         yield table_name
 
 
-def create_tables_gh() -> Generator[str, None, None]:
+def get_tables_gh() -> Generator[str, None, None]:
     """Generate all table names for g,h,G,H"""
-    for char in (TablesGH):
+    for char in TablesGH:
         table_name = TablesGH.get_table_name(char.value)
         yield table_name
 
 
-def create_tables_ij() -> Generator[str, None, None]:
+def get_tables_ij() -> Generator[str, None, None]:
     """Generate all table names for i,j,I,J"""
-    for char in (TablesIJ):
+    for char in TablesIJ:
         table_name = TablesIJ.get_table_name(char.value)
         yield table_name
 
-def create_tables_kl() -> Generator[str, None, None]:
+def get_tables_kl() -> Generator[str, None, None]:
     """Generate all table names for k,l,K,L"""
-    for char in (TablesKL):
+    for char in TablesKL:
         table_name = TablesKL.get_table_name(char.value)
         yield table_name
 
-def create_tables_mn() -> Generator[str, None, None]:
+def get_tables_mn() -> Generator[str, None, None]:
     """Generate all table names for m,n,M,N"""
-    for char in (TablesMN):
+    for char in TablesMN:
         table_name = TablesMN.get_table_name(char.value)
         yield table_name
 
 
-def create_tables_op() -> Generator[str, None, None]:
+def get_tables_op() -> Generator[str, None, None]:
     """Generate all table names for o,p,O,P"""
-    for char in (TablesOP):
+    for char in TablesOP:
         table_name = TablesOP.get_table_name(char.value)
         yield table_name
 
 
-def create_tables_qr() -> Generator[str, None, None]:
+def get_tables_qr() -> Generator[str, None, None]:
     """Generate all table names for q,r,Q,R"""
-    for char in (TablesQR):
+    for char in TablesQR:
         table_name = TablesQR.get_table_name(char.value)
         yield table_name
 
 
-def create_tables_st() -> Generator[str, None, None]:
+def get_tables_st() -> Generator[str, None, None]:
     """Generate all table names for s,t,S,T"""
-    for char in (TablesST):
+    for char in TablesST:
         table_name = TablesST.get_table_name(char.value)
         yield table_name
 
-def create_tables_uv() -> Generator[str, None, None]:
+def get_tables_uv() -> Generator[str, None, None]:
     """Generate all table names for u,v,U,V"""
-    for char in (TablesUV):
+    for char in TablesUV:
         table_name = TablesUV.get_table_name(char.value)
         yield table_name
 
-def create_tables_wx() -> Generator[str, None, None]:
+def get_tables_wx() -> Generator[str, None, None]:
     """Generate all table names for w,x,W,X"""
-    for char in (TablesWX):
+    for char in TablesWX:
         table_name = TablesWX.get_table_name(char.value)
         yield table_name
 
-def create_tables_yz() -> Generator[str, None, None]:
+def get_tables_yz() -> Generator[str, None, None]:
     """Generate all table names for y,z,Y,Z"""
-    for char in (TablesYZ):
+    for char in TablesYZ:
         table_name = TablesYZ.get_table_name(char.value)
         yield table_name
 
-def create_column(stash_column: StashColumn) -> Column:
+def get_column(stash_column: StashColumn) -> Column:
     """Create columns for database tables"""
     column = Column(
         stash_column.name,
@@ -148,7 +148,7 @@ def mk_hash_column() -> Column:
         Conf.BLOB.value,
         primary_key=True,
     )
-    return create_column(hash_column)
+    return get_column(hash_column)
 
 
 def mk_key_column() -> Column:
@@ -159,7 +159,7 @@ def mk_key_column() -> Column:
         unique=True,
         index=True,
     )
-    return create_column(key_column)
+    return get_column(key_column)
 
 
 def mk_value_column() -> Column:
@@ -168,13 +168,13 @@ def mk_value_column() -> Column:
         Col.VALUE.value,
         Conf.JSON.value,
     )
-    return create_column(value_column)
+    return get_column(value_column)
 
 
 def mk_time_column() -> Column:
     """Return a Column for the date the data was added."""
     time_column = StashColumn(Col.TIME.value,Conf.INT.value)
-    return create_column(time_column)
+    return get_column(time_column)
 
 
 def mk_columns() -> Generator[Column, None, None]:
