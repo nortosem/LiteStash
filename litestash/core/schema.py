@@ -3,7 +3,7 @@
 #TODO
 """
 from litestash.core.engine import Engine
-from litestash.core.config.schema_conf import MetaSlots
+from litestash.core.config.root import Tables
 from litestash.core.config.litestash_conf import StashSlots
 from litestash.core.util.litestash_util import setup_metadata
 from litestash.core.util.litestash_util import MetaAttributes
@@ -15,20 +15,22 @@ class Metadata:
     This handles the setup of new metadata and enables access.
     #TODO docs
     """
-    __slots__ = (MetaSlots.ZFD.value,
-                 MetaSlots.FND.value,
-                 MetaSlots.AEL.value,
-                 MetaSlots.FIL.value,
-                 MetaSlots.JML.value,
-                 MetaSlots.NRL.value,
-                 MetaSlots.SVL.value,
-                 MetaSlots.WZL.value,
-                 MetaSlots.AEU.value,
-                 MetaSlots.FIU.value,
-                 MetaSlots.JMU.value,
-                 MetaSlots.NRU.value,
-                 MetaSlots.SVU.value,
-                 MetaSlots.WZU.value,
+    __slots__ = (Tables.TABLES_03.value,
+                 Tables.TABLES_47.value,
+                 Tables.TABLES_89HU.value,
+                 Tables.TABLES_AB.value,
+                 Tables.TABLES_CD.value,
+                 Tables.TABLES_EF.value,
+                 Tables.TABLES_GH.value,
+                 Tables.TABLES_IJ.value,
+                 Tables.TABLES_KL.value,
+                 Tables.TABLES_MN.value,
+                 Tables.TABLES_OP.value,
+                 Tables.TABLES_QR.value,
+                 Tables.TABLES_ST.value,
+                 Tables.TABLES_UV.value,
+                 Tables.TABLES_WX.value,
+                 Tables.TABLES_YZ.value
                 )
 
     def __init__(self, engine: Engine):
@@ -36,75 +38,68 @@ class Metadata:
 
         Create metadata objects for all of the databases
         """
-        self.zfd = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.ZFD.value)
-            )
+        self.tables_03 = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_03.value))
         )
-        self.fnd = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.FND.value)
-            )
+
+        self.tables_47 = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_47.value))
         )
-        self.ael = MetaAttributes(
-            *setup_metadata(
-               getattr(engine, MetaSlots.AEL.value)
-            )
+
+        self.tables_89hu = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_89HU.value))
         )
-        self.fil = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.FIL.value)
-            )
+
+        self.tables_ab = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_AB.value))
         )
-        self.jml = MetaAttributes(
-            *setup_metadata(
-               getattr(engine, MetaSlots.JML.value)
-            )
+
+        self.tables_cd = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_CD.value))
         )
-        self.nrl = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.NRL.value)
-            )
+
+        self.tables_ef = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_EF.value))
         )
-        self.svl = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.SVL.value)
-            )
+
+        self.tables_gh = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_GH.value))
         )
-        self.wzl = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.WZL.value)
-            )
+
+        self.tables_ij = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_IJ.value))
         )
-        self.aeu = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.AEU.value)
-            )
+
+        self.tables_kl = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_KL.value))
         )
-        self.fiu = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.FIU.value)
-            )
+
+        self.tables_mn = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_MN.value))
         )
-        self.jmu = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.JMU.value)
-            )
+
+        self.tables_op = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_OP.value))
         )
-        self.nru = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.NRU.value)
-            )
+
+        self.tables_qr = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_QR.value))
         )
-        self.svu = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.SVU.value)
-            )
+
+        self.tables_st = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_ST.value))
         )
-        self.wzu = MetaAttributes(
-            *setup_metadata(
-                getattr(engine, MetaSlots.WZU.value)
-            )
+
+        self.tables_uv = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_UV.value))
+        )
+
+        self.tables_wx = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_WX.value))
+        )
+
+        self.tables_yz = MetaAttributes(
+            *setup_metadata(getattr(engine, Tables.TABLES_YZ.value))
         )
 
     def get(self, db_name):
