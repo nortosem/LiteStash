@@ -33,52 +33,52 @@ def mk_table_names(db_name: str):
     Return a generator.
     """
     if db_name in Tables03:
-        return table_util.create_tables_03()
+        return table_util.get_tables_03()
 
     elif db_name in Tables47:
-        return create_tables_47()
+        return table_util.get_tables_47()
 
     elif db_name in Tables89hu:
-        return create_tables_89hu()
+        return table_util.get_tables_89hu()
 
     elif db_name in TablesAB :
-        return create_tables_ab()
+        return table_util.get_tables_ab()
 
     elif db_name in TablesCD :
-        return create_tables_cd()
+        return table_util.get_tables_cd()
 
     elif db_name in TablesEF :
-        return create_tables_ef()
+        return table_util.get_tables_ef()
 
     elif db_name in TablesGH:
-        return create_tables_gh()
+        return table_util.get_tables_gh()
 
     elif db_name in TablesIJ:
-        return create_tables_ij()
+        return table_util.get_tables_ij()
 
     elif db_name in TablesKL:
-        return create_tables_kl()
+        return table_util.get_tables_kl()
 
     elif db_name in TablesMN:
-        return create_tables_mn()
+        return table_util.get_tables_mn()
 
     elif db_name in TablesOP:
-        return create_tables_op()
+        return table_util.get_tables_op()
 
     elif db_name in TablesQR:
-        return create_tables_qr()
+        return table_util.get_tables_qr()
 
     elif db_name in TablesST:
-        return create_tables_st()
+        return table_util.get_tables_st()
 
     elif db_name in TablesUV:
-        return create_tables_uv()
+        return table_util.get_tables_uv()
 
     elif db_name in TablesWX:
-        return create_tables_wx()
+        return table_util.get_tables_wx()
 
     elif db_name in TablesYZ:
-        return create_tables_yz()
+        return table_util.get_tables_yz()
 
 def mk_tables(db_name: str, metadata: MetaData) -> MetaData:
     """Make Tables
@@ -99,87 +99,103 @@ def get_db_name(char: bytes) -> bytes:
     match char:
         case char if char in prefix_util.tables_03():
             return Names.TABLES_03.value
+
         case char if char in prefix_util.tables_47():
             return Names.TABLES_47.value
+
         case char if char in prefix_util.tables_89hu():
             return Names.TABLES_89HU.value
+
         case char if char in prefix_util.tables_ab():
             return Names.TABLES_AB.value
+
         case char if char in prefix_util.tables_cd():
             return Names.TABLES_CD.value
+
         case char if char in prefix_util.tables_ef():
             return Names.TABLES_EF.value
+
         case char if char in prefix_util.tables_gh():
             return Names.TABLES_GH.value
+
         case char if char in prefix_util.tables_ij():
             return Names.TABLES_IJ.value
+
         case char if char in prefix_util.tables_kl():
             return Names.TABLES_KL.value
+
         case char if char in prefix_util.tables_mn():
             return Names.TABLES_MN.value
+
         case char if char in prefix_util.tables_op():
             return Names.TABLES_OP.value
+
         case char if char in prefix_util.tables_qr():
             return Names.TABLES_QR.value
+
         case char if char in prefix_util.tables_st():
             return Names.TABLES_ST.value
+
         case char if char in prefix_util.tables_uv():
             return Names.TABLES_UV.value
+
         case char if char in prefix_util.tables_wx():
             return Names.TABLES_WX.value
+
         case char if char in prefix_util.tables_yz():
             return Names.TABLES_YZ.value
+
         case _:
             raise ValueError(Utils.DB_NAME_ERROR.value)
 
 
 def get_table_name(char: str) -> str:
     """Given a char get the table's name"""
-    if char in Tables03:
-        return create_tables_03()
+    match char:
+        case char if char in Tables03:
+            return Tables03.get_table_name(char)
 
-    elif char in Tables47:
-        return create_tables_47()
+        case char if char in Tables47:
+            return Tables47.get_table_name(char)
 
-    elif char in Tables89hu:
-        return create_tables_89hu()
+        case char if char in Tables89hu:
+            return Tables47.get_table_name(char)
 
-    elif char in TablesAB :
-        return create_tables_ab()
+        case char if char in TablesAB :
+            return TablesAB.get_table_name(char)
 
-    elif char in TablesCD :
-        return create_tables_cd()
+        case char if char in TablesCD :
+            return TablesCD.get_table_name(char)
 
-    elif char in TablesEF :
-        return create_tables_ef()
+        case char if char in TablesEF :
+            return TablesEF.get_table_name(char)
 
-    elif char in TablesGH:
-        return create_tables_gh()
+        case char if char in TablesGH:
+            return TablesGH.get_table_name(char)
 
-    elif char in TablesIJ:
-        return create_tables_ij()
+        case char if char in TablesIJ:
+            return TablesIJ.get_table_name(char)
 
-    elif char in TablesKL:
-        return create_tables_kl()
+        case char if char in TablesKL:
+            return TablesKL.get_table_name(char)
 
-    elif char in TablesMN:
-        return create_tables_mn()
+        case char if char in TablesMN:
+            return TablesMN.get_table_name(char)
 
-    elif char in TablesOP:
-        return create_tables_op()
+        case char if char in TablesOP:
+            return TablesOP.get_table_name(char)
 
-    elif char in TablesQR:
-        return create_tables_qr()
+        case char if char in TablesQR:
+            return TablesQR.get_table_name(char)
 
-    elif char in TablesST:
-        return create_tables_st()
+        case char if char in TablesST:
+            return TablesST.get_table_name(char)
 
-    elif char in TablesUV:
-        return create_tables_uv()
+        case char if char in TablesUV:
+            return TablesUV.get_table_name(char)
 
-    elif char in TablesWX:
-        return create_tables_wx()
+        case char if char in TablesWX:
+            return TablesWX.get_table_name(char)
 
-    elif char in TablesYZ:
-        return create_tables_yz()
-
+        case char if char in TablesYZ:
+            return TablesYZ.get_table_name(char)
