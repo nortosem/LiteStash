@@ -22,6 +22,7 @@ from litestash.core.config.litestash_conf import SessionAttr
 from litestash.core.config.litestash_conf import EngineConf
 from litestash.core.config.litestash_conf import DataScheme
 from litestash.core.config.litestash_conf import Utils
+from litestash.core.config.schema_conf import Pragma
 from litestash.core.util.schema_util import mk_tables
 
 
@@ -36,7 +37,7 @@ def setup_engine(db_name: str) -> Engine:
     """
     return (db_name,
         create_engine(
-            f'{EngineConf.sqlite()}{db_name}.db'
+            f'{EngineConf.sqlite()}{EngineConf.DIR_NAME.value}/{db_name}.db'
         )
     )
 
@@ -99,6 +100,22 @@ SessionAttributes = namedtuple(
     ]
 )
 SessionAttributes.__doc__ = SessionAttr.DOC.value
+
+def set_pragma(db_connection, record):
+    """Set Engine Pragma
+
+    Set the pragma for the engine attach event
+    Args:
+        db_connection (Engine): The engine to connect
+        connection (str): The connection record
+    """
+    if str(f'{EngineConf.SQLITE.value}'
+           f'{EngineConf.DIR_NAME.value}'
+           ) in record.engine.url:
+        cursor = db_connection.cursor()
+        cursor.execute(Pragma.journal_mode())
+        cursor.execute(Pragma.synchronous())
+        cursor.close()
 
 
 def check_key(key: str) -> bool:
