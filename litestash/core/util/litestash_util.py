@@ -101,44 +101,63 @@ SessionAttributes = namedtuple(
 SessionAttributes.__doc__ = SessionAttr.DOC.value
 
 
-def check_key(key: str) -> bytes:
+def check_key(key: str) -> bool:
     """Check A Key
 
     Validates and encodes an ASCII string name into bytes
+    Args:
+        key (str): The key to validate
+    Result:
+        (bool): Return true or raise value error
     """
     if key.isascii():
         if key.isalnum():
-            return key.encode()
+            return True
         else:
             raise ValueError(DataScheme.ALNUM_ERROR.value)
     else:
         raise ValueError(DataScheme.ASCII_ERROR.value)
 
 
-def digest_key(key: str) -> bytes:
+def digest_key(key: str) -> str:
     """Key Digest Generator
 
     Create a unique hexidecimal digest name
     Arg:
         key (str): The text name to make a digest from
+    Result:
+        digest (str): A hexidecimal digest string
     """
-    return blake2b(key.encode(), digest_size=Utils.SIZE.value).hexdigest().encode()
+    return blake2b(
+        key.encode(),
+        digest_size=Utils.SIZE.value
+    ).hexdigest()
 
 
-def allot(size: int = 6) -> bytes:
+def allot(size: int = 6) -> str:
     """Allot Function
 
     Generate unique random set of bytes for efficient hash key distribution
-    """
-    return SystemRandom().randbytes(size)
-
-
-def hash_key(digested_key: bytes, lot: bytes) -> str:
-    """Hash Key
-
-    Generate a unique primary key for the key_named: json_data
+    Return a urlsafe base64 str from the random bytes
+    All sizes must be divisible by 3
+    The default size of six bytes returns an eight character string
     Args:
-        digested_key:
+        size (int): number of bytes alloted for the lot
+    Result:
+        lot (str): An eight character string
+    """
+    if size < 6:
+        raise ValueError()
+    lot = SystemRandom().randbytes(size)
+    return base64.urlsafe_b64encode(lot).decode()
+
+
+def key_hash(key_digest: str, lot: str) -> str:
+    """Key Hash function
+
+    Generate a primary database key for a name associated with some json data
+    Args:
+        key_digest:
             The unique digest of the string name for the json value
         lot:
             Random value to distribute keys across storage
@@ -146,8 +165,5 @@ def hash_key(digested_key: bytes, lot: bytes) -> str:
         hashed_key:
             A string result to use as the unique key for json data
     """
-    return base64.urlsafe_b64encode(seed+digested_key).decode()
-
-
-#def hash_match(hashed_key: str, key: str) -> bool:
- #   base64.urlsafe_b64decode(hashed_key).decode()
+    base_key = lot + base64.urlsafe_b64encode(key_digest.encode()).decode()
+    return base64.urlsafe_b64encode(base_key.encode()).decode()
