@@ -6,8 +6,8 @@ from sqlalchemy import MetaData
 from sqlalchemy import Table
 from litestash.core.util import prefix_util
 from litestash.core.util import table_util
+from litestash.core.config.root import Tables
 from litestash.core.config.litestash_conf import Utils
-from litestash.core.config.schema_conf import Names
 from litestash.core.util.table_util import mk_columns
 from litestash.core.config.tables.tables_03 import Tables03
 from litestash.core.config.tables.tables_47 import Tables47
@@ -83,7 +83,7 @@ def mk_table_names(db_name: str):
 def mk_tables(db_name: str, metadata: MetaData) -> MetaData:
     """Make Tables
 
-    Create all tables using preset columns and names.
+    Create all tables using preset columns and names
     """
     for table_name in mk_table_names(db_name):
         Table(
@@ -98,52 +98,52 @@ def get_db_name(char: bytes) -> bytes:
     """Find database for given char"""
     match char:
         case char if char in prefix_util.tables_03():
-            return Names.TABLES_03.value
+            return Tables.TABLES_03.value
 
         case char if char in prefix_util.tables_47():
-            return Names.TABLES_47.value
+            return Tables.TABLES_47.value
 
         case char if char in prefix_util.tables_89hu():
-            return Names.TABLES_89HU.value
+            return Tables.TABLES_89HU.value
 
         case char if char in prefix_util.tables_ab():
-            return Names.TABLES_AB.value
+            return Tables.TABLES_AB.value
 
         case char if char in prefix_util.tables_cd():
-            return Names.TABLES_CD.value
+            return Tables.TABLES_CD.value
 
         case char if char in prefix_util.tables_ef():
-            return Names.TABLES_EF.value
+            return Tables.TABLES_EF.value
 
         case char if char in prefix_util.tables_gh():
-            return Names.TABLES_GH.value
+            return Tables.TABLES_GH.value
 
         case char if char in prefix_util.tables_ij():
-            return Names.TABLES_IJ.value
+            return Tables.TABLES_IJ.value
 
         case char if char in prefix_util.tables_kl():
-            return Names.TABLES_KL.value
+            return Tables.TABLES_KL.value
 
         case char if char in prefix_util.tables_mn():
-            return Names.TABLES_MN.value
+            return Tables.TABLES_MN.value
 
         case char if char in prefix_util.tables_op():
-            return Names.TABLES_OP.value
+            return Tables.TABLES_OP.value
 
         case char if char in prefix_util.tables_qr():
-            return Names.TABLES_QR.value
+            return Tables.TABLES_QR.value
 
         case char if char in prefix_util.tables_st():
-            return Names.TABLES_ST.value
+            return Tables.TABLES_ST.value
 
         case char if char in prefix_util.tables_uv():
-            return Names.TABLES_UV.value
+            return Tables.TABLES_UV.value
 
         case char if char in prefix_util.tables_wx():
-            return Names.TABLES_WX.value
+            return Tables.TABLES_WX.value
 
         case char if char in prefix_util.tables_yz():
-            return Names.TABLES_YZ.value
+            return Tables.TABLES_YZ.value
 
         case _:
             raise ValueError(Utils.DB_NAME_ERROR.value)
