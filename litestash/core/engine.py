@@ -2,10 +2,13 @@
 
 
 """
+from sqlalchemy import event
+from sqlalchemy import Engine as SQL_Engine
 from litestash.core.config.root import Tables
+from litestash.core.config.schema_conf import Pragma
+from litestash.core.util.litestash_util import set_pragma
 from litestash.core.util.litestash_util import setup_engine
 from litestash.core.util.litestash_util import EngineAttributes
-from sqlalchemy import Engine as SQL_Engine
 
 class Engine:
     """LiteStash Engine
@@ -98,6 +101,22 @@ class Engine:
         """
         attribute = getattr(self, name)
         return attribute.engine
+
+
+    def attach_pragma(self):
+        """Set DB Pragma
+
+        Attach an event listener to each database
+        """
+        for slot in self.__slots__:
+            attribute = getattr(self, slot)
+            if isinstance(attribute, EngineAttributes):
+                event.listen(
+                    attribute.engine,
+                    Pragma.CONNECT.value,
+                    set_pragma
+                )
+
 
     def __iter__(self):
         """Iterator for all database engines"""
