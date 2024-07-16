@@ -2,7 +2,7 @@
 
 
 """
-from litestash.core.config.schema_conf import MetaSlots
+from litestash.core.config.root import Tables
 from litestash.core.util.litestash_util import setup_engine
 from litestash.core.util.litestash_util import EngineAttributes
 from sqlalchemy import Engine as SQL_Engine
@@ -14,20 +14,22 @@ class Engine:
     The LiteStashEngine class encapsulates the setup
     and access to these engines.
     """
-    __slots__ = (MetaSlots.ZFD.value,
-                 MetaSlots.FND.value,
-                 MetaSlots.AEL.value,
-                 MetaSlots.FIL.value,
-                 MetaSlots.JML.value,
-                 MetaSlots.NRL.value,
-                 MetaSlots.SVL.value,
-                 MetaSlots.WZL.value,
-                 MetaSlots.AEU.value,
-                 MetaSlots.FIU.value,
-                 MetaSlots.JMU.value,
-                 MetaSlots.NRU.value,
-                 MetaSlots.SVU.value,
-                 MetaSlots.WZU.value,
+    __slots__ = (Tables.TABLES_03.value,
+                 Tables.TABLES_47.value,
+                 Tables.TABLES_89HU.value,
+                 Tables.TABLES_AB.value,
+                 Tables.TABLES_CD.value,
+                 Tables.TABLES_EF.value,
+                 Tables.TABLES_GH.value,
+                 Tables.TABLES_IJ.value,
+                 Tables.TABLES_KL.value,
+                 Tables.TABLES_MN.value,
+                 Tables.TABLES_OP.value,
+                 Tables.TABLES_QR.value,
+                 Tables.TABLES_ST.value,
+                 Tables.TABLES_UV.value,
+                 Tables.TABLES_WX.value,
+                 Tables.TABLES_YZ.value
                 )
 
 
@@ -36,52 +38,64 @@ class Engine:
 
         Each database stored as name, engine.
         """
-        self.zfd = EngineAttributes(
-            *setup_engine(MetaSlots.ZFD.value)
+        self.tables_03 = EngineAttributes(
+            *setup_engine(Tables.TABLES_03.value)
         )
-        self.fnd = EngineAttributes(
-            *setup_engine(MetaSlots.FND.value)
+        self.tables_47 = EngineAttributes(
+            *setup_engine(Tables.TABLES_47.value)
         )
-        self.ael = EngineAttributes(
-            *setup_engine(MetaSlots.AEL.value)
+        self.tables_89hu = EngineAttributes(
+            *setup_engine(Tables.TABLES_89HU.value)
         )
-        self.fil = EngineAttributes(
-            *setup_engine(MetaSlots.FIL.value)
+        self.tables_ab = EngineAttributes(
+            *setup_engine(Tables.TABLES_AB.value)
         )
-        self.jml = EngineAttributes(
-            *setup_engine(MetaSlots.JML.value)
+        self.tables_cd = EngineAttributes(
+            *setup_engine(Tables.TABLES_CD.value)
         )
-        self.nrl = EngineAttributes(
-            *setup_engine(MetaSlots.NRL.value)
+        self.tables_ef = EngineAttributes(
+            *setup_engine(Tables.TABLES_EF.value)
         )
-        self.svl = EngineAttributes(
-            *setup_engine(MetaSlots.SVL.value)
+        self.tables_gh = EngineAttributes(
+            *setup_engine(Tables.TABLES_GH.value)
         )
-        self.wzl = EngineAttributes(
-            *setup_engine(MetaSlots.WZL.value)
+        self.tables_ij = EngineAttributes(
+            *setup_engine(Tables.TABLES_IJ.value)
         )
-        self.aeu = EngineAttributes(
-            *setup_engine(MetaSlots.AEU.value)
+        self.tables_kl = EngineAttributes(
+            *setup_engine(Tables.TABLES_KL.value)
         )
-        self.fiu = EngineAttributes(
-            *setup_engine(MetaSlots.FIU.value)
+        self.tables_mn = EngineAttributes(
+            *setup_engine(Tables.TABLES_MN.value)
         )
-        self.jmu = EngineAttributes(
-            *setup_engine(MetaSlots.JMU.value)
+        self.tables_op = EngineAttributes(
+            *setup_engine(Tables.TABLES_OP.value)
         )
-        self.nru = EngineAttributes(
-            *setup_engine(MetaSlots.NRU.value)
+        self.tables_qr = EngineAttributes(
+            *setup_engine(Tables.TABLES_QR.value)
         )
-        self.svu = EngineAttributes(
-            *setup_engine(MetaSlots.SVU.value)
+        self.tables_st = EngineAttributes(
+            *setup_engine(Tables.TABLES_ST.value)
         )
-        self.wzu = EngineAttributes(
-            *setup_engine(MetaSlots.WZU.value)
+        self.tables_uv = EngineAttributes(
+            *setup_engine(Tables.TABLES_UV.value)
+        )
+        self.tables_wx = EngineAttributes(
+            *setup_engine(Tables.TABLES_WX.value)
+        )
+        self.tables_yz = EngineAttributes(
+            *setup_engine(Tables.TABLES_YZ.value)
         )
 
 
     def get(self, name: str) -> SQL_Engine:
-        """Given a name return the engine"""
+        """Engine Getter
+
+        Args:
+            name (str): The name of the engine to get
+        Result:
+            engine (Engine): Return the sqlalchemy engine
+        """
         attribute = getattr(self, name)
         return attribute.engine
 
