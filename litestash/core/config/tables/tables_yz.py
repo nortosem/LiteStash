@@ -30,31 +30,35 @@ class TablesYZ(Valid):
     @staticmethod
     def y_low() -> str:
         """Get the full table name for hash[y:]"""
-        return str(TablesYZ.Y_LOW.value
+        return str(Names.TABLES_YZ.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesYZ.Y_LOW.value
                    )
 
     @staticmethod
     def z_low() -> str:
         """Get the full table name for hash[z:]"""
-        return str(TablesYZ.Z_LOW.value
+        return str(Names.TABLES_YZ.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesYZ.Z_LOW.value
                    )
 
     @staticmethod
     def y_upper() -> str:
         """Get the full table name for hash[Y:]"""
-        return str(TablesYZ.Y_UP.value
+        return str(Names.TABLES_YZ.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesYZ.Y_UP.value
                    )
 
     @staticmethod
     def z_upper() -> str:
         """Get the full table name for hash[Z:]"""
-        return str(TablesYZ.Z_UP.value
+        return str(Names.TABLES_YZ.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesYZ.Z_UP.value
                    )

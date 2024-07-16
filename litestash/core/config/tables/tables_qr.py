@@ -30,27 +30,36 @@ class TablesQR(Valid):
     @staticmethod
     def q_low() -> str:
         """Get the full table name for """
-        return(
-            f'{TablesQR.Q_LOW.value}{Names.LOW.value}{Names.HASH.value}'
-        )
+        return str(Names.TABLES_QR.value
+                   +Names.LOW.value
+                   +Names.HASH.value
+                   +TablesOP.Q_LOW.value
+                   )
 
     @staticmethod
     def r_low() -> str:
         """Get the full table name for """
-        return(
-            f'{TablesQR.R_LOW.value}{Names.LOW.value}{Names.HASH.value}'
-        )
+        return str(Names.TABLES_QR.value
+                   +Names.LOW.value
+                   +Names.HASH.value
+                   +TablesOP.R_LOW.value
+                   )
 
     @staticmethod
     def q_upper() -> str:
         """Get the full table name for Q"""
-        return(
-            f'{TablesQR.Q_UP.value}{Names.UP.value}{Names.HASH.value}'
-        )
+        return str(Names.TABLES_QR.value
+                   +Names.LOW.value
+                   +Names.HASH.value
+                   +TablesOP.Q_UP.value
+                   )
 
     @staticmethod
     def r_upper() -> str:
         """Get the full table name for R"""
-        return(
-            f'{TablesQR.R_UP.value}{Names.UP.value}{Names.HASH.value}'
-        )
+        return str(Names.TABLES_QR.value
+                   +Names.LOW.value
+                   +Names.HASH.value
+                   +TablesOP.R_UP.value
+                   )
+

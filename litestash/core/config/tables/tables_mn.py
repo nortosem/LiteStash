@@ -30,31 +30,35 @@ class TablesMN(Valid):
     @staticmethod
     def m_low() -> str:
         """Get the full table name for hash[m:]"""
-        return str(TablesMN.M_LOW.value
+        return str(Names.TABLES_MN.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesMN.M_LOW.value
                    )
 
     @staticmethod
     def n_low() -> str:
         """Get the full table name for hash[n:]"""
-        return str(TablesMN.N_LOW.value
+        return str(Names.TABLES_MN.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesMN.N_LOW.value
                    )
 
     @staticmethod
     def m_upper() -> str:
         """Get the full table name for hash[M:]"""
-        return str(TablesMN.M_UP.value
+        return str(Names.TABLES_MN.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesMN.M_UP.value
                    )
 
     @staticmethod
     def n_upper() -> str:
         """Get the full table name for hash[N:]"""
-        return str(TablesMN.N_UP.value
+        return str(Names.TABLES_MN.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesMN.N_UP.value
                    )

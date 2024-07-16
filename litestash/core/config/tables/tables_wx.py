@@ -30,31 +30,35 @@ class TablesWX(Valid):
     @staticmethod
     def w_low() -> str:
         """Get the full table name for hash[w:]"""
-        return str(TablesWX.W_LOW.value
+        return str(Names.TABLES_WX.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesWX.W_LOW.value
                    )
 
     @staticmethod
     def x_low() -> str:
         """Get the full table name for hash[x:]"""
-        return str(TablesWX.X_LOW.value
+        return str(Names.TABLES_WX.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesWX.X_LOW.value
                    )
 
     @staticmethod
     def w_upper() -> str:
         """Get the full table name for hash[W:]"""
-        return str(TablesWX.W_UP.value
+        return str(Names.TABLES_WX.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesWX.W_UP.value
                    )
 
     @staticmethod
     def x_upper() -> str:
         """Get the full table name for hash[X:]"""
-        return str(TablesWX.X_UP.value
+        return str(Names.TABLES_WX.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesWX.X_UP.value
                    )

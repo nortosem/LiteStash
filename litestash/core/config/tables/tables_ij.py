@@ -30,31 +30,35 @@ class TablesIJ(Valid):
     @staticmethod
     def i_low() -> str:
         """Get the full table name for hash[i:]"""
-        return str(TablesIJ.I_LOW.value
+        return str(Names.TABLES_IJ.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesIJ.I_LOW.value
                    )
 
     @staticmethod
     def j_low() -> str:
         """Get the full table name for hash[j:]"""
-        return str(TablesIJ.J_LOW.value
+        return str(Names.TABLES_IJ.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesIJ.J_LOW.value
                    )
 
     @staticmethod
     def i_upper() -> str:
         """Get the full table name for hash[I:]"""
-        return str(TablesIJ.I_UP.value
+        return str(Names.TABLES_IJ.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesIJ.I_UP.value
                    )
 
     @staticmethod
     def j_upper() -> str:
         """Get the full table name for hash[J:]"""
-        return str(TablesIJ.J_UP.value
+        return str(Names.TABLES_IJ.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesIJ.J_UP.value
                    )
