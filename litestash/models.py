@@ -5,12 +5,13 @@ The column and data models for keeping a stash.
 from litestash.core.config.litestash_conf import DataScheme
 from litestash.core.config.schema_conf import ColumnConfig
 from litestash.core.util.model_util import ColumnType
-from litestash.core.util.model_util import BlobType
-from litestash.core.util.model_util import IntegerType
+from litestash.core.util.model_util import StrType
+from litestash.core.util.model_util import IntType
 from litestash.core.util.model_util import JsonType
 from pydantic.dataclasses import dataclass
 from pydantic import validator
-from pydantic import StrictBytes
+from pydantic import StrictStr
+from pydantic import StrictInt
 from pydantic import Json
 from pydantic import Field
 from typing import Literal
@@ -18,7 +19,7 @@ from typing import Union
 from datetime import datetime
 from sqlalchemy import Integer
 from sqlalchemy import JSON
-from sqlalchemy import BLOB
+from sqlalchemy import String
 import orjson
 
 
@@ -92,7 +93,7 @@ class StashColumn:
     name: str
     type_: Literal[
         StrType.literal,
-        FloatType.literal,
+        IntType.literal,
         JsonType.literal
     ] = Field(...)
     primary_key: bool = False
@@ -100,7 +101,7 @@ class StashColumn:
     unique: bool = False
 
     @validator(ColumnConfig.STASH_COLUMN.value)
-    def valid_type(cls, column_type: ColumnType) -> Union[BLOB,Integer,JSON]:
+    def valid_type(cls, column_type: ColumnType) -> Union[String,Integer,JSON]:
         """Valid Type Function
 
         Take a Literal and return sqlite column type.
@@ -111,7 +112,7 @@ class StashColumn:
         match column_type:
             case StrType.literal:
                 return StrType.sqlite
-            case FloatType.literal:
+            case IntType.literal:
                 return StrType.sqlite
             case JsonType.literal:
                 return JsonType.sqlite
