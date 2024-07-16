@@ -33,7 +33,7 @@ class TablesQR(Valid):
         return str(Names.TABLES_QR.value
                    +Names.LOW.value
                    +Names.HASH.value
-                   +TablesOP.Q_LOW.value
+                   +TablesQR.Q_LOW.value
                    )
 
     @staticmethod
@@ -42,7 +42,7 @@ class TablesQR(Valid):
         return str(Names.TABLES_QR.value
                    +Names.LOW.value
                    +Names.HASH.value
-                   +TablesOP.R_LOW.value
+                   +TablesQR.R_LOW.value
                    )
 
     @staticmethod
@@ -51,7 +51,7 @@ class TablesQR(Valid):
         return str(Names.TABLES_QR.value
                    +Names.LOW.value
                    +Names.HASH.value
-                   +TablesOP.Q_UP.value
+                   +TablesQR.Q_UP.value
                    )
 
     @staticmethod
@@ -60,6 +60,6 @@ class TablesQR(Valid):
         return str(Names.TABLES_QR.value
                    +Names.LOW.value
                    +Names.HASH.value
-                   +TablesOP.R_UP.value
+                   +TablesQR.R_UP.value
                    )
 
