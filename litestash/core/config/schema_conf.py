@@ -4,24 +4,6 @@ TODO: docs
 """
 from litestash.core.config.root import Valid
 
-class MetaSlots(Valid):
-    """Slots for the LiteStashMetadata"""
-    ZFD = 'zfd'
-    FND = 'fnd'
-    AEL = 'ael'
-    FIL = 'fil'
-    JML = 'jml'
-    NRL = 'nrl'
-    SVL = 'svl'
-    WZL = 'wzl'
-    AEU = 'aeu'
-    FIU = 'fiu'
-    JMU = 'jmu'
-    NRU = 'nru'
-    SVU = 'svu'
-    WZU = 'wzu'
-
-
 class Pragma(Valid):
     """Sqlite Pragma
 
