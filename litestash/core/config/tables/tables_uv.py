@@ -60,5 +60,5 @@ class TablesUV(Valid):
         return str(Names.TABLES_UV.value
                    +Names.UP.value
                    +Names.HASH.value
-                   ++TablesUV.V_UP.value
+                   +TablesUV.V_UP.value
                    )
