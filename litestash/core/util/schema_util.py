@@ -4,31 +4,27 @@
 """
 from sqlalchemy import MetaData
 from sqlalchemy import Table
-
-from litestash.core.config.litestash_conf import Utils
-from litestash.core.config.schema_conf import MetaSlots
-from litestash.core.config.schema_conf import Names
-from litestash.core.config.tables.digits import Digitables
-from litestash.core.config.tables.lowercase import LowerTables
-from litestash.core.config.tables.uppercase import UpperTables
-
 from litestash.core.util import prefix_util
+from litestash.core.util import table_util
+from litestash.core.config.litestash_conf import Utils
+from litestash.core.config.schema_conf import Names
 from litestash.core.util.table_util import mk_columns
-from litestash.core.util.table_util import create_zfd_tables
-from litestash.core.util.table_util import create_fnd_tables
-from litestash.core.util.table_util import create_ael_tables
-from litestash.core.util.table_util import create_fil_tables
-from litestash.core.util.table_util import create_jml_tables
-from litestash.core.util.table_util import create_nrl_tables
-from litestash.core.util.table_util import create_svl_tables
-from litestash.core.util.table_util import create_wzl_tables
-from litestash.core.util.table_util import create_aeu_tables
-from litestash.core.util.table_util import create_fiu_tables
-from litestash.core.util.table_util import create_jmu_tables
-from litestash.core.util.table_util import create_nru_tables
-from litestash.core.util.table_util import create_svu_tables
-from litestash.core.util.table_util import create_wzu_tables
-
+from litestash.core.config.tables.tables_03 import Tables03
+from litestash.core.config.tables.tables_47 import Tables47
+from litestash.core.config.tables.tables_89hu import Tables89hu
+from litestash.core.config.tables.tables_ab import TablesAB
+from litestash.core.config.tables.tables_cd import TablesCD
+from litestash.core.config.tables.tables_ef import TablesEF
+from litestash.core.config.tables.tables_gh import TablesGH
+from litestash.core.config.tables.tables_ij import TablesIJ
+from litestash.core.config.tables.tables_kl import TablesKL
+from litestash.core.config.tables.tables_mn import TablesMN
+from litestash.core.config.tables.tables_op import TablesOP
+from litestash.core.config.tables.tables_qr import TablesQR
+from litestash.core.config.tables.tables_st import TablesST
+from litestash.core.config.tables.tables_uv import TablesUV
+from litestash.core.config.tables.tables_wx import TablesWX
+from litestash.core.config.tables.tables_yz import TablesYZ
 
 def mk_table_names(db_name: str):
     """Make valid Table names
@@ -36,48 +32,53 @@ def mk_table_names(db_name: str):
     Generate names for all tables in the given database name.
     Return a generator.
     """
-    if db_name == MetaSlots.ZFD.value:
-        return create_zfd_tables()
+    if db_name in Tables03:
+        return table_util.create_tables_03()
 
-    elif db_name == MetaSlots.FND.value:
-        return create_fnd_tables()
+    elif db_name in Tables47:
+        return create_tables_47()
 
-    elif db_name == MetaSlots.AEL.value:
-        return create_ael_tables()
+    elif db_name in Tables89hu:
+        return create_tables_89hu()
 
-    elif db_name == MetaSlots.FIL.value:
-        return create_fil_tables()
+    elif db_name in TablesAB :
+        return create_tables_ab()
 
-    elif db_name == MetaSlots.JML.value:
-        return create_jml_tables()
+    elif db_name in TablesCD :
+        return create_tables_cd()
 
-    elif db_name == MetaSlots.NRL.value:
-        return create_nrl_tables()
+    elif db_name in TablesEF :
+        return create_tables_ef()
 
-    elif db_name == MetaSlots.SVL.value:
-        return create_svl_tables()
+    elif db_name in TablesGH:
+        return create_tables_gh()
 
-    elif db_name == MetaSlots.WZL.value:
-        return create_wzl_tables()
+    elif db_name in TablesIJ:
+        return create_tables_ij()
 
-    elif db_name == MetaSlots.AEU.value:
-        return create_aeu_tables()
+    elif db_name in TablesKL:
+        return create_tables_kl()
 
-    elif db_name == MetaSlots.FIU.value:
-        return create_fiu_tables()
+    elif db_name in TablesMN:
+        return create_tables_mn()
 
-    elif db_name == MetaSlots.JMU.value:
-        return create_jmu_tables()
+    elif db_name in TablesOP:
+        return create_tables_op()
 
-    elif db_name == MetaSlots.NRU.value:
-        return create_nru_tables()
+    elif db_name in TablesQR:
+        return create_tables_qr()
 
-    elif db_name == MetaSlots.SVU.value:
-        return create_svu_tables()
+    elif db_name in TablesST:
+        return create_tables_st()
 
-    elif db_name == MetaSlots.WZU.value:
-        return create_wzu_tables()
+    elif db_name in TablesUV:
+        return create_tables_uv()
 
+    elif db_name in TablesWX:
+        return create_tables_wx()
+
+    elif db_name in TablesYZ:
+        return create_tables_yz()
 
 def mk_tables(db_name: str, metadata: MetaData) -> MetaData:
     """Make Tables
@@ -85,7 +86,6 @@ def mk_tables(db_name: str, metadata: MetaData) -> MetaData:
     Create all tables using preset columns and names.
     """
     for table_name in mk_table_names(db_name):
-        print(f'tablename: {table_name}')
         Table(
             table_name,
             metadata,
@@ -97,45 +97,89 @@ def mk_tables(db_name: str, metadata: MetaData) -> MetaData:
 def get_db_name(char: bytes) -> bytes:
     """Find database for given char"""
     match char:
-        case char if char in prefix_util.zf_db():
-            return Names.ZFD.value
-        case char if char in prefix_util.fn_db():
-            return Names.FND.value
-        case char if char in prefix_util.ael_db():
-            return Names.AEL.value
-        case char if char in prefix_util.fil_db():
-            return Names.FIL.value
-        case char if char in prefix_util.jml_db():
-            return Names.JML.value
-        case char if char in prefix_util.nrl_db():
-            return Names.NRL.value
-        case char if char in prefix_util.svl_db():
-            return Names.SVL.value
-        case char if char in prefix_util.wzl_db():
-            return Names.WZL.value
-        case char if char in prefix_util.aeu_db():
-            return Names.AEU.value
-        case char if char in prefix_util.fiu_db():
-            return Names.FIU.value
-        case char if char in prefix_util.jmu_db():
-            return Names.JMU.value
-        case char if char in prefix_util.nru_db():
-            return Names.NRU.value
-        case char if char in prefix_util.svu_db():
-            return Names.SVU.value
-        case char if char in prefix_util.wzu_db():
-            return Names.WZU.value
+        case char if char in prefix_util.tables_03():
+            return Names.TABLES_03.value
+        case char if char in prefix_util.tables_47():
+            return Names.TABLES_47.value
+        case char if char in prefix_util.tables_89hu():
+            return Names.TABLES_89HU.value
+        case char if char in prefix_util.tables_ab():
+            return Names.TABLES_AB.value
+        case char if char in prefix_util.tables_cd():
+            return Names.TABLES_CD.value
+        case char if char in prefix_util.tables_ef():
+            return Names.TABLES_EF.value
+        case char if char in prefix_util.tables_gh():
+            return Names.TABLES_GH.value
+        case char if char in prefix_util.tables_ij():
+            return Names.TABLES_IJ.value
+        case char if char in prefix_util.tables_kl():
+            return Names.TABLES_KL.value
+        case char if char in prefix_util.tables_mn():
+            return Names.TABLES_MN.value
+        case char if char in prefix_util.tables_op():
+            return Names.TABLES_OP.value
+        case char if char in prefix_util.tables_qr():
+            return Names.TABLES_QR.value
+        case char if char in prefix_util.tables_st():
+            return Names.TABLES_ST.value
+        case char if char in prefix_util.tables_uv():
+            return Names.TABLES_UV.value
+        case char if char in prefix_util.tables_wx():
+            return Names.TABLES_WX.value
+        case char if char in prefix_util.tables_yz():
+            return Names.TABLES_YZ.value
         case _:
             raise ValueError(Utils.DB_NAME_ERROR.value)
 
 
-def get_table_name(char: bytes) -> str:
+def get_table_name(char: str) -> str:
     """Given a char get the table's name"""
-    if char in Digitables:
-        return Digitables.get_table_name(char)
-    elif char in LowerTables:
-        return LowerTables.get_table_name(char)
-    elif char in UpperTables:
-        return UpperTables.get_table_name(char)
-    else:
-        raise ValueError("NO!")
+    if char in Tables03:
+        return create_tables_03()
+
+    elif char in Tables47:
+        return create_tables_47()
+
+    elif char in Tables89hu:
+        return create_tables_89hu()
+
+    elif char in TablesAB :
+        return create_tables_ab()
+
+    elif char in TablesCD :
+        return create_tables_cd()
+
+    elif char in TablesEF :
+        return create_tables_ef()
+
+    elif char in TablesGH:
+        return create_tables_gh()
+
+    elif char in TablesIJ:
+        return create_tables_ij()
+
+    elif char in TablesKL:
+        return create_tables_kl()
+
+    elif char in TablesMN:
+        return create_tables_mn()
+
+    elif char in TablesOP:
+        return create_tables_op()
+
+    elif char in TablesQR:
+        return create_tables_qr()
+
+    elif char in TablesST:
+        return create_tables_st()
+
+    elif char in TablesUV:
+        return create_tables_uv()
+
+    elif char in TablesWX:
+        return create_tables_wx()
+
+    elif char in TablesYZ:
+        return create_tables_yz()
+
