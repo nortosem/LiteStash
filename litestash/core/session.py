@@ -9,7 +9,7 @@ This class is intended for use in a LiteStash:
         self.session = Session
 """
 from litestash.core.engine import Engine
-from litestash.core.config.schema_conf import MetaSlots
+from litestash.core.config.root import Tables
 from litestash.core.util.litestash_util import SessionAttributes
 from litestash.core.util.litestash_util import setup_sessions
 
@@ -21,20 +21,22 @@ class Session:
     factories.
     #TODO: finish docs
     """
-    __slots__ = (MetaSlots.ZFD.value,
-                 MetaSlots.FND.value,
-                 MetaSlots.AEL.value,
-                 MetaSlots.FIL.value,
-                 MetaSlots.JML.value,
-                 MetaSlots.NRL.value,
-                 MetaSlots.SVL.value,
-                 MetaSlots.WZL.value,
-                 MetaSlots.AEU.value,
-                 MetaSlots.FIU.value,
-                 MetaSlots.JMU.value,
-                 MetaSlots.NRU.value,
-                 MetaSlots.SVU.value,
-                 MetaSlots.WZU.value,
+    __slots__ = (Tables.TABLES_03.value,
+                 Tables.TABLES_47.value,
+                 Tables.TABLES_89HU.value,
+                 Tables.TABLES_AB.value,
+                 Tables.TABLES_CD.value,
+                 Tables.TABLES_EF.value,
+                 Tables.TABLES_GH.value,
+                 Tables.TABLES_IJ.value,
+                 Tables.TABLES_KL.value,
+                 Tables.TABLES_MN.value,
+                 Tables.TABLES_OP.value,
+                 Tables.TABLES_QR.value,
+                 Tables.TABLES_ST.value,
+                 Tables.TABLES_UV.value,
+                 Tables.TABLES_WX.value,
+                 Tables.TABLES_YZ.value
                 )
 
     def __init__(self, engine: Engine):
@@ -42,76 +44,55 @@ class Session:
 
         TODO: docs
         """
-        self.zfd = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.ZFD.value)
-            )
+        self.tables_03 = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_03.value))
         )
-        self.fnd = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.FND.value)
-            )
+        self.tables_47 = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_47.value))
         )
-        self.ael = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.AEL.value)
-            )
+        self.tables_89hu = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_89HU.value))
         )
-        self.fil = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.FIL.value)
-            )
+        self.tables_ab = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_AB.value))
         )
-        self.jml = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.JML.value)
-            )
+        self.tables_cd = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_CD.value))
         )
-        self.nrl = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.NRL.value)
-            )
+        self.tables_ef = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_EF.value))
         )
-        self.svl = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.SVL.value)
-            )
+        self.tables_gh = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_GH.value))
         )
-        self.wzl = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.WZL.value)
-            )
+        self.tables_ij = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_IJ.value))
         )
-        self.aeu = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.AEU.value)
-            )
+        self.tables_kl = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_KL.value))
         )
-        self.fiu = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.FIU.value)
-            )
+        self.tables_mn = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_MN.value))
         )
-        self.jmu = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.JMU.value)
-            )
+        self.tables_op = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_OP.value))
         )
-        self.nru = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.NRU.value)
-            )
+        self.tables_qr = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_QR.value))
         )
-        self.svu = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.SVU.value)
-            )
+        self.tables_st = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_ST.value))
         )
-        self.wzu = SessionAttributes(
-            *setup_sessions(
-                getattr(engine, MetaSlots.WZU.value)
-            )
+        self.tables_uv = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_UV.value))
         )
+        self.tables_wx = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_WX.value))
+        )
+        self.tables_yz = SessionAttributes(
+            *setup_sessions(getattr(engine, Tables.TABLES_YZ.value))
+        )
+
 
     def get(self, db_name):
         """Get a session factory for the database name"""
