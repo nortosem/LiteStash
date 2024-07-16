@@ -67,7 +67,7 @@ class EngineConf(Valid):
     Provide the configuation to setup a database engine.
     """
     SQLITE = 'sqlite:///'
-    DIR_NAME = 'litestash'
+    DIR_NAME = 'data'
     ECHO = True
     FUTURE = True
     NO_ECHO = False

@@ -9,6 +9,7 @@ class Pragma(Valid):
 
     The default pragma configuration.
     """
+    CONNECT = 'connect'
     PRAGMA = 'PRAGMA'
     JOURNAL_MODE = 'journal_mode=WAL'
     SYNCHRONOUS = 'synchronous=NORMAL'
@@ -66,20 +67,4 @@ class Names(Valid):
     LOW = '_lower'
     UP = '_upper'
     DB = '.db'
-    TABLES_03 = 'tables_03'
-    TABLES_47 = 'tables_47'
-    TABLES_89HU = 'tablee_89hu'
-    TABLES_AB = 'tables_ab'
-    TABLES_CD = 'tables_cd'
-    TABLES_EF = 'tables_ef'
-    TABLES_GH = 'tables_gh'
-    TABLES_IJ = 'tables_ij'
-    TABLES_KL = 'tables_kl'
-    TABLES_MN = 'tables_mn'
-    TABLES_OP = 'tables_op'
-    TABLES_QR = 'tables_qr'
-    TABLES_ST = 'tables_st'
-    TABLES_UV = 'tables_uv'
-    TABLES_WX = 'tables_wx'
-    TABLES_YZ = 'tables_yz'
     ERROR = 'Invalid character request'
