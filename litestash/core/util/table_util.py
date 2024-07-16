@@ -2,161 +2,133 @@
 
 TODO: docs
 """
-from litestash.core.config.schema_conf import ColumnSetup as Col
-from litestash.core.config.schema_conf import ColumnConfig as Conf
-from litestash.core.config.tables.digits import Digitables
-from litestash.core.config.tables.lowercase import LowerTables
-from litestash.core.config.tables.uppercase import UpperTables
-from litestash.models import StashColumn
 from sqlalchemy import Column
 from typing import Generator
+from litestash.models import StashColumn
+from litestash.core.config.schema_conf import ColumnSetup as Col
+from litestash.core.config.schema_conf import ColumnConfig as Conf
+from litestash.core.config.tables.tables_03 import Tables03
+from litestash.core.config.tables.tables_47 import Tables47
+from litestash.core.config.tables.tables_89hu import Tables89hu
+from litestash.core.config.tables.tables_ab import TablesAB
+from litestash.core.config.tables.tables_cd import TablesCD
+from litestash.core.config.tables.tables_ef import TablesEF
+from litestash.core.config.tables.tables_gh import TablesGH
+from litestash.core.config.tables.tables_ij import TablesIJ
+from litestash.core.config.tables.tables_kl import TablesKL
+from litestash.core.config.tables.tables_mn import TablesMN
+from litestash.core.config.tables.tables_op import TablesOP
+from litestash.core.config.tables.tables_qr import TablesQR
+from litestash.core.config.tables.tables_st import TablesST
+from litestash.core.config.tables.tables_uv import TablesUV
+from litestash.core.config.tables.tables_wx import TablesWX
+from litestash.core.config.tables.tables_yz import TablesYZ
 
-def create_zfd_tables() -> Generator[str, None, None]:
-    """Generate all table names for 0-4"""
-    for char in (Digitables.ZERO.value,
-                 Digitables.ONE.value,
-                 Digitables.TWO.value,
-                 Digitables.THREE.value,
-                 Digitables.FOUR.value
-                 ):
-        table_name = Digitables.get_table_name(char)
+def create_tables_03() -> Generator[str, None, None]:
+    """Generate all table names for 0-3"""
+    for char in (Tables03):
+        table_name = Tables03.get_table_name(char.value)
         yield table_name
 
 
-def create_fnd_tables() -> Generator[str, None, None]:
-    """Generate all table names for 5-9"""
-    for char in (Digitables.FIVE.value,
-                 Digitables.SIX.value,
-                 Digitables.SEVEN.value,
-                 Digitables.EIGHT.value,
-                 Digitables.NINE.value
-                 ):
-        yield Digitables.get_table_name(char)
+def create_tables_47() -> Generator[str, None, None]:
+    """Generate all table names for 4-7"""
+    for char in (Tables43):
+        table_name = Tables47.get_table_name(char.value)
+        yield table_name
 
 
-def create_ael_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (LowerTables.A.value,
-                 LowerTables.B.value,
-                 LowerTables.C.value,
-                 LowerTables.D.value,
-                 LowerTables.E.value
-                 ):
-        yield LowerTables.get_table_name(char)
+def create_tables_89hu() -> Generator[str, None, None]:
+    """Generate all table names for 8,9,-,_"""
+    for char in (Tables89hu):
+        table_name = Tables89hu.get_table_name(char.value)
+        yield table_name
 
 
-def create_fil_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (LowerTables.F.value,
-                 LowerTables.G.value,
-                 LowerTables.H.value,
-                 LowerTables.I.value,
-                 ):
-        yield LowerTables.get_table_name(char)
+def create_tables_ab() -> Generator[str, None, None]:
+    """Generate all table names for a,b,A,B"""
+    for char in (TablesAB):
+        table_name = TablesAB.get_table_name(char.value)
+        yield table_name
 
 
-def create_jml_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (LowerTables.J.value,
-                 LowerTables.K.value,
-                 LowerTables.L.value,
-                 LowerTables.M.value,
-                 ):
-        yield LowerTables.get_table_name(char)
+def create_tables_cd() -> Generator[str, None, None]:
+    """Generate all table names for c,d,C,D"""
+    for char in (TablesCD):
+        table_name = TablesCD.get_table_name(char.value)
+        yield table_name
 
 
-def create_nrl_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (LowerTables.N.value,
-                 LowerTables.O.value,
-                 LowerTables.P.value,
-                 LowerTables.Q.value,
-                 LowerTables.R.value
-                 ):
-        yield LowerTables.get_table_name(char)
+def create_tables_ef() -> Generator[str, None, None]:
+    """Generate all table names for e,f,E,F"""
+    for char in (TablesEF):
+        table_name = TablesEF.get_table_name(char.value)
+        yield table_name
 
 
-def create_svl_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (LowerTables.S.value,
-                 LowerTables.T.value,
-                 LowerTables.U.value,
-                 LowerTables.V.value,
-                 ):
-        yield LowerTables.get_table_name(char)
+def create_tables_gh() -> Generator[str, None, None]:
+    """Generate all table names for g,h,G,H"""
+    for char in (TablesGH):
+        table_name = TablesGH.get_table_name(char.value)
+        yield table_name
 
 
-def create_wzl_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (LowerTables.W.value,
-                 LowerTables.X.value,
-                 LowerTables.Y.value,
-                 LowerTables.Z.value,
-                 ):
-        yield LowerTables.get_table_name(char)
+def create_tables_ij() -> Generator[str, None, None]:
+    """Generate all table names for i,j,I,J"""
+    for char in (TablesIJ):
+        table_name = TablesIJ.get_table_name(char.value)
+        yield table_name
+
+def create_tables_kl() -> Generator[str, None, None]:
+    """Generate all table names for k,l,K,L"""
+    for char in (TablesKL):
+        table_name = TablesKL.get_table_name(char.value)
+        yield table_name
+
+def create_tables_mn() -> Generator[str, None, None]:
+    """Generate all table names for m,n,M,N"""
+    for char in (TablesMN):
+        table_name = TablesMN.get_table_name(char.value)
+        yield table_name
 
 
-def create_aeu_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (UpperTables.A.value,
-                 UpperTables.B.value,
-                 UpperTables.C.value,
-                 UpperTables.D.value,
-                 UpperTables.E.value
-                 ):
-        yield UpperTables.get_table_name(char)
+def create_tables_op() -> Generator[str, None, None]:
+    """Generate all table names for o,p,O,P"""
+    for char in (TablesOP):
+        table_name = TablesOP.get_table_name(char.value)
+        yield table_name
 
 
-def create_fiu_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (UpperTables.F.value,
-                 UpperTables.G.value,
-                 UpperTables.H.value,
-                 UpperTables.I.value,
-                 ):
-        yield UpperTables.get_table_name(char)
+def create_tables_qr() -> Generator[str, None, None]:
+    """Generate all table names for q,r,Q,R"""
+    for char in (TablesQR):
+        table_name = TablesQR.get_table_name(char.value)
+        yield table_name
 
 
-def create_jmu_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (UpperTables.J.value,
-                 UpperTables.K.value,
-                 UpperTables.L.value,
-                 UpperTables.M.value,
-                 ):
-        yield UpperTables.get_table_name(char)
+def create_tables_st() -> Generator[str, None, None]:
+    """Generate all table names for s,t,S,T"""
+    for char in (TablesST):
+        table_name = TablesST.get_table_name(char.value)
+        yield table_name
 
+def create_tables_uv() -> Generator[str, None, None]:
+    """Generate all table names for u,v,U,V"""
+    for char in (TablesUV):
+        table_name = TablesUV.get_table_name(char.value)
+        yield table_name
 
-def create_nru_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (UpperTables.N.value,
-                 UpperTables.O.value,
-                 UpperTables.P.value,
-                 UpperTables.Q.value,
-                 UpperTables.R.value
-                 ):
-        yield UpperTables.get_table_name(char)
+def create_tables_wx() -> Generator[str, None, None]:
+    """Generate all table names for w,x,W,X"""
+    for char in (TablesWX):
+        table_name = TablesWX.get_table_name(char.value)
+        yield table_name
 
-
-def create_svu_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (UpperTables.S.value,
-                 UpperTables.T.value,
-                 UpperTables.U.value,
-                 UpperTables.V.value,
-                 ):
-        yield UpperTables.get_table_name(char)
-
-
-def create_wzu_tables() -> Generator[str, None, None]:
-    """Generate all table names for a-e"""
-    for char in (UpperTables.W.value,
-                 UpperTables.X.value,
-                 UpperTables.Y.value,
-                 UpperTables.Z.value,
-                 ):
-        yield UpperTables.get_table_name(char)
-
+def create_tables_yz() -> Generator[str, None, None]:
+    """Generate all table names for y,z,Y,Z"""
+    for char in (TablesYZ):
+        table_name = TablesYZ.get_table_name(char.value)
+        yield table_name
 
 def create_column(stash_column: StashColumn) -> Column:
     """Create columns for database tables"""

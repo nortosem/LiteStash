@@ -15,7 +15,6 @@ from sqlalchemy import MetaData
 from collections import namedtuple
 from hashlib import blake2b
 from secrets import base64
-from secretes import token_bytes
 from secrets import SystemRandom
 from litestash.core.config.litestash_conf import EngineAttr
 from litestash.core.config.litestash_conf import MetaAttr
