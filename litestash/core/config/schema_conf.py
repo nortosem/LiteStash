@@ -80,7 +80,7 @@ class Names(Valid):
     Default filenames for each database.
     Also the Table name suffix as HASH
     """
-    HASH = '_hash'
+    HASH = '_hash_'
     LOW = '_lower'
     UP = '_upper'
     DB = '.db'
