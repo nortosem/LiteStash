@@ -30,31 +30,35 @@ class TablesCD(Valid):
     @staticmethod
     def c_low() -> str:
         """Get the full table name for hash[:0] equal to 'c'"""
-        return str(TablesCD.C.value
+        return str(Names.TABLES_CD.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesCD.C.value
                    )
 
     @staticmethod
     def d_low() -> str:
         """Get the full table name for hash[:0] equal to 'd'"""
-        return  str(TablesCD.D.value
+        return  str(Names.TABLES_CD.value
                     +Names.LOW.value
                     +Names.HASH.value
+                    +TablesCD.D.value
                     )
 
     @staticmethod
     def c_upper() -> str:
         """Get the full table name for hash[:0] equal to 'C'"""
-        return str(TablesCD.C.value
+        return str(Names.TABLES_CD.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesCD.C.value
                    )
 
     @staticmethod
     def d_upper() -> str:
         """Get the full table name for hash[:0] equal to 'D'"""
-        return str(TablesCD.D.value
+        return str(Names.TABLES_CD.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesCD.D.value
                    )

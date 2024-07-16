@@ -30,31 +30,35 @@ class TablesUV(Valid):
     @staticmethod
     def u_low() -> str:
         """Get the full table name for hash[u:]"""
-        return str(TablesUV.U_LOW.value
+        return str(Names.TABLES_UV.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesUV.U_LOW.value
                    )
 
     @staticmethod
     def v_low() -> str:
         """Get the full table name for hash[v:]"""
-        return str(TablesUV.V_LOW.value
+        return str(Names.TABLES_UV.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesUV.V_LOW.value
                    )
 
     @staticmethod
     def u_upper() -> str:
         """Get the full table name for hash[U:]"""
-        return str(TablesUV.U_UP.value
+        return str(Names.TABLES_UV.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesUV.U_UP.value
                    )
 
     @staticmethod
     def v_upper() -> str:
         """Get the full table name for hash[V:]"""
-        return str(TablesUV.V_UP.value
+        return str(Names.TABLES_UV.value
                    +Names.UP.value
                    +Names.HASH.value
+                   ++TablesUV.V_UP.value
                    )
