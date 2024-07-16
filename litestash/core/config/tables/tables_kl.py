@@ -30,31 +30,35 @@ class TablesKL(Valid):
     @staticmethod
     def k_low() -> str:
         """Get the full table name for hash[k:]"""
-        return str(TablesKL.K_LOW.value
+        return str(Names.TABLES_KL.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesKL.K_LOW.value
                    )
 
     @staticmethod
     def l_low() -> str:
         """Get the full table name for hash[l:]"""
-        return str(TablesKL.L_LOW.value
+        return str(Names.TABLES_KL.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesKL.L_LOW.value
                    )
 
     @staticmethod
     def k_upper() -> str:
         """Get the full table name for hash[K:]"""
-        return str(TablesKL.K_UP.value
+        return str(Names.TABLES_KL.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesKL.K_UP.value
                    )
 
     @staticmethod
     def l_upper() -> str:
         """Get the full table name for hash[L:]"""
-        return str(TablesKL.L_UP.value
+        return str(Names.TABLES_KL.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesKL.L_UP.value
                    )

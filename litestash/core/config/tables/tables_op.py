@@ -30,31 +30,35 @@ class TablesOP(Valid):
     @staticmethod
     def o_low() -> str:
         """Get the full table name for hash[o:]"""
-        return str(TablesOP.O_LOW.value
+        return str(Names.TABLES_OP.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesOP.O_LOW.value
                    )
 
     @staticmethod
     def p_low() -> str:
         """Get the full table name for hash[p:]"""
-        return str(TablesOP.P_LOW.value
+        return str(Names.TABLES_OP.value
                    +Names.LOW.value
                    +Names.HASH.value
+                   +TablesOP.P_LOW.value
                    )
 
     @staticmethod
     def o_upper() -> str:
         """Get the full table name for hash[O:]"""
-        return str(TablesOP.O_UP.value
+        return str(Names.TABLES_OP.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesOP.O_UP.value
                    )
 
     @staticmethod
     def p_upper() -> str:
         """Get the full table name for hash[P:]"""
-        return str(TablesOP.P_UP.value
+        return str(Names.TABLES_OP.value
                    +Names.UP.value
                    +Names.HASH.value
+                   +TablesOP.P_UP.value
                    )
