@@ -2,25 +2,25 @@
 
 The column and data models for keeping a stash.
 """
-from litestash.core.config.litestash_conf import DataScheme
-from litestash.core.config.schema_conf import ColumnConfig
-from litestash.core.util.model_util import ColumnType
+import orjson
+from typing import Union
+from typing import Literal
+from sqlalchemy import JSON
+from sqlalchemy import String
+from sqlalchemy import Integer
+from pydantic import Json
+from pydantic import Field
+from pydantic import StrictStr
+from pydantic import StrictInt
+from pydantic import field_validator
+from pydantic.dataclasses import dataclass
 from litestash.core.util.model_util import StrType
 from litestash.core.util.model_util import IntType
 from litestash.core.util.model_util import JsonType
-from pydantic.dataclasses import dataclass
-from pydantic import validator
-from pydantic import StrictStr
-from pydantic import StrictInt
-from pydantic import Json
-from pydantic import Field
-from typing import Literal
-from typing import Union
-from sqlalchemy import Integer
-from sqlalchemy import JSON
-from sqlalchemy import String
-import orjson
-
+from litestash.core.util.model_util import ColumnType
+from litestash.core.config.model import StashDataConf
+from litestash.core.config.schema_conf import ColumnConfig
+from litestash.core.config.litestash_conf import DataScheme
 
 @dataclass(frozen=True, slots=True)
 class LiteStashData:
@@ -31,6 +31,13 @@ class LiteStashData:
         key (str): A text label for some json data
         value (json): A text string composed of json data
     """
+    model_config = {
+        StashDataConf.ORM_MODE.value: False,
+        StashDataConf.EXTRA.value: DataScheme.FORBID_EXTRA.value,
+        StashDataConf.JSON_LOADS.value: orjson.loads,
+        StashDataConf.JSON_DUMPS.value: orjson.dumps
+    }
+
     key: StrictStr = Field(
         ...,
         min_length=DataScheme.MIN_LENGTH.value,
@@ -38,7 +45,7 @@ class LiteStashData:
     )
     value: Json | None = Field(default=None)
 
-    @validator(ColumnConfig.DATA_KEY.value, pre=True)
+    @field_validator(ColumnConfig.DATA_KEY.value)
     def valid_key(cls, key: str):
         """Validate Key String
 
@@ -55,13 +62,6 @@ class LiteStashData:
         return key
 
 
-    class Config:
-        """Define data config attributes"""
-        orm_mode = False
-        extra = f'{DataScheme.FORBID_EXTRA.value}'
-        json_loads = orjson.loads
-        json_dumps = orjson.dumps
-
 @dataclass(slots=True)
 class LiteStashStore:
     """LiteStash Database Fields
@@ -77,18 +77,18 @@ class LiteStashStore:
         date_time (StrictInt): Y,M,D,H,M,S as POSIX datetime integer
         ms_time (StrictInt): The microseconds floated from datetime source
     """
+    model_config = {
+        StashDataConf.ORM_MODE.value: True,
+        StashDataConf.EXTRA.value: DataScheme.FORBID_EXTRA.value,
+        StashDataConf.JSON_LOADS.value: orjson.loads,
+        StashDataConf.JSON_DUMPS.value: orjson.dumps
+    }
+
     key_hash: StrictStr = Field(..., primary_key=True, index=True)
     key: StrictStr = Field(..., unique=True, index=True)
     value: Json | None = Field(default=None)
     date_time: StrictInt | None = Field(default=None)
     ms_time: StrictInt | None = Field(default=None)
-
-    class Config:
-        """LiteStashStore Config"""
-        orm_mode = True
-        extra = f'{DataScheme.FORBID_EXTRA.value}'
-        json_loads = orjson.loads
-        json_dumps = orjson.dumps
 
 
 @dataclass(slots=True)
@@ -114,7 +114,7 @@ class StashColumn:
     index: bool = False
     unique: bool = False
 
-    @validator(ColumnConfig.STASH_COLUMN.value)
+    @field_validator(ColumnConfig.STASH_COLUMN.value)
     def valid_type(cls, column_type: ColumnType) -> Union[String,Integer,JSON]:
         """Valid Type Function
 
