@@ -39,7 +39,7 @@ class Session:
                  Tables.TABLES_YZ.value
                 )
 
-    def __init__(self, engine: Engine):
+    def __init__(self, engine_stash: EngineStash):
         """Default init
 
         TODO: docs
