@@ -4,7 +4,7 @@ Enumerate the valid chars for keys with hash[:0] equal to 8,9,-,_.
 """
 from litestash.core.config.root import Valid
 from litestash.core.config.root import Tables
-from litestash.core.config.schema_conf import Name
+from litestash.core.config.schema_conf import Names
 
 class Tables89hu(Valid):
     """Enumerate char 8,9,-,_"""
