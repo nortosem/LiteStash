@@ -16,7 +16,6 @@ from pydantic import Json
 from pydantic import Field
 from typing import Literal
 from typing import Union
-from datetime import datetime
 from sqlalchemy import Integer
 from sqlalchemy import JSON
 from sqlalchemy import String
@@ -38,6 +37,23 @@ class LiteStashData:
         max_length=DataScheme.MAX_LENGTH.value,
     )
     value: Json | None = Field(default=None)
+
+    @validator(ColumnConfig.DATA_KEY.value, pre=True)
+    def valid_key(cls, key: str):
+        """Validate Key String
+
+        Valid keys have only alphanumeric & ASCII characters
+        Args:
+            key (str): the name for the json being stashed
+        """
+        if not key.isascii():
+            raise ValueError(DataScheme.ASCII_ERROR.value)
+
+        if not key.isalnum():
+            raise ValueError(DataScheme.ALNUM_ERROR.value)
+
+        return key
+
 
     class Config:
         """Define data config attributes"""
@@ -62,8 +78,6 @@ class LiteStashStore:
         ms_time (StrictInt): The microseconds floated from datetime source
     """
     key_hash: StrictStr = Field(..., primary_key=True, index=True)
-    key_digest: StrictStr = Field(..., unique=True, index=True)
-    lot: StrictStr = Field(..., unique=True, index=True)
     key: StrictStr = Field(..., unique=True, index=True)
     value: Json | None = Field(default=None)
     date_time: StrictInt | None = Field(default=None)
