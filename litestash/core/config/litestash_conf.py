@@ -75,11 +75,11 @@ class EngineConf(Valid):
 
     @staticmethod
     def sqlite() -> str:
-        return f'{EngineConf.SQLITE.value}'
+        return EngineConf.SQLITE.value
 
     @staticmethod
     def dirname() -> str:
-        return f'{EngineConf.DIR_NAME.value}'
+        return EngineConf.DIR_NAME.value
 
     @staticmethod
     def echo() -> str:
@@ -87,12 +87,12 @@ class EngineConf(Valid):
 
     @staticmethod
     def future() -> str:
-        return f'{EngineConf.FUTURE.value}'
+        return EngineConf.FUTURE.value
 
     @staticmethod
     def no_echo() -> str:
-        return f'{EngineConf.NO_ECHO.value}'
+        return EngineConf.NO_ECHO.value
 
     @staticmethod
     def no_future() -> str:
-        return f'{EngineConf.NO_FUTURE.value}'
+        return EngineConf.NO_FUTURE.value
