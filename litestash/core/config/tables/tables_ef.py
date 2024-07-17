@@ -3,7 +3,8 @@
 Enumerate the valid chars for keys with hash[:0] equal to e,E,f,F.
 """
 from litestash.core.config.root import Valid
-from litestash.core.config.schema_conf import Names
+from litestash.core.config.root import Tables
+from litestash.core.config.schema_conf import Name
 
 class TablesEF(Valid):
     """Enumeration with access methods"""
@@ -30,35 +31,35 @@ class TablesEF(Valid):
     @staticmethod
     def e_low() -> str:
         """Get the full table name for hash[e:]"""
-        return str(Names.TABLES_EF.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_EF.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesEF.E_LOW.value
                    )
 
     @staticmethod
     def f_low() -> str:
         """Get the full table name for hash[f:]"""
-        return str(Names.TABLES_EF.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_EF.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesEF.F_LOW.value
                    )
 
     @staticmethod
     def e_upper() -> str:
         """Get the full table name for hash[E:]"""
-        return str(Names.TABLES_EF.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_EF.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesEF.E_UP.value
                    )
 
     @staticmethod
     def f_upper() -> str:
         """Get the full table name for hash[F:]"""
-        return str(Names.TABLES_EF.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_EF.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesEF.F_UP.value
                    )

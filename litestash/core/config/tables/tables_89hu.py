@@ -3,7 +3,8 @@
 Enumerate the valid chars for keys with hash[:0] equal to 8,9,-,_.
 """
 from litestash.core.config.root import Valid
-from litestash.core.config.schema_conf import Names
+from litestash.core.config.root import Tables
+from litestash.core.config.schema_conf import Name
 
 class Tables89hu(Valid):
     """Enumerate char 8,9,-,_"""
@@ -30,31 +31,31 @@ class Tables89hu(Valid):
     @staticmethod
     def eight() -> str:
         """Get the full table name for hash[:0] equal to '8'"""
-        return str({Names.TABLES_89HU.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_89HU.value}
+                   +{Tables.HASH.value}
                    +{Tables89hu.EIGHT.value}
                    )
 
     @staticmethod
     def nine() -> str:
         """Get the full table name for hash[:0] equal to '9'"""
-        return str({Names.TABLES_89HU.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_89HU.value}
+                   +{Tables.HASH.value}
                    +{Tables89hu.NINE.value}
                    )
 
     @staticmethod
     def hyphen() -> str:
         """Get the full table name for hash[:0] equal to '-'"""
-        return str({Names.TABLES_89HU.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_89HU.value}
+                   +{Tables.HASH.value}
                    +{Tables89hu.HYPHEN.value}
                    )
 
     @staticmethod
     def underscore() -> str:
         """Get the full table name for hash[:0] equal to '_'"""
-        return str({Names.TABLES_89HU.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_89HU.value}
+                   +{Tables.HASH.value}
                    +{Tables89hu.UNDERSCORE.value}
                    )

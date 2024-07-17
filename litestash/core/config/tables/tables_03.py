@@ -3,7 +3,8 @@
 Enumerate the valid chars for keys with hash[:0] equal to 0-3.
 """
 from litestash.core.config.root import Valid
-from litestash.core.config.schema_conf import Names
+from litestash.core.config.root import Tables
+from litestash.core.config.schema_conf import Name
 
 class Tables03(Valid):
     """Enumerate 0 to 3"""
@@ -30,31 +31,31 @@ class Tables03(Valid):
     @staticmethod
     def zero() -> str:
         """Get the full table name for hash[:0] equal to '0'"""
-        return str({Names.TABLES_03.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_03.value}
+                   +{Tables.HASH.value}
                    +{Tables03.ZERO.value}
                    )
 
     @staticmethod
     def one() -> str:
         """Get the full table name for hash[:0] equal to '1'"""
-        return str({Names.TABLES_03.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_03.value}
+                   +{Tables.HASH.value}
                    +{Tables03.ONE.value}
                    )
 
     @staticmethod
     def two() -> str:
         """Get the full table name for hash[:0] equal to '2'"""
-        return str({Names.TABLES_03.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_03.value}
+                   +{Tables.HASH.value}
                    +{Tables03.TWO.value}
                    )
 
     @staticmethod
     def three() -> str:
         """Get the full table name for hash[:0] equal to '3'"""
-        return str({Names.TABLES_03.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_03.value}
+                   +{Tables.HASH.value}
                    +{Tables03.THREE.value}
                    )

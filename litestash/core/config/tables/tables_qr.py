@@ -3,6 +3,7 @@
 Enumerate the valid chars for keys with hash[:0] equal to q,Q,r,R.
 """
 from litestash.core.config.root import Valid
+from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
 class TablesQR(Valid):
@@ -30,36 +31,36 @@ class TablesQR(Valid):
     @staticmethod
     def q_low() -> str:
         """Get the full table name for """
-        return str(Names.TABLES_QR.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_QR.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesQR.Q_LOW.value
                    )
 
     @staticmethod
     def r_low() -> str:
         """Get the full table name for """
-        return str(Names.TABLES_QR.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_QR.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesQR.R_LOW.value
                    )
 
     @staticmethod
     def q_upper() -> str:
         """Get the full table name for Q"""
-        return str(Names.TABLES_QR.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_QR.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesQR.Q_UP.value
                    )
 
     @staticmethod
     def r_upper() -> str:
         """Get the full table name for R"""
-        return str(Names.TABLES_QR.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_QR.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesQR.R_UP.value
                    )
 
