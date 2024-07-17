@@ -31,31 +31,31 @@ class Tables03(Valid):
     @staticmethod
     def zero() -> str:
         """Get the full table name for hash[:0] equal to '0'"""
-        return str({Tables.TABLES_03.value}
-                   +{Tables.HASH.value}
-                   +{Tables03.ZERO.value}
+        return str(Tables.TABLES_03.value
+                   +Names.HASH.value
+                   +Tables03.ZERO.value
                    )
 
     @staticmethod
     def one() -> str:
         """Get the full table name for hash[:0] equal to '1'"""
-        return str({Tables.TABLES_03.value}
-                   +{Tables.HASH.value}
-                   +{Tables03.ONE.value}
+        return str(Tables.TABLES_03.value
+                   +Names.HASH.value
+                   +Tables03.ONE.value
                    )
 
     @staticmethod
     def two() -> str:
         """Get the full table name for hash[:0] equal to '2'"""
-        return str({Tables.TABLES_03.value}
-                   +{Tables.HASH.value}
-                   +{Tables03.TWO.value}
+        return str(Tables.TABLES_03.value
+                   +Names.HASH.value
+                   +Tables03.TWO.value
                    )
 
     @staticmethod
     def three() -> str:
         """Get the full table name for hash[:0] equal to '3'"""
-        return str({Tables.TABLES_03.value}
-                   +{Tables.HASH.value}
-                   +{Tables03.THREE.value}
+        return str(Tables.TABLES_03.value
+                   +Names.HASH.value
+                   +Tables03.THREE.value
                    )
