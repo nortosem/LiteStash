@@ -18,13 +18,13 @@ class TablesYZ(Valid):
         """Match on char and return table name"""
         match char:
             case TablesYZ.Y_LOW.value:
-                return TablesYZ.Y_LOW_low()
+                return TablesYZ.y_low()
             case TablesYZ.Z_LOW.value:
-                return TablesYZ.Z_LOW_low()
+                return TablesYZ.z_low()
             case TablesYZ.Y_UP.value:
-                return TablesYZ.Y_UP_upper()
+                return TablesYZ.y_upper()
             case TablesYZ.Z_UP.value:
-                return TablesYZ.Z_UP_upper()
+                return TablesYZ.z_upper()
             case _:
                 raise ValueError(Names.ERROR.value)
 
@@ -32,8 +32,8 @@ class TablesYZ(Valid):
     def y_low() -> str:
         """Get the full table name for hash[y:]"""
         return str(Tables.TABLES_YZ.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesYZ.Y_LOW.value
                    )
 
@@ -41,8 +41,8 @@ class TablesYZ(Valid):
     def z_low() -> str:
         """Get the full table name for hash[z:]"""
         return str(Tables.TABLES_YZ.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesYZ.Z_LOW.value
                    )
 
@@ -50,16 +50,16 @@ class TablesYZ(Valid):
     def y_upper() -> str:
         """Get the full table name for hash[Y:]"""
         return str(Tables.TABLES_YZ.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesYZ.Y_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesYZ.Y_LOW.value
                    )
 
     @staticmethod
     def z_upper() -> str:
         """Get the full table name for hash[Z:]"""
         return str(Tables.TABLES_YZ.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesYZ.Z_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesYZ.Z_LOW.value
                    )

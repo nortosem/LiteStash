@@ -18,13 +18,13 @@ class TablesST(Valid):
         """Match on char and return table name"""
         match char:
             case TablesST.S_LOW.value:
-                return TablesST.S_LOW_low()
+                return TablesST.s_low()
             case TablesST.T_LOW.value:
-                return TablesST.T_LOW_low()
+                return TablesST.t_low()
             case TablesST.S_UP.value:
-                return TablesST.S_UP_upper()
+                return TablesST.s_upper()
             case TablesST.T_UP.value:
-                return TablesST.T_UP_upper()
+                return TablesST.t_upper()
             case _:
                 raise ValueError(Names.ERROR.value)
 
@@ -32,8 +32,8 @@ class TablesST(Valid):
     def s_low() -> str:
         """Get the full table name for hash[s:]"""
         return str(Tables.TABLES_ST.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesST.S_LOW.value
                    )
 
@@ -41,8 +41,8 @@ class TablesST(Valid):
     def t_low() -> str:
         """Get the full table name for hash[t:]"""
         return str(Tables.TABLES_ST.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesST.T_LOW.value
                    )
 
@@ -50,16 +50,16 @@ class TablesST(Valid):
     def s_upper() -> str:
         """Get the full table name for hash[S:]"""
         return str(Tables.TABLES_ST.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesST.S_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesST.S_LOW.value
                    )
 
     @staticmethod
     def t_upper() -> str:
         """Get the full table name for hash[T:]"""
         return str(Tables.TABLES_ST.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesST.T_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesST.T_LOW.value
                    )

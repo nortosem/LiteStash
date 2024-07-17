@@ -32,8 +32,8 @@ class TablesGH(Valid):
     def g_low() -> str:
         """Get the full table name for hash[g:]"""
         return str(Tables.TABLES_GH.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesGH.G_LOW.value
                    )
 
@@ -41,8 +41,8 @@ class TablesGH(Valid):
     def h_low() -> str:
         """Get the full table name for hash[h:]"""
         return str(Tables.TABLES_GH.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesGH.H_LOW.value
                    )
 
@@ -50,16 +50,16 @@ class TablesGH(Valid):
     def g_upper() -> str:
         """Get the full table name for hash[G:]"""
         return str(Tables.TABLES_GH.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesGH.G_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesGH.G_LOW.value
                    )
 
     @staticmethod
     def h_upper() -> str:
         """Get the full table name for hash[H:]"""
         return str(Tables.TABLES_GH.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesGH.H_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesGH.H_LOW.value
                    )

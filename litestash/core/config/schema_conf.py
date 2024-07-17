@@ -60,9 +60,10 @@ class ColumnConfig(Valid):
 class Names(Valid):
     """Various Names
 
-    Default filenames for each database.
     Also the Table name suffix as HASH
     """
+    HYPHEN = 'hyphen'
+    UNDER = 'underscore'
     HASH = '_hash_'
     LOW = '_lower'
     UP = '_upper'

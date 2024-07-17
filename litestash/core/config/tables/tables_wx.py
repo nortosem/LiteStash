@@ -18,13 +18,13 @@ class TablesWX(Valid):
         """Match on char and return table name"""
         match char:
             case TablesWX.W_LOW.value:
-                return TablesWX.W_LOW_low()
+                return TablesWX.w_low()
             case TablesWX.X_LOW.value:
-                return TablesWX.X_LOW_low()
+                return TablesWX.x_low()
             case TablesWX.W_UP.value:
-                return TablesWX.W_UP_upper()
+                return TablesWX.w_upper()
             case TablesWX.X_UP.value:
-                return TablesWX.X_UP_upper()
+                return TablesWX.x_upper()
             case _:
                 raise ValueError(Names.ERROR.value)
 
@@ -32,8 +32,8 @@ class TablesWX(Valid):
     def w_low() -> str:
         """Get the full table name for hash[w:]"""
         return str(Tables.TABLES_WX.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesWX.W_LOW.value
                    )
 
@@ -41,8 +41,8 @@ class TablesWX(Valid):
     def x_low() -> str:
         """Get the full table name for hash[x:]"""
         return str(Tables.TABLES_WX.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesWX.X_LOW.value
                    )
 
@@ -50,16 +50,16 @@ class TablesWX(Valid):
     def w_upper() -> str:
         """Get the full table name for hash[W:]"""
         return str(Tables.TABLES_WX.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesWX.W_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesWX.W_LOW.value
                    )
 
     @staticmethod
     def x_upper() -> str:
         """Get the full table name for hash[X:]"""
         return str(Tables.TABLES_WX.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesWX.X_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesWX.X_LOW.value
                    )

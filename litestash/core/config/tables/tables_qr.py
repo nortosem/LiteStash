@@ -18,13 +18,13 @@ class TablesQR(Valid):
         """Match on char and return table name"""
         match char:
             case TablesQR.Q_LOW.value:
-                return TablesQR.Q_LOW_low()
+                return TablesQR.q_low()
             case TablesQR.R_LOW.value:
-                return TablesQR.R_LOW_low()
+                return TablesQR.r_low()
             case TablesQR.Q_UP.value:
-                return TablesQR.Q_UP_upper()
+                return TablesQR.q_upper()
             case TablesQR.R_UP.value:
-                return TablesQR.R_UP_upper()
+                return TablesQR.r_upper()
             case _:
                 raise ValueError(Names.ERROR.value)
 
@@ -32,8 +32,8 @@ class TablesQR(Valid):
     def q_low() -> str:
         """Get the full table name for """
         return str(Tables.TABLES_QR.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesQR.Q_LOW.value
                    )
 
@@ -41,8 +41,8 @@ class TablesQR(Valid):
     def r_low() -> str:
         """Get the full table name for """
         return str(Tables.TABLES_QR.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesQR.R_LOW.value
                    )
 
@@ -50,17 +50,17 @@ class TablesQR(Valid):
     def q_upper() -> str:
         """Get the full table name for Q"""
         return str(Tables.TABLES_QR.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
-                   +TablesQR.Q_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesQR.Q_LOW.value
                    )
 
     @staticmethod
     def r_upper() -> str:
         """Get the full table name for R"""
         return str(Tables.TABLES_QR.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
-                   +TablesQR.R_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesQR.R_LOW.value
                    )
 
