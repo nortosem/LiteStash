@@ -84,8 +84,8 @@ class LiteStashStore:
         StashDataConf.JSON_DUMPS.value: orjson.dumps
     }
 
-    key_hash: StrictStr = Field(..., primary_key=True, index=True)
-    key: StrictStr = Field(..., unique=True, index=True)
+    key_hash: StrictStr = Field(...)
+    key: StrictStr = Field(...)
     value: Json | None = Field(default=None)
     date_time: StrictInt | None = Field(default=None)
     ms_time: StrictInt | None = Field(default=None)
