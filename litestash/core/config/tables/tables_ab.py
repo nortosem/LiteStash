@@ -3,7 +3,8 @@
 Enumerate the valid chars for keys with hash[:0] equal to a,A,b,B.
 """
 from litestash.core.config.root import Valid
-from litestash.core.config.schema_conf import Names
+from litestash.core.config.root import Tables
+from litestash.core.config.schema_conf import Name
 
 class TablesAB(Valid):
     """Enumeration with access methods"""
@@ -30,35 +31,35 @@ class TablesAB(Valid):
     @staticmethod
     def a_low() -> str:
         """Get the full table name for hash[:0] equal to 'a'"""
-        return str(Names.TABLES_AB.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_AB.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesAB.A_LOW.value
                    )
 
     @staticmethod
     def b_low() -> str:
         """Get the full table name for hash[:0] equal to 'b'"""
-        return str(Names.TABLES_AB.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_AB.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesAB.B_LOW.value
                    )
 
     @staticmethod
     def a_upper() -> str:
         """Get the full table name for hash[:0] equal to 'A'"""
-        return str(Names.TABLES_AB.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_AB.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesAB.A_UP.value
                    )
 
     @staticmethod
     def b_upper() -> str:
         """Get the full table name for hash[:0] equal to 'B'"""
-        return str(Names.TABLES_AB.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_AB.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesAB.B_UPB.value
                    )

@@ -3,6 +3,7 @@
 Enumerate the valid chars for keys with hash[:0] equal to 4-7.
 """
 from litestash.core.config.root import Valid
+from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
 class Tables47(Valid):
@@ -24,35 +25,37 @@ class Tables47(Valid):
                 return Tables47.six()
             case Tables47.SEVEN.value:
                 return Tables47.seven()
+            case _:
+                raise ValueError(Names.ERROR.value)
 
     @staticmethod
     def four() -> str:
         """Get the full table name for hash[:0] equal to '4'"""
-        return str({Names.TABLES_47.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_47.value}
+                   +{Tables.HASH.value}
                    +{Tables47.FOUR.value}
                    )
 
     @staticmethod
     def five() -> str:
         """Get the full table name for hash[:0] equal to '5'"""
-        return str({Names.TABLES_47.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_47.value}
+                   +{Tables.HASH.value}
                    +{Tables47.FIVE.value}
                    )
 
     @staticmethod
     def six() -> str:
         """Get the full table name for hash[:0] equal to '6'"""
-        return str({Names.TABLES_47.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_47.value}
+                   +{Tables.HASH.value}
                    +{Tables47.SIX.value}
                    )
 
     @staticmethod
     def seven() -> str:
         """Get the full table name for hash[:0] equal to '7'"""
-        return str({Names.TABLES_47.value}
-                   +{Names.HASH.value}
+        return str({Tables.TABLES_47.value}
+                   +{Tables.HASH.value}
                    +{Tables47.SEVEN.value}
                    )
