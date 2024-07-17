@@ -3,22 +3,23 @@
 Define the LiteStash key-value database object.
 LiteStash is a text key with JSON value key value store.
 """
+from typing import overload
+from sqlalchemy import insert
+from sqlalchemy import select
+from pydantic import ValidationError
 from litestash.core.config.litestash_conf import StashSlots
+from litestash.core.config.schema_util import get_table_name
 from litestash.core.engine import Engine
 from litestash.core.schema import Metadata
 from litestash.core.session import Session
 from litestash.models import LiteStashData
-from litestash.core.util.litestash_util import hash_key
-from litestash.core.util.litestash_util import check_key
+from litestash.core.util.litestash_util import get_datastore
 from litestash.core.util.schema_util import get_db_name
-from litestash.core.util.schema_util import get_table_name
-from sqlalchemy import select
-from pydantic import ValidationError
 
 class LiteStash:
     """The LiteStash
 
-    TODO
+    TODO: docs
     """
     __slots__ = (StashSlots.ENGINE.value,
                  StashSlots.METADATA.value,
@@ -31,19 +32,85 @@ class LiteStash:
         Creates a new empty cache by default.
         """
         self.engine = Engine()
+        self.engine.attach_pragma()
         self.metadata = Metadata(self.engine)
         self.db_session = Session(self.engine)
 
 
+    @overload
     def set(self, key: str, value: str) -> None:
-        """LiteStash Key Setter
+        """Set String Data
 
         Add a new key to the database.
         If key already exists update the value.
-        """
-        pass
+        Args:
+            key (str):
 
-    def get(self, key: str) -> LiteStashData | None:
+            value (str):
+        """
+
+
+    @overload
+    def set(self, data: LiteStashData) -> None:
+        """Set LiteStashData
+
+        Add valid data to the database.
+        Args:
+            data: LiteStashData
+        """
+
+
+    def set(self, data: str | LiteStashData, value: str):
+        """Overloaded Set Function
+
+        Insert or Update the the data named in the stash
+        """
+        stash_data = data
+
+        if isinstance(data, LiteStashData):
+            stash_data = get_datastore(data)
+
+        if isinstance(data, str):
+            try:
+                stash = LiteStashData(key=data, value=value)
+            except ValueError as v:
+                print(f'Error: {v}')
+            except ValidationError as e:
+                print(f'Invalid key: {e}')
+            stash_data = get_datastore(stash)
+
+        table_name = get_table_name(stash_data.key_hash[0])
+        db_name = get_db_name(stash_data.key_hash[0])
+        metadata = self.metadata.get(db_name)
+        session = self.session.get(db_name)
+
+        table = metadata.tables[table_name]
+        sql_statement = (
+            insert(table)
+            .values(
+                key_hash=stash_data.key_hash,
+                key=stash_data.key,
+                value=stash_data.value,
+                timestamp=stash_data.date_time,
+                microseconds=stash_data.ms_time
+            )
+        )
+        with session():
+            session.execute(sql_statement)
+
+
+    @overload
+    def get(self, data: LiteStashData):
+        """Set LiteStashData
+
+        Get json data for the given data stash
+        Args:
+            data: LiteStashData
+
+        """
+
+
+    def get(self, data: str) -> LiteStashData | None:
         """LiteStash Get a value.
 
         Given a key return the value stored.
@@ -51,33 +118,39 @@ class LiteStash:
         Args:
             key (str): The key for the json data
         """
-        # update with logger and review validation
-        try:
-            # create the LSD DTO with given str
-            dto = LiteStashData(key=check_key(key))
-        except ValidationError as e:
-            print(f'Invalid key: {e}')
-        # return hash byte with utils.hash_key function
-        hashed_key = hash_key(dto.key)
-        # utils find db name for the given key hash (strip .db off)
-        db_name = get_db_name(hashed_key[0])[:3].decode()
-        # utils get the table name
-        table_name = get_table_name(hashed_key)
-        # extract metadata for db_name
-        metadata = getattr(self.metadata, db_name).metadata
-        # the table for the select
+        if isinstance(data, LiteStashData):
+            stash_data = get_datastore(data)
+            stash = LiteStashData(stash_data.key)
+
+        if isinstance(data, str):
+            try:
+                stash = LiteStashData(key=data)
+            except ValueError as v:
+                print(f'Error: {v}')
+            except ValidationError as e:
+                print(f'Invalid key: {e}')
+            stash_data = get_datastore(stash)
+
+        table_name = get_table_name(stash_data.key_hash[0])
+        db_name = get_db_name(stash_data.key_hash[0])
+        metadata = self.metadata.get(db_name)
+        session = self.session.get(db_name)
+
         table = metadata.tables[table_name]
-        # assemble the sql
-        sql_statement = select(table).where(table.c.key_hash == hashed_key)
-        # extract session for db_name
-        session = getattr(self.db_session, db_name).session
-        # get the data
-        data = session.execute(sql_statement)
-        if data:
-            return LiteStashData(
-                key=data.key,
-                value=data.value
+        sql_statement = (
+            select(table)
+            .where(
+                table.key_hash == stash_data.key_hash
             )
+        )
+
+        with session.begin() as db_get:
+            data = db_get.execute(sql_statement)
+
+        if data:
+            stash.value = data.value
+            return stash
+
         else:
             return None
 
@@ -112,14 +185,3 @@ class LiteStash:
     def __str__(self) -> str:
         """Quick and minimal string"""
         pass
-#@event.listens_for(Engine, 'connect')
-#def pragma_setup(db_connection, connection):
-#    """Pragma setup
-#    Turn on WAL mode, normal sync, and foreign_keys.
-#    Leave the rest to sqlite defaults.
-#    """
-#    cursor = db_connection.cursor()
-#    cursor.execute(Pragma.journal_mode())
-#    cursor.execute(Pragma.synchronous())
-#    cursor.execute(Pragma.foreign_keys())
-#    cursor.close()
