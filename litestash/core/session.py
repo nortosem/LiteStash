@@ -8,7 +8,7 @@ This class is intended for use in a LiteStash:
     def __init__(self):
         self.session = Session
 """
-from litestash.core.engine import Engine
+from litestash.core.engine import Engine as EngineStash
 from litestash.core.config.root import Tables
 from litestash.core.util.litestash_util import SessionAttributes
 from litestash.core.util.litestash_util import setup_sessions
@@ -45,52 +45,52 @@ class Session:
         TODO: docs
         """
         self.tables_03 = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_03.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_03.value))
         )
         self.tables_47 = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_47.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_47.value))
         )
         self.tables_89hu = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_89HU.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_89HU.value))
         )
         self.tables_ab = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_AB.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_AB.value))
         )
         self.tables_cd = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_CD.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_CD.value))
         )
         self.tables_ef = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_EF.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_EF.value))
         )
         self.tables_gh = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_GH.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_GH.value))
         )
         self.tables_ij = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_IJ.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_IJ.value))
         )
         self.tables_kl = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_KL.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_KL.value))
         )
         self.tables_mn = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_MN.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_MN.value))
         )
         self.tables_op = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_OP.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_OP.value))
         )
         self.tables_qr = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_QR.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_QR.value))
         )
         self.tables_st = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_ST.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_ST.value))
         )
         self.tables_uv = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_UV.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_UV.value))
         )
         self.tables_wx = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_WX.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_WX.value))
         )
         self.tables_yz = SessionAttributes(
-            *setup_sessions(getattr(engine, Tables.TABLES_YZ.value))
+            *setup_sessions(engine_stash.get(Tables.TABLES_YZ.value))
         )
 
 
