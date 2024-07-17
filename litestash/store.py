@@ -8,13 +8,13 @@ from sqlalchemy import insert
 from sqlalchemy import select
 from pydantic import ValidationError
 from litestash.core.config.litestash_conf import StashSlots
-from litestash.core.config.schema_util import get_table_name
 from litestash.core.engine import Engine
 from litestash.core.schema import Metadata
 from litestash.core.session import Session
 from litestash.models import LiteStashData
 from litestash.core.util.litestash_util import get_datastore
 from litestash.core.util.schema_util import get_db_name
+from litestash.core.util.schema_util import get_table_name
 
 class LiteStash:
     """The LiteStash
