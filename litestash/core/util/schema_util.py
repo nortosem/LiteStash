@@ -94,7 +94,7 @@ def mk_tables(db_name: str, metadata: MetaData) -> MetaData:
     return metadata
 
 
-def get_db_name(char: bytes) -> bytes:
+def get_db_name(char: str) -> str:
     """Find database for given char"""
     match char:
         case char if char in prefix_util.tables_03():
