@@ -10,8 +10,8 @@ class TablesAB(Valid):
     """Enumeration with access methods"""
     A_LOW = 'a'
     A_UP = 'A'
-    B_LOW = 'B'
-    B_UP = 'b'
+    B_LOW = 'b'
+    B_UP = 'B'
 
     @staticmethod
     def get_table_name(char: str) -> str:
@@ -32,8 +32,8 @@ class TablesAB(Valid):
     def a_low() -> str:
         """Get the full table name for hash[:0] equal to 'a'"""
         return str(Tables.TABLES_AB.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesAB.A_LOW.value
                    )
 
@@ -41,8 +41,8 @@ class TablesAB(Valid):
     def b_low() -> str:
         """Get the full table name for hash[:0] equal to 'b'"""
         return str(Tables.TABLES_AB.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesAB.B_LOW.value
                    )
 
@@ -50,16 +50,16 @@ class TablesAB(Valid):
     def a_upper() -> str:
         """Get the full table name for hash[:0] equal to 'A'"""
         return str(Tables.TABLES_AB.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesAB.A_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesAB.A_LOW.value
                    )
 
     @staticmethod
     def b_upper() -> str:
         """Get the full table name for hash[:0] equal to 'B'"""
         return str(Tables.TABLES_AB.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesAB.B_UPB.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesAB.B_LOW.value
                    )

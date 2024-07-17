@@ -18,13 +18,13 @@ class TablesUV(Valid):
         """Match on char and return table name"""
         match char:
             case TablesUV.U_LOW.value:
-                return TablesUV.U_LOW_low()
+                return TablesUV.u_low()
             case TablesUV.V_LOW.value:
-                return TablesUV.V_LOW_low()
+                return TablesUV.v_low()
             case TablesUV.U_UP.value:
-                return TablesUV.U_UP_upper()
+                return TablesUV.uupper()
             case TablesUV.V_UP.value:
-                return TablesUV.V_UP_upper()
+                return TablesUV.v_upper()
             case _:
                 raise ValueError(Names.ERROR.value)
 
@@ -32,8 +32,8 @@ class TablesUV(Valid):
     def u_low() -> str:
         """Get the full table name for hash[u:]"""
         return str(Tables.TABLES_UV.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesUV.U_LOW.value
                    )
 
@@ -41,8 +41,8 @@ class TablesUV(Valid):
     def v_low() -> str:
         """Get the full table name for hash[v:]"""
         return str(Tables.TABLES_UV.value
-                   +Tables.LOW.value
-                   +Tables.HASH.value
+                   +Names.LOW.value
+                   +Names.HASH.value
                    +TablesUV.V_LOW.value
                    )
 
@@ -50,16 +50,16 @@ class TablesUV(Valid):
     def u_upper() -> str:
         """Get the full table name for hash[U:]"""
         return str(Tables.TABLES_UV.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesUV.U_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesUV.U_LOW.value
                    )
 
     @staticmethod
     def v_upper() -> str:
         """Get the full table name for hash[V:]"""
         return str(Tables.TABLES_UV.value
-                   +Tables.UP.value
-                   +Tables.HASH.value
-                   +TablesUV.V_UP.value
+                   +Names.UP.value
+                   +Names.HASH.value
+                   +TablesUV.V_LOW.value
                    )
