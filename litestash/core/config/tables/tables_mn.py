@@ -3,6 +3,7 @@
 Enumerate the valid chars for keys with hash[:0] equal to m,M,n,N.
 """
 from litestash.core.config.root import Valid
+from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
 class TablesMN(Valid):
@@ -30,35 +31,35 @@ class TablesMN(Valid):
     @staticmethod
     def m_low() -> str:
         """Get the full table name for hash[m:]"""
-        return str(Names.TABLES_MN.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_MN.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesMN.M_LOW.value
                    )
 
     @staticmethod
     def n_low() -> str:
         """Get the full table name for hash[n:]"""
-        return str(Names.TABLES_MN.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_MN.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesMN.N_LOW.value
                    )
 
     @staticmethod
     def m_upper() -> str:
         """Get the full table name for hash[M:]"""
-        return str(Names.TABLES_MN.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_MN.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesMN.M_UP.value
                    )
 
     @staticmethod
     def n_upper() -> str:
         """Get the full table name for hash[N:]"""
-        return str(Names.TABLES_MN.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_MN.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesMN.N_UP.value
                    )

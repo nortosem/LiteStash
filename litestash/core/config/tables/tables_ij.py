@@ -3,6 +3,7 @@
 Enumerate the valid chars for keys with hash[:0] equal to i,j,I,J.
 """
 from litestash.core.config.root import Valid
+from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
 class TablesIJ(Valid):
@@ -30,35 +31,35 @@ class TablesIJ(Valid):
     @staticmethod
     def i_low() -> str:
         """Get the full table name for hash[i:]"""
-        return str(Names.TABLES_IJ.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_IJ.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesIJ.I_LOW.value
                    )
 
     @staticmethod
     def j_low() -> str:
         """Get the full table name for hash[j:]"""
-        return str(Names.TABLES_IJ.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_IJ.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesIJ.J_LOW.value
                    )
 
     @staticmethod
     def i_upper() -> str:
         """Get the full table name for hash[I:]"""
-        return str(Names.TABLES_IJ.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_IJ.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesIJ.I_UP.value
                    )
 
     @staticmethod
     def j_upper() -> str:
         """Get the full table name for hash[J:]"""
-        return str(Names.TABLES_IJ.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_IJ.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesIJ.J_UP.value
                    )

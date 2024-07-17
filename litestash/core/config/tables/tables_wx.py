@@ -3,6 +3,7 @@
 Enumerate the valid chars for keys with hash[:0] equal to w,W,x,W.
 """
 from litestash.core.config.root import Valid
+from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
 class TablesWX(Valid):
@@ -30,35 +31,35 @@ class TablesWX(Valid):
     @staticmethod
     def w_low() -> str:
         """Get the full table name for hash[w:]"""
-        return str(Names.TABLES_WX.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_WX.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesWX.W_LOW.value
                    )
 
     @staticmethod
     def x_low() -> str:
         """Get the full table name for hash[x:]"""
-        return str(Names.TABLES_WX.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_WX.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesWX.X_LOW.value
                    )
 
     @staticmethod
     def w_upper() -> str:
         """Get the full table name for hash[W:]"""
-        return str(Names.TABLES_WX.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_WX.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesWX.W_UP.value
                    )
 
     @staticmethod
     def x_upper() -> str:
         """Get the full table name for hash[X:]"""
-        return str(Names.TABLES_WX.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_WX.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesWX.X_UP.value
                    )

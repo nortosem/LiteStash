@@ -3,6 +3,7 @@
 Enumerate the valid chars for keys with hash[:0] equal to o,O,p,P.
 """
 from litestash.core.config.root import Valid
+from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
 class TablesOP(Valid):
@@ -30,35 +31,35 @@ class TablesOP(Valid):
     @staticmethod
     def o_low() -> str:
         """Get the full table name for hash[o:]"""
-        return str(Names.TABLES_OP.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_OP.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesOP.O_LOW.value
                    )
 
     @staticmethod
     def p_low() -> str:
         """Get the full table name for hash[p:]"""
-        return str(Names.TABLES_OP.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_OP.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesOP.P_LOW.value
                    )
 
     @staticmethod
     def o_upper() -> str:
         """Get the full table name for hash[O:]"""
-        return str(Names.TABLES_OP.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_OP.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesOP.O_UP.value
                    )
 
     @staticmethod
     def p_upper() -> str:
         """Get the full table name for hash[P:]"""
-        return str(Names.TABLES_OP.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_OP.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesOP.P_UP.value
                    )

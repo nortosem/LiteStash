@@ -3,6 +3,7 @@
 Enumerate the valid chars for keys with hash[:0] equal to u,U,v,V.
 """
 from litestash.core.config.root import Valid
+from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
 class TablesUV(Valid):
@@ -30,35 +31,35 @@ class TablesUV(Valid):
     @staticmethod
     def u_low() -> str:
         """Get the full table name for hash[u:]"""
-        return str(Names.TABLES_UV.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_UV.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesUV.U_LOW.value
                    )
 
     @staticmethod
     def v_low() -> str:
         """Get the full table name for hash[v:]"""
-        return str(Names.TABLES_UV.value
-                   +Names.LOW.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_UV.value
+                   +Tables.LOW.value
+                   +Tables.HASH.value
                    +TablesUV.V_LOW.value
                    )
 
     @staticmethod
     def u_upper() -> str:
         """Get the full table name for hash[U:]"""
-        return str(Names.TABLES_UV.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_UV.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesUV.U_UP.value
                    )
 
     @staticmethod
     def v_upper() -> str:
         """Get the full table name for hash[V:]"""
-        return str(Names.TABLES_UV.value
-                   +Names.UP.value
-                   +Names.HASH.value
+        return str(Tables.TABLES_UV.value
+                   +Tables.UP.value
+                   +Tables.HASH.value
                    +TablesUV.V_UP.value
                    )
