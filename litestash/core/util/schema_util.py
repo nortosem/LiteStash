@@ -2,8 +2,9 @@
 
 #TODO docs
 """
-from sqlalchemy import MetaData
 from sqlalchemy import Table
+from sqlalchemy import MetaData
+from typing import Generator
 from litestash.core.util import prefix_util
 from litestash.core.util import table_util
 from litestash.core.config.root import Tables
@@ -26,59 +27,64 @@ from litestash.core.config.tables.tables_uv import TablesUV
 from litestash.core.config.tables.tables_wx import TablesWX
 from litestash.core.config.tables.tables_yz import TablesYZ
 
-def mk_table_names(db_name: str):
+def mk_table_names(db_name: str) -> Generator[str, None, None]:
     """Make valid Table names
 
     Generate names for all tables in the given database name.
     Return a generator.
     """
-    if db_name in Tables03:
-        return table_util.get_tables_03()
+    match db_name:
 
-    elif db_name in Tables47:
-        return table_util.get_tables_47()
+        case db_name if db_name == Tables.TABLES_03.value:
+            return table_util.get_tables_03()
 
-    elif db_name in Tables89hu:
-        return table_util.get_tables_89hu()
+        case db_name if db_name == Tables.TABLES_47.value:
+            return table_util.get_tables_47()
 
-    elif db_name in TablesAB :
-        return table_util.get_tables_ab()
+        case db_name if db_name == Tables.TABLES_89hu.value:
+            return table_util.get_tables_89hu()
 
-    elif db_name in TablesCD :
-        return table_util.get_tables_cd()
+        case db_name if db_name == Tables.TABLES_AB.value:
+            return table_util.get_tables_ab()
 
-    elif db_name in TablesEF :
-        return table_util.get_tables_ef()
+        case db_name if db_name == Tables.TABLES_CD.value:
+            return table_util.get_tables_cd()
 
-    elif db_name in TablesGH:
-        return table_util.get_tables_gh()
+        case db_name if db_name == Tables.TABLES_EF.value:
+            return table_util.get_tables_ef()
 
-    elif db_name in TablesIJ:
-        return table_util.get_tables_ij()
+        case db_name if db_name == Tables.TABLES_GH.value:
+            return table_util.get_tables_gh()
 
-    elif db_name in TablesKL:
-        return table_util.get_tables_kl()
+        case db_name if db_name == Tables.TABLES_IJ.value:
+            return table_util.get_tables_ij()
 
-    elif db_name in TablesMN:
-        return table_util.get_tables_mn()
+        case db_name if db_name == Tables.TABLES_KL.value:
+            return table_util.get_tables_kl()
 
-    elif db_name in TablesOP:
-        return table_util.get_tables_op()
+        case db_name if db_name == Tables.TABLES_MN.value:
+            return table_util.get_tables_mn()
 
-    elif db_name in TablesQR:
-        return table_util.get_tables_qr()
+        case db_name if db_name == Tables.TABLES_OP.value:
+            return table_util.get_tables_op()
 
-    elif db_name in TablesST:
-        return table_util.get_tables_st()
+        case db_name if db_name == Tables.TABLES_QR.value:
+            return table_util.get_tables_qr()
 
-    elif db_name in TablesUV:
-        return table_util.get_tables_uv()
+        case db_name if db_name == Tables.TABLES_ST.value:
+            return table_util.get_tables_st()
 
-    elif db_name in TablesWX:
-        return table_util.get_tables_wx()
+        case db_name if db_name == Tables.TABLES_UV.value:
+            return table_util.get_tables_uv()
 
-    elif db_name in TablesYZ:
-        return table_util.get_tables_yz()
+        case db_name if db_name == Tables.TABLES_WX.value:
+            return table_util.get_tables_wx()
+
+        case db_name if db_name == Tables.TABLES_YZ.value:
+            return table_util.get_tables_yz()
+
+        case _:
+            raise ValueError(Utils.DB_NAME_ERROR.value)
 
 def mk_tables(db_name: str, metadata: MetaData) -> MetaData:
     """Make Tables
@@ -199,3 +205,6 @@ def get_table_name(char: str) -> str:
 
         case char if char in TablesYZ:
             return TablesYZ.get_table_name(char)
+
+        case _:
+            raise ValueError(Utils.DB_NAME_ERROR.value)
