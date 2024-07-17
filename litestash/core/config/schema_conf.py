@@ -34,11 +34,9 @@ class ColumnSetup(Valid):
     Define the column attributes for each table
     """
     HASH = 'key_hash'
-    LOT = 'lot'
-    DIGEST = 'key_diges'
     KEY = 'key'
     VALUE = 'value'
-    DATE_TIME = 'datetime'
+    TIMESTAMP = 'timestamp'
     MS_TIME = 'microseconds'
 
 
@@ -54,6 +52,8 @@ class ColumnConfig(Valid):
     INT = 'Integer'
     JSON = 'JSON'
     STASH_COLUMN = 'type_'
+    DATA_KEY = 'key'
+    DATA_VALUE = 'value'
     DOC = 'todo'
     ERROR = 'Value must be a valid column type'
 
