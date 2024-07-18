@@ -22,7 +22,7 @@ class TablesUV(Valid):
             case TablesUV.V_LOW.value:
                 return TablesUV.v_low()
             case TablesUV.U_UP.value:
-                return TablesUV.uupper()
+                return TablesUV.u_upper()
             case TablesUV.V_UP.value:
                 return TablesUV.v_upper()
             case _:
