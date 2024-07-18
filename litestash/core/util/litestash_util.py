@@ -107,7 +107,7 @@ def setup_metadata(engine_attributes: EngineAttributes):
     db_name, engine = engine_attributes
     metadata = MetaData()
     metadata = mk_tables(db_name, metadata)
-    metadata.create_all(bind=engine)
+    metadata.create_all(bind=engine, checkfirst=True)
     quality_metadata = MetaAttributes(db_name, metadata)
     return quality_metadata
 
@@ -203,8 +203,6 @@ def get_primary_key(key: str) -> str:
     Generate a primary key and return the pk and lot for the given kv pair
     Args:
         key (str):
-        value (str):
-        lot (str):
     Result:
         pk (str):
     """
@@ -222,9 +220,9 @@ def get_time() -> tuple[int, int]:
         GetTime: unix timestamp and microsecond time as int
     """
     time_store = datetime.now()
-    store_ms_time = time_store.microsecond
+    store_ms = time_store.microsecond
     store_timestamp = int(time_store.timestamp())
-    now = GetTime(store_timestamp, store_ms_time)
+    now = GetTime(store_timestamp, store_ms)
     return now
 
 
@@ -232,7 +230,7 @@ GetTime = namedtuple(
     TimeAttr.TYPE_NAME.value,
     [
         TimeAttr.TIMESTAMP.value,
-        TimeAttr.MICROSECONDS.value
+        TimeAttr.MICROSECOND.value
     ]
 )
 GetTime.__doc__ = TimeAttr.DOC.value
@@ -253,7 +251,7 @@ def get_datastore(data: LiteStashData) -> LiteStashStore:
         key_hash = primary_key,
         key = data.key,
         value = data.value,
-        date_time = now.timestamp,
-        ms_time = now.microseconds
+        timestamp = now.timestamp,
+        ms = now.microsecond
             )
     return stash_data

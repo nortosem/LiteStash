@@ -95,7 +95,7 @@ def mk_tables(db_name: str, metadata: MetaData) -> MetaData:
         Table(
             table_name,
             metadata,
-            *(column for column in mk_columns())
+            *[column for column in mk_columns()]
         )
     return metadata
 
