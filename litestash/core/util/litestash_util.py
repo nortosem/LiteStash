@@ -9,9 +9,11 @@ Functions:
 """
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy import create_engine
+from sqlalchemy import event
 from sqlalchemy import inspect
 from sqlalchemy import Engine
 from sqlalchemy import MetaData
+from sqlalchemy import text
 from collections import namedtuple
 from datetime import datetime
 from hashlib import blake2b
@@ -27,6 +29,32 @@ from litestash.core.config.litestash_conf import Utils
 from litestash.core.config.schema_conf import Pragma
 from litestash.core.util.schema_util import mk_tables
 
+def set_pragma(db_connection, connect):
+    """Set Engine Pragma
+
+    Set the pragma for the engine attach event
+    Args:
+        db_connection (Engine): The engine to connect
+        connection (str): The connection record
+    """
+    cursor = db_connection.cursor()
+    cursor.execute(Pragma.journal_mode())
+    cursor.execute(Pragma.synchronous())
+    cursor.execute(Pragma.valid_json())
+    cursor.close()
+    db_connection.isolation_level = None
+
+
+def set_begin(db_connection):
+    """Begin transaction
+
+    Workaround for locking behavior per:
+    https://docs.sqlalchemy.org/en/20/dialects/sqlite.html
+    #dialect-sqlite-pysqlite-connect
+    """
+    db_connection.exec_driver_sql(Pragma.BEGIN.value)
+
+
 def setup_engine(db_name: str) -> Engine:
     """Setup engine
 
@@ -36,11 +64,27 @@ def setup_engine(db_name: str) -> Engine:
     Return a tuple of (name, engine)
     {EngineConf.dirname()}/
     """
-    return (db_name,
-        create_engine(
-            f'{EngineConf.sqlite()}{EngineConf.DIR_NAME.value}/{db_name}.db'
-        )
+    engine = create_engine(
+        f'{EngineConf.sqlite()}{EngineConf.dirname()}/{db_name}.db',
+        echo=EngineConf.no_echo(),
+        echo_pool=EngineConf.no_echo(),
+        pool_size=EngineConf.pool_size(),
+        max_overflow=EngineConf.max_overflow(),
+        pool_logging_name=db_name,
     )
+    event.listen(
+        engine,
+        Pragma.CONNECT.value,
+        set_pragma
+    )
+    event.listen(
+        engine,
+        Pragma.BEGIN.value.lower(),
+        set_begin
+    )
+    quality_engine = EngineAttributes(db_name, engine)
+    return quality_engine
+
 
 EngineAttributes = namedtuple(
     EngineAttr.TYPE_NAME.value,
@@ -63,7 +107,8 @@ def setup_metadata(engine_attributes: EngineAttributes):
     metadata = MetaData()
     metadata = mk_tables(db_name, metadata)
     metadata.create_all(bind=engine)
-    return (db_name, metadata)
+    quality_metadata = MetaAttributes(db_name, metadata)
+    return quality_metadata
 
 
 MetaAttributes = namedtuple(
@@ -90,7 +135,8 @@ def setup_sessions(engine_attributes: EngineAttributes):
         session = sessionmaker(engine)
     else:
         raise ValueError(f'{SessionAttr.VALUE_ERROR.value}')
-    return (db_name, session)
+    quality_session = SessionAttributes(db_name, session)
+    return quality_session
 
 
 SessionAttributes = namedtuple(
@@ -101,22 +147,6 @@ SessionAttributes = namedtuple(
     ]
 )
 SessionAttributes.__doc__ = SessionAttr.DOC.value
-
-def set_pragma(db_connection, record):
-    """Set Engine Pragma
-
-    Set the pragma for the engine attach event
-    Args:
-        db_connection (Engine): The engine to connect
-        connection (str): The connection record
-    """
-    if str(f'{EngineConf.SQLITE.value}'
-           f'{EngineConf.DIR_NAME.value}'
-           ) in record.engine.url:
-        cursor = db_connection.cursor()
-        cursor.execute(Pragma.journal_mode())
-        cursor.execute(Pragma.synchronous())
-        cursor.close()
 
 
 def digest_key(key: str) -> str:
