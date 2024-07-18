@@ -41,7 +41,7 @@ def mk_table_names(db_name: str) -> Generator[str, None, None]:
         case db_name if db_name == Tables.TABLES_47.value:
             return table_util.get_tables_47()
 
-        case db_name if db_name == Tables.TABLES_89hu.value:
+        case db_name if db_name == Tables.TABLES_89HU.value:
             return table_util.get_tables_89hu()
 
         case db_name if db_name == Tables.TABLES_AB.value:
