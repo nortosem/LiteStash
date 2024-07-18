@@ -72,6 +72,9 @@ class EngineConf(Valid):
     FUTURE = True
     NO_ECHO = False
     NO_FUTURE = False
+    POOL_SIZE = 50
+    MAX_OVERFLOW = 10
+
 
     @staticmethod
     def sqlite() -> str:
@@ -96,3 +99,11 @@ class EngineConf(Valid):
     @staticmethod
     def no_future() -> str:
         return EngineConf.NO_FUTURE.value
+
+    @staticmethod
+    def pool_size() -> int:
+        return EngineConf.POOL_SIZE.value
+
+    @staticmethod
+    def max_overflow() -> int:
+        return EngineConf.MAX_OVERFLOW.value
