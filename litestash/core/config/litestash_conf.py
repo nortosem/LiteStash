@@ -52,12 +52,22 @@ class MetaAttr(Valid):
     METADATA = 'metadata'
     DOC = '''todo'''
 
+
 class SessionAttr(Valid):
     """The namedtuple config for all session attribues of a LiteStash """
     TYPE_NAME = 'SessionAttr'
     DB_NAME = f'{EngineAttr.DB_NAME.value}'
     SESSION = 'session'
     VALUE_ERROR = 'Invalid database: no tables found'
+    DOC = '''todo'''
+
+
+class TimeAttr(Valid):
+    """The namedtuple config for the unix timestamp from datetime"""
+    TYPE_NAME = 'GetTime'
+    TIMESTAMP = 'timestamp'
+    MICROSECONDS = 'ms'
+    VALUE_ERROR = 'Valid time in integer only'
     DOC = '''todo'''
 
 

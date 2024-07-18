@@ -6,7 +6,6 @@ from litestash.core.engine import Engine as EngineStash
 from litestash.core.config.root import Tables
 from litestash.core.config.litestash_conf import StashSlots
 from litestash.core.util.litestash_util import setup_metadata
-from litestash.core.util.litestash_util import MetaAttributes
 
 class Metadata:
     """LiteStash Metadata
