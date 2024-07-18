@@ -13,6 +13,7 @@ from litestash.core.schema import Metadata
 from litestash.core.session import Session
 from litestash.models import LiteStashData
 from litestash.core.util.litestash_util import get_datastore
+from litestash.core.util.litestash_util import allot
 from litestash.core.util.schema_util import get_db_name
 from litestash.core.util.schema_util import get_table_name
 
@@ -32,10 +33,8 @@ class LiteStash:
         Creates a new empty cache by default.
         """
         self.engine = Engine()
-        self.engine.attach_pragma()
         self.metadata = Metadata(self.engine)
         self.db_session = Session(self.engine)
-
 
     @overload
     def set(self, key: str, value: str) -> None:
