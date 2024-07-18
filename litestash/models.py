@@ -87,8 +87,8 @@ class LiteStashStore:
     key_hash: StrictStr = Field(...)
     key: StrictStr = Field(...)
     value: Json | None = Field(default=None)
-    date_time: StrictInt | None = Field(default=None)
-    ms_time: StrictInt | None = Field(default=None)
+    timestamp: StrictInt | None = Field(default=None)
+    microsecond: StrictInt | None = Field(default=None)
 
 
 @dataclass(slots=True)
