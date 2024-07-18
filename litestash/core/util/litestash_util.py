@@ -13,7 +13,6 @@ from sqlalchemy import event
 from sqlalchemy import inspect
 from sqlalchemy import Engine
 from sqlalchemy import MetaData
-from sqlalchemy import text
 from collections import namedtuple
 from datetime import datetime
 from hashlib import blake2b
@@ -24,6 +23,7 @@ from litestash.models import LiteStashStore
 from litestash.core.config.litestash_conf import EngineAttr
 from litestash.core.config.litestash_conf import MetaAttr
 from litestash.core.config.litestash_conf import SessionAttr
+from litestash.core.config.litestash_conf import TimeAttr
 from litestash.core.config.litestash_conf import EngineConf
 from litestash.core.config.litestash_conf import Utils
 from litestash.core.config.schema_conf import Pragma
@@ -37,6 +37,7 @@ def set_pragma(db_connection, connect):
         db_connection (Engine): The engine to connect
         connection (str): The connection record
     """
+    print(f'connect: {connect}')# use with logging etc
     cursor = db_connection.cursor()
     cursor.execute(Pragma.journal_mode())
     cursor.execute(Pragma.synchronous())
@@ -218,12 +219,23 @@ def get_time() -> tuple[int, int]:
 
     Get the current datetime now as unix timestamp
     Result:
-        (tuple[int,int]): unix timestamp and microsecond time as int
+        GetTime: unix timestamp and microsecond time as int
     """
     time_store = datetime.now()
     store_ms_time = time_store.microsecond
     store_timestamp = int(time_store.timestamp())
-    return (store_timestamp, store_ms_time)
+    now = GetTime(store_timestamp, store_ms_time)
+    return now
+
+
+GetTime = namedtuple(
+    TimeAttr.TYPE_NAME.value,
+    [
+        TimeAttr.TIMESTAMP.value,
+        TimeAttr.MICROSECONDS.value
+    ]
+)
+GetTime.__doc__ = TimeAttr.DOC.value
 
 
 def get_datastore(data: LiteStashData) -> LiteStashStore:
@@ -235,13 +247,13 @@ def get_datastore(data: LiteStashData) -> LiteStashStore:
     Result:
         (LiteStashStore): data ready for use with storage
     """
-    primary_key = get_primary_key(data.key, allot())
-    store_timestamp, store_ms_time = get_time()
+    primary_key = get_primary_key(data.key)
+    now = get_time()
     stash_data = LiteStashStore(
         key_hash = primary_key,
         key = data.key,
         value = data.value,
-        date_time = store_timestamp,
-        ms_time = store_ms_time
+        date_time = now.timestamp,
+        ms_time = now.microseconds
             )
     return stash_data
