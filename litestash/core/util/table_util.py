@@ -143,19 +143,19 @@ def get_column(stash_column: StashColumn) -> Column:
 
 def mk_hash_column() -> Column:
     """Return a Column for the hash"""
-    hash_column = StashColumn(
-        Col.HASH.value,
-        Conf.STR.value,
+    stash_column = StashColumn(
+        name=Col.HASH.value,
+        type_=Conf.STR.value,
         primary_key=True,
     )
-    return get_column(hash_column)
+    return get_column(stash_column)
 
 
 def mk_key_column() -> Column:
     """Return a Column for the key being stored."""
     key_column = StashColumn(
-        Col.KEY.value,
-        Conf.STR.value,
+        name=Col.KEY.value,
+        type_=Conf.STR.value,
         unique=True,
         index=True
     )
@@ -165,21 +165,27 @@ def mk_key_column() -> Column:
 def mk_value_column() -> Column:
     """Return a Column for the value being stored."""
     value_column = StashColumn(
-        Col.VALUE.value,
-        Conf.JSON.value,
+        name=Col.VALUE.value,
+        type_=Conf.JSON.value,
     )
     return get_column(value_column)
 
 
 def mk_timestamp_column() -> Column:
     """Return a Column for the unix timestamp for when the data was added."""
-    timestamp = StashColumn(Col.TIMESTAMP.value,Conf.INT.value)
+    timestamp = StashColumn(
+        name=Col.TIMESTAMP,
+        type_=Conf.INT.value
+    )
     return get_column(timestamp)
 
 
 def mk_microseconds_column() -> Column:
     """Return a Column for the micrseconds linked to the timestamp"""
-    ms = StashColumn(Col.MS_TIME.value,Conf.INT.value)
+    ms = StashColumn(
+        name=Col.MICROSECOND.value,
+        type_=Conf.INT.value
+    )
     return get_column(ms)
 
 def mk_columns() -> Generator[Column, None, None]:
