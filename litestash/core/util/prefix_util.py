@@ -150,10 +150,10 @@ def tables_uv() -> Generator[str,None,None]:
 
 def tables_wx() -> Generator[str,None,None]:
     """Prefix generator for w,x,W,X database"""
-    for l in (TablesWX.M_LOW.value,
-              TablesWX.N_LOW.value,
-              TablesWX.M_UP.value,
-              TablesWX.N_UP.value
+    for l in (TablesWX.W_LOW.value,
+              TablesWX.X_LOW.value,
+              TablesWX.W_UP.value,
+              TablesWX.X_UP.value
     ):
         yield l
 
