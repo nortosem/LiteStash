@@ -11,9 +11,10 @@ class Pragma(Valid):
     """
     CONNECT = 'connect'
     PRAGMA = 'PRAGMA'
-    JOURNAL_MODE = 'journal_mode=WAL'
-    SYNCHRONOUS = 'synchronous=NORMAL'
-    FOREIGN_KEYS = 'foreign_keys=ON'
+    JOURNAL_MODE = 'journal_mode=WAL;'
+    SYNCHRONOUS = 'synchronous=NORMAL;'
+    FOREIGN_KEYS = 'foreign_keys=ON;'
+    JSON = 'json_valid = 1;'
     BEGIN = 'BEGIN'
 
     @staticmethod
@@ -27,6 +28,11 @@ class Pragma(Valid):
     @staticmethod
     def foreign_keys() -> str:
         return f'{Pragma.PRAGMA.value} {Pragma.FOREIGN_KEYS.value}'
+
+    @staticmethod
+    def valid_json() -> str:
+        return f'{Pragma.PRAGMA.value} {Pragma.JSON.value}'
+
 
 
 class ColumnSetup(Valid):
