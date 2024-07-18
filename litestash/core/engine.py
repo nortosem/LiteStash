@@ -4,7 +4,6 @@
 """
 from sqlalchemy import Engine as SQL_Engine
 from litestash.core.config.root import Tables
-from litestash.core.config.schema_conf import Pragma
 from litestash.core.util.litestash_util import setup_engine
 
 class Engine:

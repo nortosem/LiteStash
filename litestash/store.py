@@ -13,7 +13,6 @@ from litestash.core.schema import Metadata
 from litestash.core.session import Session
 from litestash.models import LiteStashData
 from litestash.core.util.litestash_util import get_datastore
-from litestash.core.util.litestash_util import allot
 from litestash.core.util.schema_util import get_db_name
 from litestash.core.util.schema_util import get_table_name
 
