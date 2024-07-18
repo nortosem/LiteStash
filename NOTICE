@@ -1,0 +1,30 @@
+```	
+NOTICE	
+This project includes software developed by third parties. The following is a list of these components and their respective licenses:	
+	
+	
+	
+	
+Package	License
+annotated-types	MIT License
+astroid	LGPLv2+
+coverage	Apache License 2.0
+dill	BSD 3-Clause "New" or "Revised" License
+greenlet	MIT License
+iniconfig	MIT License
+isort	MIT License
+mccabe	GPLv2
+orjson	Apache License 2.0 and MIT License
+packaging	Apache License 2.0
+platformdirs	MIT License
+pluggy	MIT License
+pydantic	MIT License
+pydantic-core	MIT License
+pylint	GPLv2
+pytest	MIT License
+pytest-mock	MIT License
+python-dotenv	BSD License
+SQLAlchemy	MIT License
+tomlkit	MIT License
+typing-extensions	PSF License
+
