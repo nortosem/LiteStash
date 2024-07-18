@@ -152,24 +152,21 @@ def allot(size: int = 6) -> str:
     return base64.urlsafe_b64encode(lot).decode()
 
 
-def hash_key(key_digest: str, lot: str) -> str:
+def mk_hash(key: str) -> str:
     """Key Hash function
 
     Generate a primary database key for a name associated with some json data
     Args:
-        key_digest:
-            The unique digest of the string name for the json value
-        lot:
+        key:
             Random value to distribute keys across storage
     Result:
         hashed_key:
             A string result to use as the unique key for json data
     """
-    base_key = lot + base64.urlsafe_b64encode(key_digest.encode()).decode()
-    return base64.urlsafe_b64encode(base_key.encode()).decode()
+    return base64.urlsafe_b64encode(key.encode()).decode()
 
 
-def get_primary_key(key: str, lot: str):
+def get_primary_key(key: str) -> str:
     """Valid Data Preparation
 
     Generate a primary key and return the pk and lot for the given kv pair
@@ -181,10 +178,12 @@ def get_primary_key(key: str, lot: str):
         pk (str):
     """
     key_digest = digest_key(key)
-    return hash_key(key_digest, lot)
+    keyed = mk_hash(key)
+    digested = mk_hash(key_digest)
+    return mk_hash(keyed+digested)
 
 
-def get_time():
+def get_time() -> tuple[int, int]:
     """Get time now
 
     Get the current datetime now as unix timestamp
@@ -216,4 +215,3 @@ def get_datastore(data: LiteStashData) -> LiteStashStore:
         ms_time = store_ms_time
             )
     return stash_data
-
