@@ -44,7 +44,7 @@ class ColumnSetup(Valid):
     KEY = 'key'
     VALUE = 'value'
     TIMESTAMP = 'timestamp'
-    MS_TIME = 'microseconds'
+    MICROSECOND = 'microsecond'
 
 
 class ColumnConfig(Valid):
