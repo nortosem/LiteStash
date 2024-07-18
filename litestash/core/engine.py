@@ -2,13 +2,10 @@
 
 
 """
-from sqlalchemy import event
 from sqlalchemy import Engine as SQL_Engine
 from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Pragma
-from litestash.core.util.litestash_util import set_pragma
 from litestash.core.util.litestash_util import setup_engine
-from litestash.core.util.litestash_util import EngineAttributes
 
 class Engine:
     """LiteStash Engine
@@ -41,54 +38,22 @@ class Engine:
 
         Each database stored as name, engine.
         """
-        self.tables_03 = EngineAttributes(
-            *setup_engine(Tables.TABLES_03.value)
-        )
-        self.tables_47 = EngineAttributes(
-            *setup_engine(Tables.TABLES_47.value)
-        )
-        self.tables_89hu = EngineAttributes(
-            *setup_engine(Tables.TABLES_89HU.value)
-        )
-        self.tables_ab = EngineAttributes(
-            *setup_engine(Tables.TABLES_AB.value)
-        )
-        self.tables_cd = EngineAttributes(
-            *setup_engine(Tables.TABLES_CD.value)
-        )
-        self.tables_ef = EngineAttributes(
-            *setup_engine(Tables.TABLES_EF.value)
-        )
-        self.tables_gh = EngineAttributes(
-            *setup_engine(Tables.TABLES_GH.value)
-        )
-        self.tables_ij = EngineAttributes(
-            *setup_engine(Tables.TABLES_IJ.value)
-        )
-        self.tables_kl = EngineAttributes(
-            *setup_engine(Tables.TABLES_KL.value)
-        )
-        self.tables_mn = EngineAttributes(
-            *setup_engine(Tables.TABLES_MN.value)
-        )
-        self.tables_op = EngineAttributes(
-            *setup_engine(Tables.TABLES_OP.value)
-        )
-        self.tables_qr = EngineAttributes(
-            *setup_engine(Tables.TABLES_QR.value)
-        )
-        self.tables_st = EngineAttributes(
-            *setup_engine(Tables.TABLES_ST.value)
-        )
-        self.tables_uv = EngineAttributes(
-            *setup_engine(Tables.TABLES_UV.value)
-        )
-        self.tables_wx = EngineAttributes(
-            *setup_engine(Tables.TABLES_WX.value)
-        )
-        self.tables_yz = EngineAttributes(
-            *setup_engine(Tables.TABLES_YZ.value)
-        )
+        self.tables_03 = setup_engine(Tables.TABLES_03.value)
+        self.tables_47 = setup_engine(Tables.TABLES_47.value)
+        self.tables_89hu = setup_engine(Tables.TABLES_89HU.value)
+        self.tables_ab = setup_engine(Tables.TABLES_AB.value)
+        self.tables_cd = setup_engine(Tables.TABLES_CD.value)
+        self.tables_ef = setup_engine(Tables.TABLES_EF.value)
+        self.tables_gh = setup_engine(Tables.TABLES_GH.value)
+        self.tables_ij = setup_engine(Tables.TABLES_IJ.value)
+        self.tables_kl = setup_engine(Tables.TABLES_KL.value)
+        self.tables_mn = setup_engine(Tables.TABLES_MN.value)
+        self.tables_op = setup_engine(Tables.TABLES_OP.value)
+        self.tables_qr = setup_engine(Tables.TABLES_QR.value)
+        self.tables_st = setup_engine(Tables.TABLES_ST.value)
+        self.tables_uv = setup_engine(Tables.TABLES_UV.value)
+        self.tables_wx = setup_engine(Tables.TABLES_WX.value)
+        self.tables_yz = setup_engine(Tables.TABLES_YZ.value)
 
 
     def get(self, name: str) -> SQL_Engine:
@@ -101,21 +66,6 @@ class Engine:
         """
         attribute = getattr(self, name)
         return attribute.engine
-
-
-    def attach_pragma(self):
-        """Set DB Pragma
-
-        Attach an event listener to each database
-        """
-        for slot in self.__slots__:
-            attribute = getattr(self, slot)
-            if isinstance(attribute, EngineAttributes):
-                event.listen(
-                    attribute.engine,
-                    Pragma.CONNECT.value,
-                    set_pragma
-                )
 
 
     def __iter__(self):
