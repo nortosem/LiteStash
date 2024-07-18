@@ -157,7 +157,7 @@ def mk_key_column() -> Column:
         Col.KEY.value,
         Conf.STR.value,
         unique=True,
-        index=True,
+        index=True
     )
     return get_column(key_column)
 
