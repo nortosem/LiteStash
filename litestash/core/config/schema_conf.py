@@ -14,6 +14,7 @@ class Pragma(Valid):
     JOURNAL_MODE = 'journal_mode=WAL'
     SYNCHRONOUS = 'synchronous=NORMAL'
     FOREIGN_KEYS = 'foreign_keys=ON'
+    BEGIN = 'BEGIN'
 
     @staticmethod
     def journal_mode() -> str:
