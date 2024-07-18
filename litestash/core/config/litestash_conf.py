@@ -66,7 +66,7 @@ class TimeAttr(Valid):
     """The namedtuple config for the unix timestamp from datetime"""
     TYPE_NAME = 'GetTime'
     TIMESTAMP = 'timestamp'
-    MICROSECONDS = 'ms'
+    MICROSECOND = 'microsecond'
     VALUE_ERROR = 'Valid time in integer only'
     DOC = '''todo'''
 
