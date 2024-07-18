@@ -38,68 +38,100 @@ class Metadata:
 
         Create metadata objects for all of the databases
         """
-        self.tables_03 = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_03.value))
+        self.tables_03 = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_03.value
+            )
         )
-
-        self.tables_47 = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_47.value))
+        self.tables_47 = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_47.value
+            )
         )
-
-        self.tables_89hu = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_89HU.value))
+        self.tables_89hu = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_89HU.value
+            )
         )
-
-        self.tables_ab = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_AB.value))
+        self.tables_ab = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_AB.value
+            )
         )
-
-        self.tables_cd = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_CD.value))
+        self.tables_cd = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_CD.value
+            )
         )
-
-        self.tables_ef = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_EF.value))
+        self.tables_ef = setup_metadata(
+            getattr(engine_stash,
+                    Tables.TABLES_EF.value
+                    )
         )
-
-        self.tables_gh = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_GH.value))
+        self.tables_gh = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_GH.value
+            )
         )
-
-        self.tables_ij = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_IJ.value))
+        self.tables_ij = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_IJ.value
+            )
         )
-
-        self.tables_kl = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_KL.value))
+        self.tables_kl = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_KL.value
+            )
         )
-
-        self.tables_mn = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_MN.value))
+        self.tables_mn = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_MN.value
+            )
         )
-
-        self.tables_op = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_OP.value))
+        self.tables_op = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_OP.value
+            )
         )
-
-        self.tables_qr = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_QR.value))
+        self.tables_qr = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_QR.value
+            )
         )
-
-        self.tables_st = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_ST.value))
+        self.tables_st = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_ST.value
+            )
         )
-
-        self.tables_uv = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_UV.value))
+        self.tables_uv = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_UV.value
+            )
         )
-
-        self.tables_wx = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_WX.value))
+        self.tables_wx = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_WX.value
+            )
         )
-
-        self.tables_yz = MetaAttributes(
-            *setup_metadata(getattr(engine_stash, Tables.TABLES_YZ.value))
+        self.tables_yz = setup_metadata(
+            getattr(
+                engine_stash,
+                Tables.TABLES_YZ.value
+            )
         )
 
     def get(self, db_name):
