@@ -3,6 +3,7 @@
 Define the LiteStash key-value database object.
 LiteStash is a text key with JSON value key value store.
 """
+import orjson
 from typing import overload
 from sqlalchemy import insert
 from sqlalchemy import select
@@ -13,6 +14,7 @@ from litestash.core.schema import Metadata
 from litestash.core.session import Session
 from litestash.models import LiteStashData
 from litestash.core.util.litestash_util import get_datastore
+from litestash.core.util.litestash_util import get_primary_key
 from litestash.core.util.schema_util import get_db_name
 from litestash.core.util.schema_util import get_table_name
 
@@ -76,12 +78,16 @@ class LiteStash:
             except ValidationError as e:
                 print(f'Invalid key: {e}')
             stash_data = get_datastore(stash)
+        print(f'data: {data}')
+        print(f'stashdata: {stash_data}')
 
         table_name = get_table_name(stash_data.key_hash[0])
         db_name = get_db_name(stash_data.key_hash[0])
+        print(f'db: {db_name}')
         metadata = self.metadata.get(db_name)
-        session = self.session.get(db_name)
-
+        print(f'meta: {metadata}')
+        session = self.db_session.get(db_name)
+        print(f'sess: {session}')
         table = metadata.tables[table_name]
         sql_statement = (
             insert(table)
@@ -89,12 +95,14 @@ class LiteStash:
                 key_hash=stash_data.key_hash,
                 key=stash_data.key,
                 value=stash_data.value,
-                timestamp=stash_data.date_time,
-                microseconds=stash_data.ms_time
+                timestamp=stash_data.timestamp,
+                microsecond=stash_data.microsecond
             )
         )
-        with session():
-            session.execute(sql_statement)
+        with session() as set_session:
+            set_session.execute(sql_statement)
+            print(f'Session: {Session}')
+            set_session.commit()
 
 
     @overload
@@ -132,23 +140,23 @@ class LiteStash:
         table_name = get_table_name(stash_data.key_hash[0])
         db_name = get_db_name(stash_data.key_hash[0])
         metadata = self.metadata.get(db_name)
-        session = self.session.get(db_name)
-
+        session = self.db_session.get(db_name)
+        hash_key = get_primary_key(stash_data.key)
         table = metadata.tables[table_name]
         sql_statement = (
-            select(table)
-            .where(
-                table.key_hash == stash_data.key_hash
-            )
+            select(table).where(table.c.key_hash == hash_key)
         )
 
-        with session.begin() as db_get:
-            data = db_get.execute(sql_statement)
+        with session() as get_session:
+            data = get_session.execute(sql_statement).first()
 
         if data:
-            stash.value = data.value
+            json_data = str(data[2])
+            stash = LiteStashData(
+                key=data[1],
+                value=orjson.dumps(json_data)
+            )
             return stash
-
         else:
             return None
 
