@@ -65,24 +65,26 @@ class LiteStash:
 
         Insert or Update the the data named in the stash
         """
-        stash_data = data
+        store = data
+        stash = data
 
-        if isinstance(data, LiteStashData):
-            stash_data = get_datastore(data)
+        if isinstance(store, LiteStashData):
+            store = get_datastore(data)
 
-        if isinstance(data, str):
-            try:
-                stash = LiteStashData(key=data, value=value)
-            except ValueError as v:
-                print(f'Error: {v}')
-            except ValidationError as e:
-                print(f'Invalid key: {e}')
-            stash_data = get_datastore(stash)
-        print(f'data: {data}')
-        print(f'stashdata: {stash_data}')
+        if isinstance(stash, str):
+            if value is not None:
+                try:
+                    stash = LiteStashData(key=data, value=value)
+                except ValueError as v:
+                    print(f'Error: {v}')
+                except ValidationError as e:
+                    print(f'Invalid key: {e}')
+                    store = get_datastore(stash)
+            print(f'data: {data}')
+            print(f'stashdata: {store}')
 
-        table_name = get_table_name(stash_data.key_hash[0])
-        db_name = get_db_name(stash_data.key_hash[0])
+        table_name = get_table_name(store.key_hash[0])
+        db_name = get_db_name(store.key_hash[0])
         print(f'db: {db_name}')
         metadata = self.metadata.get(db_name)
         print(f'meta: {metadata}')
@@ -92,11 +94,11 @@ class LiteStash:
         sql_statement = (
             insert(table)
             .values(
-                key_hash=stash_data.key_hash,
-                key=stash_data.key,
-                value=stash_data.value,
-                timestamp=stash_data.timestamp,
-                microsecond=stash_data.microsecond
+                key_hash=store.key_hash,
+                key=store.key,
+                value=store.value,
+                timestamp=store.timestamp,
+                microsecond=store.microsecond
             )
         )
         with session() as set_session:
@@ -125,8 +127,8 @@ class LiteStash:
             key (str): The key for the json data
         """
         if isinstance(data, LiteStashData):
-            stash_data = get_datastore(data)
-            stash = LiteStashData(stash_data.key)
+            store = get_datastore(data)
+            stash = LiteStashData(store.key)
 
         if isinstance(data, str):
             try:
@@ -135,13 +137,13 @@ class LiteStash:
                 print(f'Error: {v}')
             except ValidationError as e:
                 print(f'Invalid key: {e}')
-            stash_data = get_datastore(stash)
+            store = get_datastore(stash)
 
-        table_name = get_table_name(stash_data.key_hash[0])
-        db_name = get_db_name(stash_data.key_hash[0])
+        table_name = get_table_name(store.key_hash[0])
+        db_name = get_db_name(store.key_hash[0])
         metadata = self.metadata.get(db_name)
         session = self.db_session.get(db_name)
-        hash_key = get_primary_key(stash_data.key)
+        hash_key = get_primary_key(store.key)
         table = metadata.tables[table_name]
         sql_statement = (
             select(table).where(table.c.key_hash == hash_key)
@@ -149,13 +151,11 @@ class LiteStash:
 
         with session() as get_session:
             data = get_session.execute(sql_statement).first()
+            get_session.commit()
 
         if data:
             json_data = str(data[2])
-            stash = LiteStashData(
-                key=data[1],
-                value=orjson.dumps(json_data)
-            )
+            stash.value = orjson.dumps(json_data)
             return stash
         else:
             return None
@@ -168,8 +168,11 @@ class LiteStash:
         """
         pass
 
-    def keys(self):
-        """ListStash Keys"""
+    def keys(self) -> list[str]:
+        """ListStash Keys
+
+        Return a list of all keys in the database
+        """
         pass
 
     def values(self):
