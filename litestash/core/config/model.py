@@ -4,8 +4,8 @@ Enumerate the config strings for the models module
 """
 from litestash.core.config.root import Valid
 
-class StashDataConf(Valid):
-    """LiteStashData Model Config
+class StashConf(Valid):
+    """LiteStash Model Config
 
     The model_config dictionary slots/keys
     """
