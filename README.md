@@ -14,7 +14,6 @@ Keys are hashed and indexed by Sqlite in the background.  Each database handles 
 ## Features
 
 * **Performance:** Stores data in memory for near-instantaneous access.
-* **SQLite** Utilizes SQLite on a ramdisk for data durability.
 * **Pydantic Data Validation:** Ensures type safety and data integrity using Pydantic models.
 * **Distributed Hash Table:** Organizes data across multiple SQLite databases for scalability.
 * **Pythonic API:**  Offers a simple and intuitive API for interacting with the key-value store. 
