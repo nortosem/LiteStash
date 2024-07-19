@@ -38,7 +38,7 @@ dependencies = [
     "pydantic_core==2.20.1",
     "pylint==3.2.5",
     "pytest==8.2.2",
-    "pytest-mock==3.14.0".
+    "pytest-mock==3.14.0",
     "python-dotenv==1.0.1",
     "SQLAlchemy==2.0.31",
     "sqlmodel==0.0.19",
