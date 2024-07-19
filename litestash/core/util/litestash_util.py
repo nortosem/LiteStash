@@ -10,9 +10,12 @@ Functions:
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy import event
+from sqlalchemy import select
 from sqlalchemy import inspect
 from sqlalchemy import Engine
 from sqlalchemy import MetaData
+from sqlalchemy import Table
+from sqlalchemy.orm.session import Session
 from collections import namedtuple
 from datetime import datetime
 from hashlib import blake2b
@@ -27,6 +30,7 @@ from litestash.core.config.litestash_conf import TimeAttr
 from litestash.core.config.litestash_conf import EngineConf
 from litestash.core.config.litestash_conf import Utils
 from litestash.core.config.schema_conf import Pragma
+from litestash.core.config.schema_conf import ColumnSetup as C
 from litestash.core.util.schema_util import mk_tables
 
 def set_pragma(db_connection, connect):
@@ -252,6 +256,29 @@ def get_datastore(data: LiteStashData) -> LiteStashStore:
         key = data.key,
         value = data.value,
         timestamp = now.timestamp,
-        ms = now.microsecond
+        microsecond = now.microsecond
             )
     return stash_data
+
+
+def get_keys(session: Session, table: Table) -> list[str]:
+    """Get all keys
+
+    The get_keys function gets all of the key names from a table
+    Result:
+        (list[str]): all plain text key's naming some data in the table
+    """
+    sql_statement = select(table.c.key[C.KEY.value])
+    keys = session.execute(sql_statement).scalars().all()
+    return keys
+
+def get_values(session: Session, table: Table) -> list[dict]:
+    """Get all values
+
+    The get_values function get all of the values from a table
+    Result:
+        (list[]): all of the json data store in a taable
+    """
+    sql_statement = select(table.c[C.VALUE.value])
+    values = session.execute(sql_statement).scalars().all()
+    return values
