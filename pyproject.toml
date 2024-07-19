@@ -16,7 +16,6 @@ classifiers = [
     "Development Status :: 4 - Beta",         
     "Intended Audience :: Developers",
     "Topic :: Database",
-    "Topic :: NoSQL",
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 dependencies = [
