@@ -18,11 +18,11 @@ from litestash.core.util.model_util import StrType
 from litestash.core.util.model_util import IntType
 from litestash.core.util.model_util import JsonType
 from litestash.core.util.model_util import ColumnType
-from litestash.core.config.model import StashDataConf
+from litestash.core.config.model import StashConf
 from litestash.core.config.schema_conf import ColumnConfig
 from litestash.core.config.litestash_conf import DataScheme
 
-@dataclass(frozen=True, slots=True)
+@dataclass(slots=True)
 class LiteStashData:
     """The LiteStash Data
 
@@ -32,10 +32,10 @@ class LiteStashData:
         value (json): A text string composed of json data
     """
     model_config = {
-        StashDataConf.ORM_MODE.value: False,
-        StashDataConf.EXTRA.value: DataScheme.FORBID_EXTRA.value,
-        StashDataConf.JSON_LOADS.value: orjson.loads,
-        StashDataConf.JSON_DUMPS.value: orjson.dumps
+        StashConf.ORM_MODE.value: False,
+        StashConf.EXTRA.value: DataScheme.FORBID_EXTRA.value,
+        StashConf.JSON_LOADS.value: orjson.loads,
+        StashConf.JSON_DUMPS.value: orjson.dumps
     }
 
     key: StrictStr = Field(
@@ -78,10 +78,10 @@ class LiteStashStore:
         ms_time (StrictInt): The microseconds floated from datetime source
     """
     model_config = {
-        StashDataConf.ORM_MODE.value: True,
-        StashDataConf.EXTRA.value: DataScheme.FORBID_EXTRA.value,
-        StashDataConf.JSON_LOADS.value: orjson.loads,
-        StashDataConf.JSON_DUMPS.value: orjson.dumps
+        StashConf.ORM_MODE.value: True,
+        StashConf.EXTRA.value: DataScheme.FORBID_EXTRA.value,
+        StashConf.JSON_LOADS.value: orjson.loads,
+        StashConf.JSON_DUMPS.value: orjson.dumps
     }
 
     key_hash: StrictStr = Field(...)
