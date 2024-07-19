@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "litestash"
-version = "0.1.0b1" description = "The LiteStash Python project offers a lightning-fast, lightweight key-value storage solution.  LiteStash provides a NoSQL API for seamless integration into your applications.  The LiteStash database handles the data with SQLite transparently.  Optimal use for caching, session management, and other high-performance use cases.
+version = "beta01-0.1.0" description = "The LiteStash Python project offers a lightning-fast, lightweight key-value storage solution.  LiteStash provides a NoSQL API for seamless integration into your applications.  The LiteStash database handles the data with SQLite transparently.  Optimal use for caching, session management, and other high-performance use cases.
 "
 authors = [{ name = "Jonathan Cain", email = "mail@mesotron.dev" }]
 readme = "README.md"  
@@ -51,7 +51,7 @@ Homepage = "https://github.com/nortosem/LiteStash"
 Documentation = "https://github.com/nortosem/LiteStash/blob/master/README.md"
 
 [tool.setuptools.packages.find]
-include = ["litestash"]  # List of packages to include
+include = ["litestash"] 
 
 #[project.scripts]
 #litestash = "litestash.main:app"  # TODO
