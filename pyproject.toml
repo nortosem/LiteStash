@@ -52,8 +52,15 @@ dependencies = [
 Homepage = "https://github.com/nortosem/LiteStash" 
 Documentation = "https://github.com/nortosem/LiteStash/blob/master/README.md"
 
-[tool.setuptools.packages.find]
-include = ["litestash"] 
+[tool.setuptools]
+packages = [
+    "litestash",
+    "litestash.core",
+    "litestash.core.util",
+    "litestash.core.config",
+    "litestash.core.config.tables"
+] 
+
 
 #[project.scripts]
 #litestash = "litestash.main:app"  # TODO
