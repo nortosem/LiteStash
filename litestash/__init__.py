@@ -6,11 +6,9 @@ storage and offers a simple NoSQL-like API.
 
 Key Features:
 
-- Blazing-Fast Performance:  Utilizes in-memory SQLite for
-near-instantaneous operations.
+- Blazing-Fast Performance:  Utilizes distributed hashing operations.
 - Persistent Storage: Optionally syncs data to disk for durability.
-- Scalability: Distributes data across multiple SQLite databases for
-handling larger datasets.
+- Scalability: Distributes data across tables & databases.
 - Full-Text Search (FTS5):  Enables efficient searching within JSON values.
 - Type Safety:  Uses Pydantic for robust data validation and type checking.
 
