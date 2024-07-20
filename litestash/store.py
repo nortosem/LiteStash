@@ -1,7 +1,8 @@
-"""The Storage module
+"""LiteStash Key-Value Store
 
-Define the LiteStash key-value database object.
-LiteStash is a text key with JSON value key value store.
+This module provides the `LiteStash` class, which acts as the main interface for
+interacting with the distributed SQLite-based key-value store. It offers methods
+for setting, getting, deleting, and listing key-value pairs.
 """
 import orjson
 from typing import overload
@@ -23,10 +24,8 @@ from litestash.core.util.schema_util import get_table_name
 from litestash.core.util.schema_util import mk_table_names
 
 class LiteStash:
-    """The LiteStash
+    """A high-performance in-memory key-value store using SQLite."""
 
-    TODO: docs
-    """
     __slots__ = (StashSlots.ENGINE.value,
                  StashSlots.METADATA.value,
                  StashSlots.DB_SESSION.value
@@ -35,7 +34,7 @@ class LiteStash:
     def __init__(self):
         """Initiate a new LiteStash
 
-        Creates a new empty cache by default.
+        Creates a empty cache by default.
         """
         self.engine = Engine()
         self.metadata = Metadata(self.engine)
@@ -49,7 +48,6 @@ class LiteStash:
         If key already exists update the value.
         Args:
             key (str):
-
             value (str):
         """
 
@@ -65,9 +63,16 @@ class LiteStash:
 
 
     def set(self, data: str | LiteStashData, value: str):
-        """Overloaded Set Function
+        """Inserts or updates a key-value pair.
 
-        Insert or Update the the data named in the stash
+        Args:
+            data: Either a `LiteStashData` object or a string key.
+            value: The JSON value to store (only required when `data` is a
+            string).
+
+        Raises:
+            ValueError: If the key or value is invalid.
+            ValidationError: If the `LiteStashData` object fails validation.
         """
         if isinstance(data, LiteStashData):
             store = get_datastore(data)
@@ -82,17 +87,14 @@ class LiteStash:
                 except ValidationError as e:
                     print(f'Invalid key: {e}')
                 store = get_datastore(stash)
-         #   print(f'data: {data}')
-        #    print(f'stashdata: {store}')
+
 
         table_name = get_table_name(store.key_hash[0])
         db_name = get_db_name(store.key_hash[0])
-       # print(f'db: {db_name}')
         metadata = self.metadata.get(db_name)
-       # print(f'meta: {metadata}')
         session = self.db_session.get(db_name)
-       # print(f'sess: {session}')
         table = metadata.tables[table_name]
+
         sql_statement = (
             insert(table)
             .values(
@@ -105,7 +107,6 @@ class LiteStash:
         )
         with session() as set_session:
             set_session.execute(sql_statement)
-          #  print(f'Session: {Session}')
             set_session.commit()
 
 
@@ -121,12 +122,14 @@ class LiteStash:
 
 
     def get(self, data: str) -> LiteStashData | None:
-        """LiteStash Get a value.
+        """Retrieves a value from the cache by key.
 
-        Given a key return the value stored.
-        Returns the key,value as LiteStashData.
         Args:
-            key (str): The key for the json data
+            key_or_data (str | LiteStashData): The key (string) or a
+            `LiteStashData` object containing the key.
+
+        Returns:
+            LiteStashData: The retrieved key-value pair, or None if not found.
         """
         if isinstance(data, LiteStashData):
             store = get_datastore(data)
@@ -174,11 +177,10 @@ class LiteStash:
 
 
     def delete(self, data: str):
-        """LiteStash Delete
+        """Deletes a key-value pair from the database.
 
-        Remove a give key and its value from the database
         Args:
-            data (str): Remove data by the named key
+            data: Either a `LiteStashData` object or a string key to delete.
         """
         if isinstance(data, LiteStashData):
             store = get_datastore(data)
@@ -210,10 +212,7 @@ class LiteStash:
 
 
     def keys(self) -> list[str]:
-        """ListStash Keys
-
-        Return a list of all keys in the database
-        """
+        """Returns a list of all keys in the database."""
         keys = []
         for db_name in All_Tables:
             table_names = mk_table_names(db_name)
@@ -227,10 +226,7 @@ class LiteStash:
 
 
     def values(self) -> list[dict]:
-        """ListStash Values
-
-        Return all values from database in a dictionary.
-        """
+        """Returns a list of all values (as dictionaries) in the database."""
         values = []
         for db_name in All_Tables:
             table_names = mk_table_names(db_name)
@@ -243,13 +239,13 @@ class LiteStash:
         return values
 
     def exists(self, key: str) -> bool:
-        """Exists
+        """Checks if a key exists in the database.
 
-        Check for key existence in the LiteStash
         Args:
-            key (str): the string name of a key
-        Result:
-            (bool): True if key is found
+            key (str): The key to check.
+
+        Returns:
+            bool: True if the key exists, False otherwise.
         """
         if isinstance(key, LiteStashData):
             store = get_datastore(key)
@@ -285,10 +281,7 @@ class LiteStash:
 
 
     def clear(self) -> None:
-        """Clear the LiteStash
-
-        Remove all key-values stored in LiteStash
-        """
+        """Clears all entries from the database."""
         for db_name in All_Tables:
             metadata = self.metadata.get(db_name)
             metadata.drop_all()
