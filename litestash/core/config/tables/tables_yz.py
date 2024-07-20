@@ -1,8 +1,11 @@
 """The tables_yz Table Module
 
-This module defines an enumeration (`TablesYZ`) for accessing table names within the SQLite database associated with hash values starting with 'y', 'Y', 'z', or 'Z'.
+This module defines an enumeration (`TablesYZ`) for accessing table names
+within the SQLite database associated with hash values starting with 'y', 'Y',
+'z', or 'Z'.
 
-Each member of the enum represents a valid hash prefix, and provides methods for retrieving the corresponding full table name.
+Each member of the enum represents a valid hash prefix, and provides methods for
+retrieving the corresponding full table name.
 """
 from litestash.core.config.root import Valid
 from litestash.core.config.root import Tables
@@ -25,7 +28,8 @@ class TablesYZ(Valid):
 
     @staticmethod
     def get_table_name(char: str) -> str:
-        """Gets the full table name based on the provided initial hash character.
+        """Gets the full table name based on the provided initial hash
+        character.
 
         Args:
             char (str): The initial character of the hash value.

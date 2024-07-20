@@ -1,8 +1,12 @@
 """tables_89hu Table Module
 
-This module defines an enumeration (`Tables89hu`) for accessing table names within the SQLite database associated with hash values starting with '8', '9', '-', or '_'.
+This module defines an enumeration (`Tables89hu`) for accessing table names
+within the SQLite database associated with hash values starting with '8', '9',
+'-', or '_'.
 
-The module facilitates consistent and type-safe access to these table names within the LiteStash library. Each member of the enum corresponds to a specific hash prefix and provides a method to construct the full table name.
+The module facilitates consistent and type-safe access to these table names
+within the LiteStash library. Each member of the enum corresponds to a
+specific hash prefix and provides a method to construct the full table name.
 """
 from litestash.core.config.root import Valid
 from litestash.core.config.root import Tables
@@ -26,7 +30,8 @@ class Tables89hu(Valid):
     @staticmethod
     def get_table_name(char: str) -> str:
         """
-        Returns the full table name based on the provided initial hash character.
+        Returns the full table name based on the provided initial hash
+        character.
 
         Args:
             char: The initial character of the hash value.
@@ -35,7 +40,8 @@ class Tables89hu(Valid):
             The full table name corresponding to the hash character.
 
         Raises:
-            ValueError: If the provided character is not a valid hash prefix for this module.
+            ValueError: If the provided character is not a valid hash prefix
+            for this module.
         """
         match char:
             case Tables89hu.EIGHT.value:

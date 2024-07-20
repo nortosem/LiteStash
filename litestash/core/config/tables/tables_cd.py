@@ -1,13 +1,27 @@
-"""The tables_cCdD Table Module
+"""tables_cd Table Module
 
-Enumerate the valid chars for keys with hash[:0] equal to c,C,d,D.
+This module defines an enumeration (`TablesCD`) for accessing table names
+within the SQLite database associated with hash values starting with 'c', 'C',
+'d', or 'D'.
+
+The module facilitates consistent and type-safe access to these table names
+within the LiteStash library. Each member of the enum corresponds to a specific
+hash prefix and provides a method to construct the full table name.
 """
 from litestash.core.config.root import Valid
 from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
 class TablesCD(Valid):
-    """Enumeration with access methods"""
+    """
+    Enumeration for table names based on the initial character of the hash.
+
+    Members:
+        C_LOW: Represents a lowercase 'c' as the first hash character.
+        D_LOW: Represents a lowercase 'd' as the first hash character.
+        C_UP: Represents an uppercase 'C' as the first hash character.
+        D_UP: Represents an uppercase 'D' as the first hash character.
+    """
     C_LOW = 'c'
     D_LOW = 'd'
     C_UP = 'C'
@@ -15,7 +29,20 @@ class TablesCD(Valid):
 
     @staticmethod
     def get_table_name(char: str) -> str:
-        """Match on char and return table name"""
+        """
+        Returns the full table name based on the provided initial hash
+        character.
+
+        Args:
+            char: The initial character of the hash value.
+
+        Returns:
+            The full table name corresponding to the hash character.
+
+        Raises:
+            ValueError: If the provided character is not a valid hash prefix
+            for this module.
+        """
         match char:
             case TablesCD.C_LOW.value:
                 return TablesCD.c_low()
