@@ -44,53 +44,53 @@ class Session:
 
         TODO: docs
         """
-        self.tables_03 = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_03.value))
+        self.tables_03 = setup_sessions(
+            engine_stash.get(Tables.TABLES_03.value)
         )
-        self.tables_47 = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_47.value))
+        self.tables_47 = setup_sessions(
+            engine_stash.get(Tables.TABLES_47.value)
         )
-        self.tables_89hu = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_89HU.value))
+        self.tables_89hu = setup_sessions(
+            engine_stash.get(Tables.TABLES_89HU.value)
         )
-        self.tables_ab = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_AB.value))
+        self.tables_ab = setup_sessions(
+            engine_stash.get(Tables.TABLES_AB.value)
         )
-        self.tables_cd = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_CD.value))
+        self.tables_cd = setup_sessions(
+            engine_stash.get(Tables.TABLES_CD.value)
         )
-        self.tables_ef = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_EF.value))
+        self.tables_ef = setup_sessions(
+            engine_stash.get(Tables.TABLES_EF.value)
         )
-        self.tables_gh = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_GH.value))
+        self.tables_gh = setup_sessions(
+            engine_stash.get(Tables.TABLES_GH.value)
         )
-        self.tables_ij = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_IJ.value))
+        self.tables_ij = setup_sessions(
+            engine_stash.get(Tables.TABLES_IJ.value)
         )
-        self.tables_kl = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_KL.value))
+        self.tables_kl = setup_sessions(
+            engine_stash.get(Tables.TABLES_KL.value)
         )
-        self.tables_mn = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_MN.value))
+        self.tables_mn = setup_sessions(
+            engine_stash.get(Tables.TABLES_MN.value)
         )
-        self.tables_op = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_OP.value))
+        self.tables_op = setup_sessions(
+            engine_stash.get(Tables.TABLES_OP.value)
         )
-        self.tables_qr = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_QR.value))
+        self.tables_qr = setup_sessions(
+            engine_stash.get(Tables.TABLES_QR.value)
         )
-        self.tables_st = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_ST.value))
+        self.tables_st = setup_sessions(
+            engine_stash.get(Tables.TABLES_ST.value)
         )
-        self.tables_uv = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_UV.value))
+        self.tables_uv = setup_sessions(
+            engine_stash.get(Tables.TABLES_UV.value)
         )
-        self.tables_wx = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_WX.value))
+        self.tables_wx = setup_sessions(
+            engine_stash.get(Tables.TABLES_WX.value)
         )
-        self.tables_yz = SessionAttributes(
-            *setup_sessions(getattr(engine_stash, Tables.TABLES_YZ.value))
+        self.tables_yz = setup_sessions(
+            engine_stash.get(Tables.TABLES_YZ.value)
         )
 
 
