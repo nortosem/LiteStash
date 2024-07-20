@@ -1,6 +1,7 @@
-"""LiteStash Schema Module
+"""LiteStash Metadata Manager
 
-#TODO
+Creates and provides access to metadata objects for each database in
+LiteStash.
 """
 from litestash.core.engine import Engine as EngineStash
 from litestash.core.config.root import Tables
@@ -8,11 +9,25 @@ from litestash.core.config.litestash_conf import StashSlots
 from litestash.core.util.litestash_util import setup_metadata
 
 class Metadata:
-    """LiteStash Metadata
+    """LiteStash Metadata Class
 
-    Encapsulate metadata for all of the sqlite databases.
-    This handles the setup of new metadata and enables access.
-    #TODO docs
+    This class manages the creation and access of SQLAlchemy Metadata for each
+    SQLite database file used in the LiteStash key-value store. Each database
+    file is associated with a specific Metadata object.
+
+    Attributes:
+
+        __slots__ (tuple): A tuple of attribute names for memory optimization.
+
+    Methods:
+
+        __init__(): Initializes the Engine object, creating engine instances
+        for each database file.
+
+        get(name): Retrieves a specific SQLAlchemy engine session by its name.
+
+        __iter__(): Returns an iterator that yields all the sesssion
+        attributes.
     """
     __slots__ = (Tables.TABLES_03.value,
                  Tables.TABLES_47.value,
@@ -33,12 +48,15 @@ class Metadata:
                 )
 
     def __init__(self, engine_stash: EngineStash):
-        """LiteStash Metadata __init__
+        """Create and bind each metadata object for each database to a
+        matching engine.
 
-        Create metadata objects for all of the databases
+        Args:
+            engine_stash (EngineStash): The EngineStash object containing the
+            database engines.
         """
         self.tables_03 = setup_metadata(
-            engine_stash.get(Tables.TABLES_03.value())
+            engine_stash.get(Tables.TABLES_03.value)
         )
         self.tables_47 = setup_metadata(
             engine_stash.get(Tables.TABLES_47.value)
@@ -88,20 +106,27 @@ class Metadata:
 
 
     def get(self, db_name):
-        """Get metadata for a database"""
+        """Retrieves the metadata for a specific database.
+
+        Args:
+            db_name: The name of the database (e.g., "tables_03").
+
+        Returns:
+            The SQLAlchemy MetaData object associated with the database.
+
+        Raises:
+            AttributeError: If no metadata is found for the given database
+            name.
+        """
         attribute = getattr(self, db_name)
         return attribute.metadata
 
     def __iter__(self):
-        """Iterator for all database metadata objects"""
+        """Iterates over all database metadata objects."""
         yield from (getattr(self, slot) for slot in self.__slots__)
 
     def __repr__(self):
-        """Metadata Official Representation
-
-        Detailed Metadata Info for all the database tables.
-        todo: with logger
-        """
+        """Returns a detailed string representation of the metadata objects."""
         repr_str = ''
         repr_str += f'{StashSlots.METADATA.value}  Tables:\n'
         for prefix, metadata in self.metadata.items():
@@ -111,10 +136,7 @@ class Metadata:
         return repr_str
 
     def __str__(self):
-        """Informal metadata string
-
-        Basic String Representation of all Metadata objects.
-        todo: for meh
+        """Returns a simplified string representation of the metadata objects.
         """
         metadata_str = ''
         for prefix, metadata in self.metadata.items():

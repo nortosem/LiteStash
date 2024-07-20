@@ -1,25 +1,32 @@
-"""The LiteStash Session Module
+"""LiteStash Session Manager
 
-This module provide the core session module for creating a LiteStash.
-Every instance of a LiteStash has a session attribute to access the sessions
-associated with that instance.
-
-This class is intended for use in a LiteStash:
-    def __init__(self):
-        self.session = Session
+Creates and provides access to session factories for each database in
+LiteStash.
 """
 from litestash.core.engine import Engine as EngineStash
 from litestash.core.config.root import Tables
-from litestash.core.util.litestash_util import SessionAttributes
 from litestash.core.util.litestash_util import setup_sessions
 
 class Session:
-    """The Session Manager
+    """LiteStash Session Class
 
-    All databases have a dedicated session factory.
-    The LiteStashSession class encapsulates the creation and access to these
-    factories.
-    #TODO: finish docs
+    This class manages the creation and access of SQLAlchemy sessions for each
+    SQLite database file used in the LiteStash key-value store. Each database
+    file is associated with a specific session.
+
+    Attributes:
+
+        __slots__ (tuple): A tuple of attribute names for memory optimization.
+
+    Methods:
+
+        __init__(): Initializes the Engine object, creating engine instances
+        for each database file.
+
+        get(name): Retrieves a specific SQLAlchemy engine session by its name.
+
+        __iter__(): Returns an iterator that yields all the sesssion
+        attributes.
     """
     __slots__ = (Tables.TABLES_03.value,
                  Tables.TABLES_47.value,
@@ -40,9 +47,11 @@ class Session:
                 )
 
     def __init__(self, engine_stash: EngineStash):
-        """Default init
+        """Initializes session factories for each database.
 
-        TODO: docs
+        Args:
+            engine_stash (EngineStash): An instance of the `EngineStash` class
+            containing the database engines.
         """
         self.tables_03 = setup_sessions(
             engine_stash.get(Tables.TABLES_03.value)
@@ -95,12 +104,27 @@ class Session:
 
 
     def get(self, db_name):
-        """Get a session factory for the database name"""
+        """Gets the session factory for the specified database.
+
+        Args:
+            db_name (str): The name of the database (e.g., "tables_03").
+
+        Returns:
+            sessionmaker: The SQLAlchemy session factory for the given
+            database.
+
+        Raises:
+            AttributeError: If no session factory exists for the given
+            database name.
+        """
         attribute = getattr(self, db_name)
         return attribute.session
 
     def __iter__(self):
-        """Iterator for all database session factories"""
+        """
+        Yields all session attributes (database name, session factory tuples).
+        """
+
         yield from (getattr(self, slot) for slot in self.__slots__)
 
     def __repr__(self):
