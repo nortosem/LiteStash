@@ -13,7 +13,7 @@ from litestash.models import LiteStashData
 from litestash.models import LiteStashStore
 from litestash.store import LiteStash
 
-__version__ = "0.1.0b2"
+__version__ = "0.1.0b3"
 __all__ = [
     Main.CORE.value,
     Main.DATA.value,
