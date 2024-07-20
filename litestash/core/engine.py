@@ -1,17 +1,32 @@
-"""The
+"""LiteStash Engine Manager
 
-
+This module provides engines for all SQLite databases used in the LiteStash
+key-value store.
 """
 from sqlalchemy import Engine as SQL_Engine
 from litestash.core.config.root import Tables
 from litestash.core.util.litestash_util import setup_engine
 
 class Engine:
-    """LiteStash Engine
+    """LiteStash Engine Class
 
-    Each database file defines its own dedicated sqlalchemy engine.
-    The LiteStashEngine class encapsulates the setup
-    and access to these engines.
+    This class manages the creation and access of SQLAlchemy engines for each
+    SQLite database file used in the LiteStash key-value store. Each database
+    file is associated with a specific range of hash prefixes, ensuring
+    efficient data distribution.
+
+    Attributes:
+
+        __slots__ (tuple): A tuple of attribute names for memory optimization.
+
+    Methods:
+
+        __init__(): Initializes the Engine object, creating engine instances
+        for each database file.
+
+        get(name): Retrieves a specific SQLAlchemy engine by its name.
+
+        __iter__(): Returns an iterator that yields all the engine attributes.
     """
     __slots__ = (Tables.TABLES_03.value,
                  Tables.TABLES_47.value,
@@ -33,9 +48,8 @@ class Engine:
 
 
     def __init__(self):
-        """Default DB & Engine setup
-
-        Each database stored as name, engine.
+        """Initializes the Engine object by creating SQLAlchemy engines for
+        each database file.
         """
         self.tables_03 = setup_engine(Tables.TABLES_03.value)
         self.tables_47 = setup_engine(Tables.TABLES_47.value)
@@ -56,19 +70,23 @@ class Engine:
 
 
     def get(self, name: str) -> SQL_Engine:
-        """Engine Getter
+        """Retrieves a specific SQLAlchemy engine by its name.
 
         Args:
-            name (str): The name of the engine to get
-        Result:
-            engine (Engine): Return the sqlalchemy engine
+            name: The name of the database (e.g., 'tables_03').
+
+        Returns:
+            The SQLAlchemy engine associated with the specified database.
+
+        Raises:
+            AttributeError: If no engine is found with the given name.
         """
         attribute = getattr(self, name)
         return attribute.engine
 
 
     def __iter__(self):
-        """Iterator for all database engines"""
+        """Yields all engine attributes (name, engine tuples)."""
         yield from (getattr(self, slot) for slot in self.__slots__)
 
     def __repr__(self):
