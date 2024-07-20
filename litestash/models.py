@@ -1,6 +1,12 @@
-"""The Models
+"""LiteStash Data Models
 
-The column and data models for keeping a stash.
+This module defines the data models used by LiteStash for representing
+key-value pairs and database column definitions.
+
+Classes:
+    LiteStashData: A data transfer object (DTO) for key-value pairs.
+    LiteStashStore: Represents the structure of data stored in the database.
+    StashColumn: Defines a column for a LiteStash database table.
 """
 import orjson
 from typing import Union
@@ -24,12 +30,12 @@ from litestash.core.config.litestash_conf import DataScheme
 
 @dataclass(slots=True)
 class LiteStashData:
-    """The LiteStash Data
+    """Data Transfer Object (DTO) for key-value pairs.
 
-    This class defines a class of data for use with the LiteStash database.
-    Args:
-        key (str): A text label for some json data
-        value (json): A text string composed of json data
+    Attributes:
+        key (str): A unique identifier for the value (alphanumeric and ASCII
+        only).
+        value (Json): The JSON data to be stored or retrieved.
     """
     model_config = {
         StashConf.ORM_MODE.value: False,
@@ -64,18 +70,17 @@ class LiteStashData:
 
 @dataclass(slots=True)
 class LiteStashStore:
-    """LiteStash Database Fields
+    """Database model for key-value pairs.
 
-    The database storage class.  Defines all columns and column types in db.
-    Only used by the Stash Manager and the database interface.
-    Args:
-        key_hash (StrictStr): The base64 urlsafe primary key
-        key_digest (StrictStr): A unique string that identifies a key
-        lot (StrictStr): A unique string id alloted to the storage object
-        key (StrictStr): The text name label for the json data
-        value (Json): The json data being stashed
-        date_time (StrictInt): Y,M,D,H,M,S as POSIX datetime integer
-        ms_time (StrictInt): The microseconds floated from datetime source
+    This class is used internally by the LiteStash manager and database
+    interface.
+
+    Attributes:
+        key_hash (str):  Base64 URL-safe primary key.
+        key (str):  The original key (unique and indexed).
+        value (Json): The JSON data (optional).
+        date_time (int): POSIX timestamp.
+        ms_time (int): Microseconds.
     """
     model_config = {
         StashConf.ORM_MODE.value: True,
@@ -93,16 +98,17 @@ class LiteStashStore:
 
 @dataclass(slots=True)
 class StashColumn:
-    """Valid LiteStash Column
+    """Defines the structure of a column in a LiteStash database table.
 
-    Definition for sqlite database columns.
-    Args:
-        name (str): The name for a column
-        type_ (Literal[str,float,json]):
-            Only permit Text, Float, or Json types for any column
-        primary_key (bool): Label as partcipating in rowid for a row of data
-        index (bool): Create an index if True
-        unique (bool): Mark some column unique
+    Attributes:
+        name (str): The column name.
+        type_ (Literal[...]) : The SQLAlchemy type of the column.
+        primary_key (bool): Whether the column is a primary key
+        (default: False).
+        index (bool): Whether to create an index on the column
+        (default: False).
+        unique (bool): Whether the column has a unique constraint
+        (default: False).
     """
     name: str
     type_: Literal[

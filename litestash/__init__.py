@@ -1,11 +1,33 @@
-"""The LiteStash Package
+"""LiteStash: A High-Performance In-Memory Key-Value Store
 
-A unSQL key-value database for JSON data with string keys.
+LiteStash is a Python library providing a fast and efficient key-value (KV)
+store for JSON data with string keys. It leverages SQLite for reliable data
+storage and offers a simple NoSQL-like API.
 
-Modules:
-    Core: The core components of the LiteStash
-    Models: The data models for a LiteStash
-    Store: The LiteStash class module
+Key Features:
+
+- Blazing-Fast Performance:  Utilizes in-memory SQLite for
+near-instantaneous operations.
+- Persistent Storage: Optionally syncs data to disk for durability.
+- Scalability: Distributes data across multiple SQLite databases for
+handling larger datasets.
+- Full-Text Search (FTS5):  Enables efficient searching within JSON values.
+- Type Safety:  Uses Pydantic for robust data validation and type checking.
+
+Main Modules:
+
+- `core`: Core components for engine, metadata, and session management.
+- `models`: Data models for representing key-value pairs and database entities.
+- `store`: The main `LiteStash` class for interacting with the KV store.
+
+Example:
+
+```python
+from litestash import LiteStash
+
+cache = LiteStash()
+cache.set("user_123", {"name": "Alice"})
+data = cache.get("user_123")
 """
 from litestash.core.config.root import Main
 from litestash import core
