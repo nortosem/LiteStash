@@ -1,7 +1,18 @@
-"""The LiteStash Core Metadata Config
+"""LiteStash Schema Configuration
 
-TODO: docs
+Provides configuration for defining the structure of the LiteStash database
+schema.
+
+This module includes the following configuration elements:
+
+- **`Pragma`:**  SQLite PRAGMA statements for database setup and optimization.
+- **`ColumnSetup`:**  Column names used in the LiteStash tables.
+- **`ColumnConfig`:** Configuration for mapping column types and validating
+column definitions.
+- **`Names`:**  Enum for common table and database suffixes used in naming
+conventions.
 """
+
 from litestash.core.config.root import Valid
 
 class Pragma(Valid):

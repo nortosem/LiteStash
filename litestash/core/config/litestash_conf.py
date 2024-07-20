@@ -1,6 +1,16 @@
-"""The LiteStash Attribue Module
+"""LiteStash Configuration Module
 
-#TODO doc
+Provides core configuration for the LiteStash key-value store.
+
+This module defines classes and constants for configuring various aspects of
+LiteStash, including:
+
+- **DataScheme:**  Constraints and options for key-value data validation.
+- **StashSlots:** Attribute names used in the main `LiteStash` class.
+- **Utils:**  Default values and error messages for utility functions.
+- **EngineAttr/MetaAttr/SessionAttr/TimeAttr:** Named tuple structures for
+organizing engine, metadata, session, and time-related information.
+- **EngineConf:** Configuration parameters for setting up the SQLAlchemy engine.
 """
 from litestash.core.config.root import Valid
 

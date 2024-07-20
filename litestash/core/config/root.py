@@ -1,7 +1,15 @@
-"""Package Configuration
+"""LiteStash Configuration Module
 
-The config module enumerates the common required strings.
-#from pydantic import ValidationError, validator
+Defines core configuration elements for the LiteStash library.
+
+This module provides enums and constants to manage various aspects of the
+LiteStash key-value store, including:
+
+- **Main:** Top-level public interfaces and classes.
+- **Core:** Core modules within the library.
+- **Util:** Utility functions and classes.
+- **Config:** Configuration subpackage.
+- **Tables:** Subpackage for managing table names across databases.
 """
 from enum import Enum
 

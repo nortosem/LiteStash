@@ -1,10 +1,16 @@
-"""The Config subpackage
+"""LiteStash Configuration Subpackage
 
-Modules:
-    litestash_conf: The constants for litestash config
-    schema_conf: The constants for schema config
-    tables: The tables subpackage
+This subpackage provides centralized configuration constants and enums for
+various aspects of the LiteStash key-value store. It includes:
+
+- **`litestash_conf`:**  General configuration constants for LiteStash
+behavior.
+- **`schema_conf`:**  Configuration options related to database schema and
+column definitions.
+- **`tables`:** A subpackage defining enums for accessing table names within
+the distributed database structure.
 """
+
 from litestash.core.config.root import Config
 from litestash.core.config import litestash_conf
 from litestash.core.config import schema_conf
