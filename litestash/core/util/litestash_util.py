@@ -1,11 +1,23 @@
-"""The LiteStash Core Utilities
+"""LiteStash Utility Module
+
+This module provides essential utility functions for the LiteStash key-value store.
 
 Functions:
-    setup_engine
-    setup_metadata
-    setup_sessions
-    check_key
-#TODO docs
+
+- `setup_engine`: Creates a SQLAlchemy engine for a given database.
+- `setup_metadata`: Sets up database metadata and tables.
+- `setup_sessions`: Creates a session factory for a database.
+- `set_pragma`: Configures SQLite PRAGMAs for the engine.
+- `set_begin`: Begins a transaction with a specified isolation level.
+- `digest_key`: Generates a hexadecimal digest of a key.
+- `allot`: Creates a random string for key distribution.
+- `mk_hash`: Generates a hash for a key.
+- `get_primary_key`: Generates a primary database key for a key-value pair.
+- `get_time`: Gets the current time as a Unix timestamp and microseconds.
+- `get_datastore`: Creates a LiteStashStore object from LiteStashData.
+- `get_keys`: Retrieves all keys from a table.
+- `get_values`: Retrieves all values from a table.
+
 """
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy import create_engine
@@ -35,12 +47,16 @@ from litestash.core.config.schema_conf import ColumnSetup as C
 from litestash.core.util.schema_util import mk_tables
 
 def set_pragma(db_connection, connect):
-    """Set Engine Pragma
+    """Sets SQLite PRAGMA settings on a new connection.
 
-    Set the pragma for the engine attach event
+    This function is intended to be used as an event listener with SQLAlchemy engines
+    to configure essential PRAGMA settings like journaling mode, synchronous
+    mode,
+    foreign key enforcement, and JSON handling.
+
     Args:
-        db_connection (Engine): The engine to connect
-        connection (str): The connection record
+        dbapi_connection: The raw DBAPI connection object (e.g., sqlite3.Connection).
+        connection_record:  The SQLAlchemy connection record (not used in this implementation).
     """
     print(f'connect: {connect}')# use with logging etc
     cursor = db_connection.cursor()
@@ -52,24 +68,26 @@ def set_pragma(db_connection, connect):
 
 
 def set_begin(db_connection):
-    """Begin transaction
+    """Explicitly begins a transaction with a BEGIN statement.
 
-    Workaround for locking behavior per:
-    https://docs.sqlalchemy.org/en/20/dialects/sqlite.html
-    #dialect-sqlite-pysqlite-connect
+    This is a workaround for the default behavior of the pysqlite driver,
+    which can interfere with SQLAlchemy's transaction management. By emitting
+    our own BEGIN, we ensure correct transactional behavior.
+
+    Args:
+        dbapi_connection: The raw DBAPI connection object.
     """
     db_connection.exec_driver_sql(Pragma.BEGIN.value)
 
 
 def setup_engine(db_name: str) -> Engine:
-    """Setup engine
+    """Sets up a SQLAlchemy engine for the given database.
 
-    Create data directories as needed.
-    Setup each engine as a group of four tables.:
     Args:
-        engine_name (str): match with sqlite.db filename
+        db_name: The name of the database file.
 
-    Return a EngineAttributes namedtuple of (name, engine)
+    Returns:
+        EngineAttributes: A namedtuple containing the database name and the engine.
     """
     data_path = Path(
         f'{EngineConf.sqlite()}{EngineConf.dirname()}/{db_name}'
@@ -109,11 +127,14 @@ EngineAttributes.__doc__ = EngineAttr.DOC.value
 
 
 def setup_metadata(engine_attributes: EngineAttributes):
-    """Setup Metadata & Tables
+    """Sets up and returns SQLAlchemy metadata for the given database engine.
 
     Args:
-        stash (LiteStashEngine):  Retrieve name & engine to setup from
-        slot (str): datable named attribute slot
+        engine_attributes: A namedtuple containing the database name
+        (`db_name`) and SQLAlchemy `Engine` object.
+
+    Returns:
+        MetaAttributes: A namedtuple containing the database name and the initialized `MetaData` object.
     """
     db_name, engine = engine_attributes
     metadata = MetaData()
@@ -134,13 +155,22 @@ MetaAttributes.__doc__ = MetaAttr.DOC.value
 
 
 def setup_sessions(engine_attributes: EngineAttributes):
-    """Make a sesssion
+    """Creates and returns a session factory for the given database engine.
 
-    Given a LiteStashEngine make a session factory for a database engine.
+    This function checks if the database has tables before creating the session
+    factory.
+    If no tables are found, it raises a `ValueError`.
 
     Args:
-        slot (str): database name slot
-        stash (LiteStashEngine): An Engine with Metadata already setup
+        engine_attributes: A namedtuple containing the database name
+        (`db_name`) and SQLAlchemy `Engine` object.
+
+    Returns:
+        SessionAttributes: A namedtuple containing the database name and the
+        session factory.
+
+    Raises:
+        ValueError: If no tables are found in the database.
     """
     db_name, engine = engine_attributes
     if inspect(engine).get_table_names():
@@ -162,13 +192,13 @@ SessionAttributes.__doc__ = SessionAttr.DOC.value
 
 
 def digest_key(key: str) -> str:
-    """Key Digest Generator
+    """Generates a hexadecimal digest (hash) of the given key.
 
-    Create a unique hexidecimal digest name
-    Arg:
-        key (str): The text name to make a digest from
-    Result:
-        digest (str): A hexidecimal digest string
+    Args:
+        key (str): The key string to hash.
+
+    Returns:
+        str: The hexadecimal digest of the key.
     """
     return blake2b(
         key.encode(),
@@ -177,16 +207,13 @@ def digest_key(key: str) -> str:
 
 
 def allot(size: int = 6) -> str:
-    """Allot Function
+    """Generates a unique random string for key distribution.
 
-    Generate unique random set of bytes for efficient hash key distribution
-    Return a urlsafe base64 str from the random bytes
-    All sizes must be divisible by 3
-    The default size of six bytes returns an eight character string
     Args:
-        size (int): number of bytes alloted for the lot
-    Result:
-        lot (str): An eight character string
+        size: The number of random bytes to use (must be divisible by 3).
+
+    Returns:
+        A URL-safe Base64-encoded string of the specified size.
     """
     if size < 6:
         raise ValueError()
@@ -195,28 +222,12 @@ def allot(size: int = 6) -> str:
 
 
 def mk_hash(key: str) -> str:
-    """Key Hash function
-
-    Generate a primary database key for a name associated with some json data
-    Args:
-        key:
-            Random value to distribute keys across storage
-    Result:
-        hashed_key:
-            A string result to use as the unique key for json data
-    """
+    """Generates a URL-safe Base64 hash of the given key."""
     return base64.urlsafe_b64encode(key.encode()).decode()
 
 
 def get_primary_key(key: str) -> str:
-    """Valid Data Preparation
-
-    Generate a primary key and return the pk and lot for the given kv pair
-    Args:
-        key (str):
-    Result:
-        pk (str):
-    """
+    """Generates a unique primary key for a given key."""
     key_digest = digest_key(key)
     keyed = mk_hash(key)
     digested = mk_hash(key_digest)
@@ -224,12 +235,7 @@ def get_primary_key(key: str) -> str:
 
 
 def get_time() -> tuple[int, int]:
-    """Get time now
-
-    Get the current datetime now as unix timestamp
-    Result:
-        GetTime: unix timestamp and microsecond time as int
-    """
+    """Returns the current time as a named tuple (timestamp, microseconds)."""
     time_store = datetime.now()
     store_ms = time_store.microsecond
     store_timestamp = int(time_store.timestamp())
@@ -248,13 +254,13 @@ GetTime.__doc__ = TimeAttr.DOC.value
 
 
 def get_datastore(data: LiteStashData) -> LiteStashStore:
-    """Get LiteStashStore
+    """Creates a `LiteStashStore` object from `LiteStashData`.
 
-    Create a LiteStashStore object from the LiteStashData
     Args:
-        data (LiteStashData): a valide key value pair
-    Result:
-        (LiteStashStore): data ready for use with storage
+        data: A `LiteStashData` object.
+
+    Returns:
+        A `LiteStashStore` object ready for database storage.
     """
     primary_key = get_primary_key(data.key)
     now = get_time()
@@ -269,22 +275,28 @@ def get_datastore(data: LiteStashData) -> LiteStashStore:
 
 
 def get_keys(session: Session, table: Table) -> list[str]:
-    """Get all keys
+    """Retrieves all keys from the specified table.
 
-    The get_keys function gets all of the key names from a table
-    Result:
-        (list[str]): all plain text key's naming some data in the table
+    Args:
+        session: The SQLAlchemy session to use.
+        table: The SQLAlchemy Table object to query.
+
+    Returns:
+        list[str]: A list of all keys in the table.
     """
     sql_statement = select(table.c.key[C.KEY.value])
     keys = session.execute(sql_statement).scalars().all()
     return keys
 
 def get_values(session: Session, table: Table) -> list[dict]:
-    """Get all values
+    """Retrieves all values from the specified table.
 
-    The get_values function get all of the values from a table
-    Result:
-        (list[]): all of the json data store in a taable
+    Args::
+        session: The SQLAlchemy session to use.
+        table: The SQLAlchemy Table object to query.
+
+    Returns:
+        list[dict]: A list of all JSON values in the table (deserialized).
     """
     sql_statement = select(table.c[C.VALUE.value])
     values = session.execute(sql_statement).scalars().all()

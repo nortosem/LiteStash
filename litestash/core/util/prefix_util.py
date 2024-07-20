@@ -1,6 +1,8 @@
-"""The Database Prefix Build Functions
+"""LiteStash Prefix Utilities
 
-TODO: docs
+This module provides helper functions for determining the database name
+based on character prefixes, specifically designed for the LiteStash
+key-value store's distributed database structure.
 """
 from typing import Generator
 from litestash.core.config.tables.tables_03 import Tables03
