@@ -1,6 +1,13 @@
-"""Model Utilitites
+"""LiteStash Model Utilities
 
-Provide module for the project's models module
+This module provides helper types and functions for working with
+LiteStash's data models and SQLAlchemy column definitions.
+
+Key Components:
+
+* `ColumnType`: A namedtuple representing a column type definition.
+* `StrType`, `IntType`, `JsonType`: Predefined ColumnType objects for common
+SQLite data types.
 """
 from litestash.core.config.schema_conf import ColumnConfig
 from collections import namedtuple

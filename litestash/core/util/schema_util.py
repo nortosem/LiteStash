@@ -1,6 +1,7 @@
-"""The LiteStash Core Metadata Utilities
+"""LiteStash Schema Utilities
 
-#TODO docs
+Provides functions for generating table names and creating SQLAlchemy tables
+for the LiteStash key-value store.
 """
 from sqlalchemy import Table
 from sqlalchemy import MetaData
@@ -28,10 +29,17 @@ from litestash.core.config.tables.tables_wx import TablesWX
 from litestash.core.config.tables.tables_yz import TablesYZ
 
 def mk_table_names(db_name: str) -> Generator[str, None, None]:
-    """Make valid Table names
+    """
+    Generates table names for the specified database.
 
-    Generate names for all tables in the given database name.
-    Return a generator.
+    Args:
+        db_name: The name of the database (e.g., "tables_03").
+
+    Yields:
+        str: The name of each table in the database.
+
+    Raises:
+        ValueError: If the database name is invalid.
     """
     match db_name:
 
@@ -87,9 +95,15 @@ def mk_table_names(db_name: str) -> Generator[str, None, None]:
             raise ValueError(Utils.DB_NAME_ERROR.value)
 
 def mk_tables(db_name: str, metadata: MetaData) -> MetaData:
-    """Make Tables
+    """
+    Creates SQLAlchemy Table objects for the specified database.
 
-    Create all tables using preset columns and names
+    Args:
+        db_name: The name of the database.
+        metadata: The SQLAlchemy MetaData object to associate the tables with.
+
+    Returns:
+        MetaData: The updated MetaData object containing the created tables.
     """
     for table_name in mk_table_names(db_name):
         Table(
@@ -101,7 +115,18 @@ def mk_tables(db_name: str, metadata: MetaData) -> MetaData:
 
 
 def get_db_name(char: str) -> str:
-    """Find database for given char"""
+    """
+    Determines the database name based on the given character.
+
+    Args:
+        char: The character to match against table prefixes.
+
+    Returns:
+        The name of the database corresponding to the character.
+
+    Raises:
+        ValueError: If the character doesn't match any valid table prefix.
+    """
     match char:
         case char if char in prefix_util.tables_03():
             return Tables.TABLES_03.value
@@ -156,7 +181,18 @@ def get_db_name(char: str) -> str:
 
 
 def get_table_name(char: str) -> str:
-    """Given a char get the table's name"""
+    """
+    Gets the table name based on the given character.
+
+    Args:
+        char: The character to match against table prefixes.
+
+    Returns:
+        The name of the table corresponding to the character.
+
+    Raises:
+        ValueError: If the character doesn't match any valid table prefix.
+    """
     match char:
         case char if char in Tables03:
             return Tables03.get_table_name(char)
