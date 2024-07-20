@@ -77,7 +77,7 @@ def setup_engine(db_name: str) -> Engine:
     data_path.mkdir(parents=True, exist_ok=True)
 
     engine = create_engine(
-        f'{str(data_path)}/{db_name}.db',
+        f'{data_path}/{db_name}.db',
         echo=EngineConf.no_echo(),
         echo_pool=EngineConf.no_echo(),
         pool_size=EngineConf.pool_size(),
