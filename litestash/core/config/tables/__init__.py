@@ -1,8 +1,8 @@
 """The Tables subpackage
 
-Modules:
-    Pull in the names of all databases and the access enumerations for the
-    tables in each database.
+This subpackage defines enums for accessing tables in each SQLite database used by LiteStash.
+
+Each module within this subpackage corresponds to a specific database and provides enums for the table names within that database. These enums are used for consistent and type-safe access to table names throughout the LiteStash library.
 """
 from litestash.core.config.tables.tables_03 import Tables03
 from litestash.core.config.tables.tables_47 import Tables47
