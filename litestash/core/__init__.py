@@ -1,14 +1,15 @@
-"""The LiteStash Core
+"""LiteStash Core Subpackage
 
-The Core module contains the configuration, utility, and build modules used by
-LiteStash.
+This subpackage provides the foundational components of the LiteStash key-value
+store.
 
 Modules:
-    config: Package-wide configuration enumerations
-    util: Various package utilities
-    engine: Initiate and manage the engines for the LiteStash
-    schema: Initiate and manage the metadata for the LiteStash
-    session: Mange the session factories for all LiteStash databases
+
+* `config`: Contains configuration constants and settings.
+* `util`: Offers helper functions and utilities.
+* `engine`:  Manages database engines.
+* `schema`:  Handles database schema definitions and metadata.
+* `session`: Provides session management for database interactions.
 """
 from litestash.core.config.root import Core
 from litestash.core import config
