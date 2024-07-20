@@ -1,13 +1,23 @@
-"""The tables_oOpP Table Module
+"""tables_op Table Module
 
-Enumerate the valid chars for keys with hash[:0] equal to o,O,p,P.
+This module defines an enumeration (`TablesOP`) for accessing table names within the SQLite database associated with hash values starting with 'o', 'O', 'p', or 'P'.
+
+The module facilitates consistent and type-safe access to these table names within the LiteStash library. Each member of the enum corresponds to a specific hash prefix and provides a method to construct the full table name.
 """
 from litestash.core.config.root import Valid
 from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
 class TablesOP(Valid):
-    """Enumeration with access methods"""
+    """
+    Enumeration for table names based on the initial character of the hash.
+
+    Members:
+        O_LOW: Represents a lowercase 'o' as the first hash character.
+        P_LOW: Represents a lowercase 'p' as the first hash character.
+        O_UP: Represents an uppercase 'O' as the first hash character.
+        P_UP: Represents an uppercase 'P' as the first hash character.
+    """
     O_LOW = 'o'
     P_LOW = 'p'
     O_UP = 'O'
@@ -15,7 +25,18 @@ class TablesOP(Valid):
 
     @staticmethod
     def get_table_name(char: str) -> str:
-        """Match on char and return table name"""
+        """
+        Returns the full table name based on the provided initial hash character.
+
+        Args:
+            char: The initial character of the hash value.
+
+        Returns:
+            The full table name corresponding to the hash character.
+
+        Raises:
+            ValueError: If the provided character is not a valid hash prefix for this module.
+        """
         match char:
             case TablesOP.O_LOW.value:
                 return TablesOP.o_low()
@@ -30,7 +51,7 @@ class TablesOP(Valid):
 
     @staticmethod
     def o_low() -> str:
-        """Get the full table name for hash[o:]"""
+        """Returns the full table name for lowercase 'o' hash prefixes."""
         return str(Tables.TABLES_OP.value
                    +Names.LOW.value
                    +Names.HASH.value
@@ -39,7 +60,7 @@ class TablesOP(Valid):
 
     @staticmethod
     def p_low() -> str:
-        """Get the full table name for hash[p:]"""
+        """Returns the full table name for lowercase 'p' hash prefixes."""
         return str(Tables.TABLES_OP.value
                    +Names.LOW.value
                    +Names.HASH.value
@@ -48,7 +69,7 @@ class TablesOP(Valid):
 
     @staticmethod
     def o_upper() -> str:
-        """Get the full table name for hash[O:]"""
+        """Returns the full table name for uppercase 'O' hash prefixes."""
         return str(Tables.TABLES_OP.value
                    +Names.UP.value
                    +Names.HASH.value
@@ -57,7 +78,7 @@ class TablesOP(Valid):
 
     @staticmethod
     def p_upper() -> str:
-        """Get the full table name for hash[P:]"""
+        """Returns the full table name for uppercase 'P' hash prefixes."""
         return str(Tables.TABLES_OP.value
                    +Names.UP.value
                    +Names.HASH.value

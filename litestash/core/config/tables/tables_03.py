@@ -1,13 +1,23 @@
-"""Zero2Three Table Module
+"""tables_03 Table Module
 
-Enumerate the valid chars for keys with hash[:0] equal to 0-3.
+This module defines an enumeration (`Tables03`) for accessing table names within the SQLite database associated with hash values starting with '0', '1', '2', or '3'.
+
+The module facilitates consistent and type-safe access to these table names within the LiteStash library. Each member of the enum corresponds to a specific hash prefix and provides a method to construct the full table name.
 """
 from litestash.core.config.root import Valid
 from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
 class Tables03(Valid):
-    """Enumerate 0 to 3"""
+    """
+    Enumeration for table names based on the initial character of the hash.
+
+    Members:
+        ZERO: Represents the number '0' as the first hash character.
+        ONE: Represents the number '1' as the first hash character.
+        TWO: Represents the number '2' as the first hash character.
+        THREE: Represents the number '3' as the first hash character.
+    """
     ZERO = '0'
     ONE = '1'
     TWO = '2'
@@ -15,7 +25,18 @@ class Tables03(Valid):
 
     @staticmethod
     def get_table_name(char: str) -> str:
-        """Match on char and return table name"""
+        """
+        Returns the full table name based on the provided initial hash character.
+
+        Args:
+            char: The initial character of the hash value.
+
+        Returns:
+            The full table name corresponding to the hash character.
+
+        Raises:
+            ValueError: If the provided character is not a valid hash prefix for this module.
+        """
         match char:
             case Tables03.ZERO.value:
                 return Tables03.zero()
@@ -30,7 +51,7 @@ class Tables03(Valid):
 
     @staticmethod
     def zero() -> str:
-        """Get the full table name for hash[:0] equal to '0'"""
+        """Returns the full table name for number '0' hash prefixes."""
         return str(Tables.TABLES_03.value
                    +Names.HASH.value
                    +Tables03.ZERO.value
@@ -38,7 +59,7 @@ class Tables03(Valid):
 
     @staticmethod
     def one() -> str:
-        """Get the full table name for hash[:0] equal to '1'"""
+        """Returns the full table name for number '1' hash prefixes."""
         return str(Tables.TABLES_03.value
                    +Names.HASH.value
                    +Tables03.ONE.value
@@ -46,7 +67,7 @@ class Tables03(Valid):
 
     @staticmethod
     def two() -> str:
-        """Get the full table name for hash[:0] equal to '2'"""
+        """Returns the full table name for number '2' hash prefixes."""
         return str(Tables.TABLES_03.value
                    +Names.HASH.value
                    +Tables03.TWO.value
@@ -54,7 +75,7 @@ class Tables03(Valid):
 
     @staticmethod
     def three() -> str:
-        """Get the full table name for hash[:0] equal to '3'"""
+        """Returns the full table name for number '3' hash prefixes."""
         return str(Tables.TABLES_03.value
                    +Names.HASH.value
                    +Tables03.THREE.value
