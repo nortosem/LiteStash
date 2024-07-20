@@ -17,6 +17,7 @@ from sqlalchemy import MetaData
 from sqlalchemy import Table
 from sqlalchemy.orm.session import Session
 from collections import namedtuple
+from pathlib import Path
 from datetime import datetime
 from hashlib import blake2b
 from secrets import base64
@@ -63,14 +64,20 @@ def set_begin(db_connection):
 def setup_engine(db_name: str) -> Engine:
     """Setup engine
 
+    Create data directories as needed.
+    Setup each engine as a group of four tables.:
     Args:
         engine_name (str): match with sqlite.db filename
 
-    Return a tuple of (name, engine)
-    {EngineConf.dirname()}/
+    Return a EngineAttributes namedtuple of (name, engine)
     """
+    data_path = Path(
+        f'{EngineConf.sqlite()}{EngineConf.dirname()}/{db_name}'
+    )
+    data_path.mkdir(parents=True, exist_ok=True)
+
     engine = create_engine(
-        f'{EngineConf.sqlite()}{EngineConf.dirname()}/{db_name}.db',
+        f'{str(data_path)}/{db_name}.db',
         echo=EngineConf.no_echo(),
         echo_pool=EngineConf.no_echo(),
         pool_size=EngineConf.pool_size(),
