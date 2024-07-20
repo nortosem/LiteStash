@@ -1,6 +1,7 @@
 """LiteStash Utility Module
 
-This module provides essential utility functions for the LiteStash key-value store.
+This module provides essential utility functions for the LiteStash key-value
+store.
 
 Functions:
 
@@ -48,15 +49,16 @@ from litestash.core.util.schema_util import mk_tables
 
 def set_pragma(db_connection, connect):
     """Sets SQLite PRAGMA settings on a new connection.
-
-    This function is intended to be used as an event listener with SQLAlchemy engines
-    to configure essential PRAGMA settings like journaling mode, synchronous
-    mode,
-    foreign key enforcement, and JSON handling.
+    This function is intended to be used as an event listener with SQLAlchemy
+    engines to configure essential PRAGMA settings like journaling mode,
+    synchronous mode, foreign key enforcement, and JSON handling.
 
     Args:
-        dbapi_connection: The raw DBAPI connection object (e.g., sqlite3.Connection).
-        connection_record:  The SQLAlchemy connection record (not used in this implementation).
+        dbapi_connection: The raw DBAPI connection object
+        (e.g., sqlite3.Connection).
+
+        connection_record:  The SQLAlchemy connection record
+        (not used in this implementation).
     """
     print(f'connect: {connect}')# use with logging etc
     cursor = db_connection.cursor()
@@ -87,7 +89,8 @@ def setup_engine(db_name: str) -> Engine:
         db_name: The name of the database file.
 
     Returns:
-        EngineAttributes: A namedtuple containing the database name and the engine.
+        EngineAttributes: A namedtuple containing the database name and the
+        engine.
     """
     data_path = Path(
         f'{EngineConf.sqlite()}{EngineConf.dirname()}/{db_name}'
@@ -134,7 +137,8 @@ def setup_metadata(engine_attributes: EngineAttributes):
         (`db_name`) and SQLAlchemy `Engine` object.
 
     Returns:
-        MetaAttributes: A namedtuple containing the database name and the initialized `MetaData` object.
+        MetaAttributes: A namedtuple containing the database name and the
+        initialized `MetaData` object.
     """
     db_name, engine = engine_attributes
     metadata = MetaData()
