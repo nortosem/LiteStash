@@ -118,7 +118,7 @@ class Session:
             database name.
         """
         attribute = getattr(self, db_name)
-        return attribute.session
+        return attribute
 
     def __iter__(self):
         """
