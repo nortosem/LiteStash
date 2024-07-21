@@ -193,19 +193,19 @@ SessionAttributes = namedtuple(
 SessionAttributes.__doc__ = SessionAttr.DOC.value
 
 
-def digest_key(key: str) -> str:
-    """Generates a hexadecimal digest (hash) of the given key.
+def digest_key(key: str) -> bytes:
+    """Generates a bytes digest of the given key.
 
     Args:
         key (str): The key string to hash.
 
     Returns:
-        str: The hexadecimal digest of the key.
+        bytes: The digest of the key in bytes.
     """
     return blake2b(
         key.encode(),
         digest_size=Utils.SIZE.value
-    ).hexdigest()
+    ).digest()
 
 
 def allot(size: int = 6) -> str:
@@ -223,17 +223,16 @@ def allot(size: int = 6) -> str:
     return base64.urlsafe_b64encode(lot).decode()
 
 
-def mk_hash(key: str) -> str:
-    """Generates a URL-safe Base64 hash of the given key."""
-    return base64.urlsafe_b64encode(key.encode()).decode()
+def mk_hash(digest: bytes) -> str:
+    """Generates a URL-safe Base64 hash of the given key digest."""
+    return base64.urlsafe_b64encode(digest).decode()
 
 
 def get_primary_key(key: str) -> str:
     """Generates a unique primary key for a given key."""
     key_digest = digest_key(key)
-    keyed = mk_hash(key)
-    digested = mk_hash(key_digest)
-    return mk_hash(keyed+digested)
+    keyed = mk_hash(key_digest)
+    return keyed
 
 
 def get_time() -> tuple[int, int]:
