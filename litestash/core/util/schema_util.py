@@ -201,7 +201,7 @@ def get_table_name(char: str) -> str:
             return Tables47.get_table_name(char)
 
         case char if char in Tables89hu:
-            return Tables47.get_table_name(char)
+            return Tables89hu.get_table_name(char)
 
         case char if char in TablesAB :
             return TablesAB.get_table_name(char)
