@@ -30,7 +30,7 @@ class DataScheme(Valid):
     TITLE = 'Data'
     DESCRIPTION = 'The key name and JSON data for the given key.'
     MIN_LENGTH = 4
-    MAX_LENGTH = 41
+    MAX_LENGTH = 999
     FORBID_EXTRA = 'forbid'
 
 
@@ -46,7 +46,7 @@ class Utils(Valid):
 
     SIZE (int): digest_size for hash_key
     """
-    SIZE = 17
+    SIZE = 41
     DB_NAME_ERROR = 'Invalid character'
 
 
