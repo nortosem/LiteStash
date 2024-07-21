@@ -8,13 +8,14 @@ import orjson
 from typing import overload
 from sqlalchemy import insert
 from sqlalchemy import select
-from pydantic import ValidationError
+from sqlalchemy import delete
 from litestash.core.config.root import Tables as All_Tables
 from litestash.core.config.litestash_conf import StashSlots
 from litestash.core.engine import Engine
 from litestash.core.schema import Metadata
 from litestash.core.session import Session
 from litestash.models import LiteStashData
+from litestash.core.config.litestash_conf import StashError
 from litestash.core.util.litestash_util import get_keys
 from litestash.core.util.litestash_util import get_values
 from litestash.core.util.litestash_util import get_datastore
@@ -41,7 +42,7 @@ class LiteStash:
         self.db_session = Session(self.engine)
 
     @overload
-    def set(self, key: str, value: str) -> None:
+    def set(self, key: str, value: str = None) -> None:
         """Set String Data
 
         Add a new key to the database.
@@ -62,7 +63,7 @@ class LiteStash:
         """
 
 
-    def set(self, data: str | LiteStashData, value: str):
+    def set(self, data: str | LiteStashData, value: str = None):
         """Inserts or updates a key-value pair.
 
         Args:
@@ -74,37 +75,47 @@ class LiteStash:
             ValueError: If the key or value is invalid.
             ValidationError: If the `LiteStashData` object fails validation.
         """
-        if isinstance(data, LiteStashData):
-            store = get_datastore(data)
-            stash = LiteStashData(store.key)
+        if isinstance(data, LiteStashData) and value is None:
+            data = get_datastore(data)
 
-        if isinstance(data, str):
-            if value is not None:
-                try:
-                    stash = LiteStashData(key=data, value=value)
-                except ValueError as v:
-                    print(f'Error: {v}')
-                except ValidationError as e:
-                    print(f'Invalid key: {e}')
-                store = get_datastore(stash)
+        elif not isinstance(data, str):
+            raise TypeError(
+                f'{StashError.KEY_TYPE.value} not {type(data).__name__}'
+            )
 
+        if not isinstance(
+                value, (dict, list, str, int, float, bool, type(None))
+        ):
+            raise TypeError(StashError.SET_TYPE.value)
 
-        table_name = get_table_name(store.key_hash[0])
-        db_name = get_db_name(store.key_hash[0])
-        metadata = self.metadata.get(db_name)
-        session = self.db_session.get(db_name)
+        if value is not None:
+            value = orjson.dumps(value)
+            data = LiteStashData(key=data, value=value)
+            print(f'data: {data}')
+            data = get_datastore(data)
+
+        if isinstance(data, str) and value is None:
+            data = LiteStashData(key=data, value=value)
+            print(f'data: {data}')
+            data = get_datastore(data)
+
+        table_name = get_table_name(data.key_hash[0])
+        db_name = get_db_name(data.key_hash[0])
+        metadata = self.metadata.get(db_name).metadata
+        session = self.db_session.get(db_name).session
         table = metadata.tables[table_name]
 
         sql_statement = (
             insert(table)
             .values(
-                key_hash=store.key_hash,
-                key=store.key,
-                value=store.value,
-                timestamp=store.timestamp,
-                microsecond=store.microsecond
+                key_hash=data.key_hash,
+                key=data.key,
+                value=data.value,
+                timestamp=data.timestamp,
+                microsecond=data.microsecond
             )
         )
+        print(f'sql: {sql_statement}')
         with session() as set_session:
             set_session.execute(sql_statement)
             set_session.commit()
@@ -132,36 +143,38 @@ class LiteStash:
             LiteStashData: The retrieved key-value pair, or None if not found.
         """
         if isinstance(data, LiteStashData):
-            store = get_datastore(data)
-            stash = LiteStashData(store.key)
+            data = get_datastore(data)
+
+        elif not isinstance(data, str):
+            raise TypeError(
+                f'{StashError.KEY_TYPE.value} not {type(data).__name__}'
+            )
 
         if isinstance(data, str):
-            try:
-                stash = LiteStashData(key=data)
-            except ValueError as v:
-                print(f'Error: {v}')
-            except ValidationError as e:
-                print(f'Invalid key: {e}')
-            store = get_datastore(stash)
+            data = LiteStashData(key=data)
+            print(f'data: {data}')
 
-        table_name = get_table_name(store.key_hash[0])
-        db_name = get_db_name(store.key_hash[0])
-        metadata = self.metadata.get(db_name)
-        session = self.db_session.get(db_name)
-        hash_key = get_primary_key(store.key)
+        hash_key = get_primary_key(data.key)
+        table_name = get_table_name(hash_key[0])
+        db_name = get_db_name(hash_key[0])
+        metadata = self.metadata.get(db_name).metadata
+        print(f'metadata: {metadata}')
+        session = self.db_session.get(db_name).session
         table = metadata.tables[table_name]
+        print(f'table: {table}')
         sql_statement = (
             select(table).where(table.c.key_hash == hash_key)
         )
 
         with session() as get_session:
             data = get_session.execute(sql_statement).first()
+            print(f'data: {data}')
             get_session.commit()
 
         if data:
             json_data = str(data[2])
-            stash.value = orjson.dumps(json_data)
-            return stash
+            return orjson.dumps(json_data)
+
         else:
             return None
 
@@ -176,38 +189,31 @@ class LiteStash:
         """
 
 
-    def delete(self, data: str):
+    def delete(self, key: str):
         """Deletes a key-value pair from the database.
 
         Args:
             data: Either a `LiteStashData` object or a string key to delete.
         """
-        if isinstance(data, LiteStashData):
-            store = get_datastore(data)
-            stash = LiteStashData(store.key)
+        if not isinstance(key, str):
+            raise TypeError(
+                f'{StashError.KEY_TYPE.value} not {type(key).__name__}'
+            )
 
-        if isinstance(data, str):
-            try:
-                stash = LiteStashData(key=data)
-            except ValueError as v:
-                print(f'Error: {v}')
-            except ValidationError as e:
-                print(f'Invalid key: {e}')
-            store = get_datastore(stash)
+        if isinstance(key, str):
+            key = LiteStashData(key=key)
 
-        table_name = get_table_name(store.key_hash[0])
-        db_name = get_db_name(store.key_hash[0])
-        metadata = self.metadata.get(db_name)
-        session = self.db_session.get(db_name)
-        hash_key = get_primary_key(store.key)
+        hash_key = get_primary_key(key.key)
+        table_name = get_table_name(hash_key[0])
+        db_name = get_db_name(hash_key[0])
+        metadata = self.metadata.get(db_name).metadata
+        session = self.db_session.get(db_name).session
         table = metadata.tables[table_name]
-        sql_statement = (
-            select(table).where(table.c.key_hash == hash_key)
-        )
 
         with session() as delete_session:
-            data = delete_session.execute(sql_statement)
-            delete_session.delete(data)
+            delete_session.execute(
+                delete(table).where(table.c.key_hash == hash_key)
+            )
             delete_session.commit()
 
 
@@ -215,9 +221,9 @@ class LiteStash:
         """Returns a list of all keys in the database."""
         keys = []
         for db_name in All_Tables:
-            table_names = mk_table_names(db_name)
-            metadata = self.metadata.get(db_name)
-            session = self.db_session.get(db_name)
+            table_names = mk_table_names(db_name.value)
+            metadata = self.metadata.get(db_name.value).metadata
+            session = self.db_session.get(db_name.value).session
             for table_name in table_names:
                 table = metadata.tables[table_name]
                 table_keys = get_keys(session, table)
@@ -229,9 +235,9 @@ class LiteStash:
         """Returns a list of all values (as dictionaries) in the database."""
         values = []
         for db_name in All_Tables:
-            table_names = mk_table_names(db_name)
-            metadata = self.metadata.get(db_name)
-            session = self.db_session.get(db_name)
+            table_names = mk_table_names(db_name.value)
+            metadata = self.metadata.get(db_name.value).metadata
+            session = self.db_session.get(db_name.value).session
             for table_name in table_names:
                 table = metadata.tables[table_name]
                 table_values = get_values(session, table)
@@ -247,31 +253,28 @@ class LiteStash:
         Returns:
             bool: True if the key exists, False otherwise.
         """
-        if isinstance(key, LiteStashData):
-            store = get_datastore(key)
-            stash = LiteStashData(store.key)
+        if not isinstance(key, str):
+            raise TypeError(
+                f'{StashError.KEY_TYPE.value} not {type(key).__name__}'
+            )
 
         if isinstance(key, str):
-            try:
-                stash = LiteStashData(key=key)
-            except ValueError as v:
-                print(f'Error: {v}')
-            except ValidationError as e:
-                print(f'Invalid key: {e}')
-            store = get_datastore(stash)
+            key = LiteStashData(key=key)
 
-        table_name = get_table_name(store.key_hash[0])
-        db_name = get_db_name(store.key_hash[0])
-        metadata = self.metadata.get(db_name)
-        session = self.db_session.get(db_name)
-        hash_key = get_primary_key(store.key)
+        hash_key = get_primary_key(key.key)
+        table_name = get_table_name(hash_key[0])
+        db_name = get_db_name(hash_key[0])
+        metadata = self.metadata.get(db_name).metadata
+        print(f'metadata: {metadata}')
+        session = self.db_session.get(db_name).session
         table = metadata.tables[table_name]
+        print(f'table: {table}')
         sql_statement = (
             select(table).where(table.c.key_hash == hash_key)
         )
 
         with session() as exist_session:
-            data = exist_session.execute(sql_statement).scalar_one()
+            data = exist_session.execute(sql_statement).first()
             exist_session.commit()
 
         if data:
@@ -282,10 +285,14 @@ class LiteStash:
 
     def clear(self) -> None:
         """Clears all entries from the database."""
-        for db_name in All_Tables:
-            metadata = self.metadata.get(db_name)
-            metadata.drop_all()
-            metadata.create_all()
+        for db in self.metadata.__slots__:
+            metadata = self.metadata.get(db).metadata
+            engine = self.engine.get(db).engine
+            metadata.drop_all(bind=engine)
+
+        self.engine = Engine()
+        self.metadata = Metadata(self.engine)
+        self.db_session = Session(self.engine)
 
 
     def __repr__(self) -> str:
