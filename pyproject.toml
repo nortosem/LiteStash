@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "litestash"
-version = "0.1.0b3" 
+version = "0.1.0b4" 
 description = """
 The LiteStash Python project offers a lightning-fast, lightweight key-value storage solution.  LiteStash provides a NoSQL API for seamless integration into your applications.  The LiteStash database handles the data with SQLite transparently.  Optimal use for caching, session management, and other high-performance use cases.
 """
