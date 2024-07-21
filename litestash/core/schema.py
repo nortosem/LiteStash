@@ -119,7 +119,7 @@ class Metadata:
             name.
         """
         attribute = getattr(self, db_name)
-        return attribute.metadata
+        return attribute
 
     def __iter__(self):
         """Iterates over all database metadata objects."""

@@ -82,7 +82,7 @@ class Engine:
             AttributeError: If no engine is found with the given name.
         """
         attribute = getattr(self, name)
-        return attribute.engine
+        return attribute
 
 
     def __iter__(self):
