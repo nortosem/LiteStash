@@ -91,14 +91,11 @@ class LiteStash:
         if value is not None:
             value = orjson.dumps(value)
             data = LiteStashData(key=data, value=value)
-            print(f'data: {data}')
             data = get_datastore(data)
 
         if isinstance(data, str) and value is None:
             data = LiteStashData(key=data, value=value)
-            print(f'data: {data}')
             data = get_datastore(data)
-
         table_name = get_table_name(data.key_hash[0])
         db_name = get_db_name(data.key_hash[0])
         metadata = self.metadata.get(db_name).metadata
@@ -115,7 +112,7 @@ class LiteStash:
                 microsecond=data.microsecond
             )
         )
-        print(f'sql: {sql_statement}')
+        #print(f'sql: {sql_statement}')
         with session() as set_session:
             set_session.execute(sql_statement)
             set_session.commit()
@@ -152,23 +149,23 @@ class LiteStash:
 
         if isinstance(data, str):
             data = LiteStashData(key=data)
-            print(f'data: {data}')
+            #print(f'data: {data}')
 
         hash_key = get_primary_key(data.key)
         table_name = get_table_name(hash_key[0])
         db_name = get_db_name(hash_key[0])
         metadata = self.metadata.get(db_name).metadata
-        print(f'metadata: {metadata}')
+        #print(f'metadata: {metadata}')
         session = self.db_session.get(db_name).session
         table = metadata.tables[table_name]
-        print(f'table: {table}')
+        #print(f'table: {table}')
         sql_statement = (
             select(table).where(table.c.key_hash == hash_key)
         )
 
         with session() as get_session:
             data = get_session.execute(sql_statement).first()
-            print(f'data: {data}')
+        #    print(f'data: {data}')
             get_session.commit()
 
         if data:
@@ -265,10 +262,10 @@ class LiteStash:
         table_name = get_table_name(hash_key[0])
         db_name = get_db_name(hash_key[0])
         metadata = self.metadata.get(db_name).metadata
-        print(f'metadata: {metadata}')
+        #print(f'metadata: {metadata}')
         session = self.db_session.get(db_name).session
         table = metadata.tables[table_name]
-        print(f'table: {table}')
+        #print(f'table: {table}')
         sql_statement = (
             select(table).where(table.c.key_hash == hash_key)
         )
