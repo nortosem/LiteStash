@@ -60,12 +60,20 @@ class LiteStashData:
             key (str): the name for the json being stashed
         """
         if not key.isascii():
-            raise ValueError(DataScheme.ASCII_ERROR.value)
-
-        if not key.isalnum():
-            raise ValueError(DataScheme.ALNUM_ERROR.value)
-
+            raise ValueError('ascii')
         return key
+
+
+    @field_validator(ColumnConfig.DATA_VALUE.value)
+    def valid_value(cls, value):
+        """Validate & serialize the value to JSON"""
+        if not isinstance(value, (dict,list,str,type(None))):
+            raise TypeError('no')
+
+        if isinstance(value, (dict,list)):
+            value = orjson.dumps(value).decode()
+
+        return value
 
 
 @dataclass(slots=True)
@@ -82,13 +90,6 @@ class LiteStashStore:
         date_time (int): POSIX timestamp.
         ms_time (int): Microseconds.
     """
-    model_config = {
-        StashConf.ORM_MODE.value: True,
-        StashConf.EXTRA.value: DataScheme.FORBID_EXTRA.value,
-        StashConf.JSON_LOADS.value: orjson.loads,
-        StashConf.JSON_DUMPS.value: orjson.dumps
-    }
-
     key_hash: StrictStr = Field(...)
     key: StrictStr = Field(...)
     value: Json | None = Field(default=None)
