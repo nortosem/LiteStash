@@ -14,6 +14,14 @@ organizing engine, metadata, session, and time-related information.
 """
 from litestash.core.config.root import Valid
 
+class StashError(Valid):
+    """StashError
+
+    Configuriaton of LiteStash error strings.
+    """
+    SET_TYPE = 'value must be JSON serializable'
+    KEY_TYPE = 'Key must be a string'
+
 class DataScheme(Valid):
     """LiteStashData Scheme
 
