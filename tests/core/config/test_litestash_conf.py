@@ -43,6 +43,8 @@ def test_engine_conf_values():
     assert EngineConf.FUTURE.value == True
     assert EngineConf.NO_ECHO.value == False
     assert EngineConf.NO_FUTURE.value == False
+    assert EngineConf.POOL_SIZE.value == 50
+    assert EngineConf.MAX_OVERFLOW.value == 10
 
 def test_engine_conf_methods():
     assert EngineConf.sqlite() == 'sqlite:///'
@@ -51,4 +53,5 @@ def test_engine_conf_methods():
     assert EngineConf.future() == True
     assert EngineConf.no_echo() == False
     assert EngineConf.no_future() == False
-
+    assert EngineConf.pool_size() == 50
+    assert EngineConf.max_overflow() == 10

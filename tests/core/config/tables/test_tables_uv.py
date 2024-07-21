@@ -5,32 +5,32 @@ Full coverage unittesting for configuration
 import pytest
 from litestash.core.config.schema_conf import Names
 from litestash.core.config.root import Tables
-from litestash.core.config.tables.tables_st import TablesST
+from litestash.core.config.tables.tables_uv import TablesUV
 
 def test_get_table_name_valid_chars():
     """Tests valid characters e,f,A,B"""
-    assert TablesST.get_table_name("s") == "tables_st_lower_hash_s"
-    assert TablesST.get_table_name("t") == "tables_st_lower_hash_t"
-    assert TablesST.get_table_name("S") == "tables_st_upper_hash_s"
-    assert TablesST.get_table_name("T") == "tables_st_upper_hash_t"
+    assert TablesUV.get_table_name("u") == "tables_uv_lower_hash_u"
+    assert TablesUV.get_table_name("v") == "tables_uv_lower_hash_v"
+    assert TablesUV.get_table_name("U") == "tables_uv_upper_hash_u"
+    assert TablesUV.get_table_name("V") == "tables_uv_upper_hash_v"
 
 def test_get_table_name_invalid_char():
     """Tests invalid character."""
     with pytest.raises(ValueError, match=Names.ERROR.value):
-        TablesST.get_table_name("#")
+        TablesUV.get_table_name("#")
 
-def test_s_low():
+def test_u_low():
     """Tests the zero() method."""
-    assert TablesST.s_low() == "tables_st_lower_hash_s"
+    assert TablesUV.u_low() == "tables_uv_lower_hash_u"
 
-def test_t_low():
+def test_v_low():
     """Tests the one() method."""
-    assert TablesST.t_low() == "tables_st_lower_hash_t"
+    assert TablesUV.v_low() == "tables_uv_lower_hash_v"
 
-def test_s_upper():
+def test_u_upper():
     """Tests the two() method."""
-    assert TablesST.s_upper() == "tables_st_upper_hash_s"
+    assert TablesUV.u_upper() == "tables_uv_upper_hash_u"
 
-def test_t_upper():
+def test_v_upper():
     """Tests the three() method."""
-    assert TablesST.t_upper() == "tables_st_upper_hash_t"
+    assert TablesUV.v_upper() == "tables_uv_upper_hash_v"
