@@ -60,7 +60,7 @@ def set_pragma(db_connection, connect):
         connection_record:  The SQLAlchemy connection record
         (not used in this implementation).
     """
-    print(f'connect: {connect}')# use with logging etc
+    print(f'connection: {connect}')
     cursor = db_connection.cursor()
     cursor.execute(Pragma.journal_mode())
     cursor.execute(Pragma.synchronous())
@@ -93,12 +93,12 @@ def setup_engine(db_name: str) -> Engine:
         engine.
     """
     data_path = Path(
-        f'{EngineConf.sqlite()}{EngineConf.dirname()}/{db_name}'
+        f'{EngineConf.dirname()}/{db_name}'
     )
     data_path.mkdir(parents=True, exist_ok=True)
 
     engine = create_engine(
-        f'{data_path}/{db_name}.db',
+        f'{EngineConf.sqlite()}{data_path}/{db_name}.db',
         echo=EngineConf.no_echo(),
         echo_pool=EngineConf.no_echo(),
         pool_size=EngineConf.pool_size(),
@@ -129,22 +129,21 @@ EngineAttributes = namedtuple(
 EngineAttributes.__doc__ = EngineAttr.DOC.value
 
 
-def setup_metadata(engine_attributes: EngineAttributes):
+def setup_metadata(engine_stash: EngineAttributes):
     """Sets up and returns SQLAlchemy metadata for the given database engine.
 
     Args:
-        engine_attributes: A namedtuple containing the database name
+        engine_stash: A namedtuple containing the database name
         (`db_name`) and SQLAlchemy `Engine` object.
 
     Returns:
         MetaAttributes: A namedtuple containing the database name and the
         initialized `MetaData` object.
     """
-    db_name, engine = engine_attributes
     metadata = MetaData()
-    metadata = mk_tables(db_name, metadata)
-    metadata.create_all(bind=engine, checkfirst=True)
-    quality_metadata = MetaAttributes(db_name, metadata)
+    metadata = mk_tables(engine_stash.db_name, metadata)
+    metadata.create_all(bind=engine_stash.engine, checkfirst=True)
+    quality_metadata = MetaAttributes(engine_stash.db_name, metadata)
     return quality_metadata
 
 
@@ -158,7 +157,7 @@ MetaAttributes = namedtuple(
 MetaAttributes.__doc__ = MetaAttr.DOC.value
 
 
-def setup_sessions(engine_attributes: EngineAttributes):
+def setup_sessions(engine_stash: EngineAttributes):
     """Creates and returns a session factory for the given database engine.
 
     This function checks if the database has tables before creating the session
@@ -166,7 +165,7 @@ def setup_sessions(engine_attributes: EngineAttributes):
     If no tables are found, it raises a `ValueError`.
 
     Args:
-        engine_attributes: A namedtuple containing the database name
+        engine_stash: A namedtuple containing the database name
         (`db_name`) and SQLAlchemy `Engine` object.
 
     Returns:
@@ -176,12 +175,11 @@ def setup_sessions(engine_attributes: EngineAttributes):
     Raises:
         ValueError: If no tables are found in the database.
     """
-    db_name, engine = engine_attributes
-    if inspect(engine).get_table_names():
-        session = sessionmaker(engine)
+    if inspect(engine_stash.engine).get_table_names():
+        session = sessionmaker(engine_stash.engine)
     else:
         raise ValueError(f'{SessionAttr.VALUE_ERROR.value}')
-    quality_session = SessionAttributes(db_name, session)
+    quality_session = SessionAttributes(engine_stash.db_name, session)
     return quality_session
 
 
@@ -288,8 +286,9 @@ def get_keys(session: Session, table: Table) -> list[str]:
     Returns:
         list[str]: A list of all keys in the table.
     """
-    sql_statement = select(table.c.key[C.KEY.value])
-    keys = session.execute(sql_statement).scalars().all()
+    with session() as keys_get:
+        sql_statement = select(table.c[C.KEY.value])
+        keys = keys_get.execute(sql_statement).scalars().all()
     return keys
 
 def get_values(session: Session, table: Table) -> list[dict]:
@@ -302,6 +301,7 @@ def get_values(session: Session, table: Table) -> list[dict]:
     Returns:
         list[dict]: A list of all JSON values in the table (deserialized).
     """
-    sql_statement = select(table.c[C.VALUE.value])
-    values = session.execute(sql_statement).scalars().all()
+    with session() as values_get:
+        sql_statement = select(table.c[C.VALUE.value])
+        values = values_get.execute(sql_statement).scalars().all()
     return values
