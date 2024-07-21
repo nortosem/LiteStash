@@ -8,7 +8,7 @@ def test_data_scheme_values():
     assert DataScheme.TITLE.value == 'Data'
     assert DataScheme.DESCRIPTION.value == 'The key name and JSON data for the given key.'
     assert DataScheme.MIN_LENGTH.value == 4
-    assert DataScheme.MAX_LENGTH.value == 41
+    assert DataScheme.MAX_LENGTH.value == 999
     assert DataScheme.FORBID_EXTRA.value == 'forbid'
 
 def test_stash_slots_values():
@@ -17,7 +17,7 @@ def test_stash_slots_values():
     assert StashSlots.DB_SESSION.value == 'db_session'
 
 def test_utils_values():
-    assert Utils.SIZE.value == 17
+    assert Utils.SIZE.value == 41
     assert Utils.DB_NAME_ERROR.value == 'Invalid character'
 
 def test_engine_attr_values():
