@@ -6,6 +6,8 @@ for setting, getting, deleting, and listing key-value pairs.
 """
 import orjson
 from typing import overload
+from typing import Dict
+from typing import List
 from sqlalchemy import insert
 from sqlalchemy import select
 from sqlalchemy import delete
@@ -43,24 +45,12 @@ class LiteStash:
 
     @overload
     def set(self, key: str, value: str = None) -> None:
-        """Set String Data
-
-        Add a new key to the database.
-        If key already exists update the value.
-        Args:
-            key (str):
-            value (str):
-        """
+        """Overload set using key,value string"""
 
 
     @overload
     def set(self, data: LiteStashData) -> None:
-        """Set LiteStashData
-
-        Add valid data to the database.
-        Args:
-            data: LiteStashData
-        """
+        """Overload set using LiteStashData"""
 
 
     def set(self, data: str | LiteStashData, value: str = None):
@@ -112,24 +102,22 @@ class LiteStash:
                 microsecond=data.microsecond
             )
         )
-        #print(f'sql: {sql_statement}')
         with session() as set_session:
             set_session.execute(sql_statement)
             set_session.commit()
 
 
     @overload
-    def get(self, data: LiteStashData):
-        """Set LiteStashData
-
-        Get json data for the given data stash
-        Args:
-            data: LiteStashData
-
-        """
+    def get(self, data: LiteStashData) -> None:
+        """Overload get using LiteStashData type"""
 
 
-    def get(self, data: str) -> LiteStashData | None:
+    @overload
+    def get(self, data: str) -> None:
+        """Overload get using string type"""
+
+
+    def get(self, data: str | LiteStashData) -> LiteStashData | None:
         """Retrieves a value from the cache by key.
 
         Args:
@@ -149,23 +137,19 @@ class LiteStash:
 
         if isinstance(data, str):
             data = LiteStashData(key=data)
-            #print(f'data: {data}')
 
         hash_key = get_primary_key(data.key)
         table_name = get_table_name(hash_key[0])
         db_name = get_db_name(hash_key[0])
         metadata = self.metadata.get(db_name).metadata
-        #print(f'metadata: {metadata}')
         session = self.db_session.get(db_name).session
         table = metadata.tables[table_name]
-        #print(f'table: {table}')
         sql_statement = (
             select(table).where(table.c.key_hash == hash_key)
         )
 
         with session() as get_session:
             data = get_session.execute(sql_statement).first()
-        #    print(f'data: {data}')
             get_session.commit()
 
         if data:
@@ -174,6 +158,122 @@ class LiteStash:
 
         else:
             return None
+
+
+    @overload
+    def mget(self, keys: List[LiteStashData]) -> List[LiteStashData]:
+        """Get many keys using LiteStashData Objects"""
+
+
+    @overload
+    def mget(self, keys: List[str]) -> List[LiteStashData]:
+        """Get many keys by string list of key names"""
+
+
+    def mget(self,
+             keys: List[str] | List[LiteStashData]) -> List[LiteStashData]:
+        """Bulk get of multiple keys"""
+        pass
+
+    @overload
+    def mset(self, data: List[LiteStashData], ttl: int) -> None:
+        """"""
+
+
+    @overload
+    def mset(self, data: List[Dict], ttl: int) -> None:
+        """"""
+
+
+    @overload
+    def mset(self, data: List[str], ttl: int) -> None:
+        """"""
+
+
+    def mset(
+        self,
+        data: List[str] | List[Dict] | List[LiteStashData],
+        ttl: int) -> None:
+        """
+
+        todo
+        """
+        pass
+
+
+    def expire(self,
+               keys: str | List[str] | None = None,
+               ttl: int = None) -> int:
+        """Expire a key, some keys, or all keys
+
+        Todo
+        """
+        pass
+
+
+    def keys(self) -> list[str]:
+        """Returns a list of all keys in the database."""
+        keys = []
+        for db_name in All_Tables:
+            table_names = mk_table_names(db_name.value)
+            metadata = self.metadata.get(db_name.value).metadata
+            session = self.db_session.get(db_name.value).session
+            for table_name in table_names:
+                table = metadata.tables[table_name]
+                table_keys = get_keys(session, table)
+                keys.append(table_keys)
+        return keys
+
+
+    def values(self) -> list[dict]:
+        """Returns a list of all values (as dictionaries) in the database."""
+        values = []
+        for db_name in All_Tables:
+            table_names = mk_table_names(db_name.value)
+            metadata = self.metadata.get(db_name.value).metadata
+            session = self.db_session.get(db_name.value).session
+            for table_name in table_names:
+                table = metadata.tables[table_name]
+                table_values = get_values(session, table)
+                values.append(table_values)
+        return values
+
+
+    def exists(self, key: str) -> bool:
+        """Checks if a key exists in the database.
+
+        Args:
+            key (str): The key to check.
+
+        Returns:
+            bool: True if the key exists, False otherwise.
+        """
+        if not isinstance(key, str):
+            raise TypeError(
+                f'{StashError.KEY_TYPE.value} not {type(key).__name__}'
+            )
+
+        if isinstance(key, str):
+            key = LiteStashData(key=key)
+
+        hash_key = get_primary_key(key.key)
+        table_name = get_table_name(hash_key[0])
+        db_name = get_db_name(hash_key[0])
+        metadata = self.metadata.get(db_name).metadata
+        session = self.db_session.get(db_name).session
+        table = metadata.tables[table_name]
+        sql_statement = (
+            select(table).where(table.c.key_hash == hash_key)
+        )
+
+        with session() as exist_session:
+            data = exist_session.execute(sql_statement).first()
+            exist_session.commit()
+
+        if data:
+            return True
+        else:
+            return False
 
 
     @overload
@@ -212,72 +312,6 @@ class LiteStash:
                 delete(table).where(table.c.key_hash == hash_key)
             )
             delete_session.commit()
-
-
-    def keys(self) -> list[str]:
-        """Returns a list of all keys in the database."""
-        keys = []
-        for db_name in All_Tables:
-            table_names = mk_table_names(db_name.value)
-            metadata = self.metadata.get(db_name.value).metadata
-            session = self.db_session.get(db_name.value).session
-            for table_name in table_names:
-                table = metadata.tables[table_name]
-                table_keys = get_keys(session, table)
-                keys.append(table_keys)
-        return keys
-
-
-    def values(self) -> list[dict]:
-        """Returns a list of all values (as dictionaries) in the database."""
-        values = []
-        for db_name in All_Tables:
-            table_names = mk_table_names(db_name.value)
-            metadata = self.metadata.get(db_name.value).metadata
-            session = self.db_session.get(db_name.value).session
-            for table_name in table_names:
-                table = metadata.tables[table_name]
-                table_values = get_values(session, table)
-                values.append(table_values)
-        return values
-
-    def exists(self, key: str) -> bool:
-        """Checks if a key exists in the database.
-
-        Args:
-            key (str): The key to check.
-
-        Returns:
-            bool: True if the key exists, False otherwise.
-        """
-        if not isinstance(key, str):
-            raise TypeError(
-                f'{StashError.KEY_TYPE.value} not {type(key).__name__}'
-            )
-
-        if isinstance(key, str):
-            key = LiteStashData(key=key)
-
-        hash_key = get_primary_key(key.key)
-        table_name = get_table_name(hash_key[0])
-        db_name = get_db_name(hash_key[0])
-        metadata = self.metadata.get(db_name).metadata
-        #print(f'metadata: {metadata}')
-        session = self.db_session.get(db_name).session
-        table = metadata.tables[table_name]
-        #print(f'table: {table}')
-        sql_statement = (
-            select(table).where(table.c.key_hash == hash_key)
-        )
-
-        with session() as exist_session:
-            data = exist_session.execute(sql_statement).first()
-            exist_session.commit()
-
-        if data:
-            return True
-        else:
-            return False
 
 
     def clear(self) -> None:
