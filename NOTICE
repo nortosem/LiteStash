@@ -13,7 +13,6 @@ Package	                License
     isort	                MIT License
     mccabe	                GPLv2
     orjson	                Apache License 2.0 and MIT License
-    packaging	            Apache License 2.0
     platformdirs	        MIT License
     pluggy	                MIT License
     pydantic	            MIT License
@@ -21,7 +20,6 @@ Package	                License
     pylint	                GPLv2
     pytest	                MIT License
     pytest-mock	            MIT License
-    python-dotenv	        BSD License
     SQLAlchemy	            MIT License
     tomlkit	                MIT License
     typing-extensions	    PSF License
