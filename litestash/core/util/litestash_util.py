@@ -60,7 +60,8 @@ def set_pragma(db_connection, connect):
         connection_record:  The SQLAlchemy connection record
         (not used in this implementation).
     """
-    print(f'connection: {connect}')
+    if connect.in_use:
+        print('how?')
     cursor = db_connection.cursor()
     cursor.execute(Pragma.journal_mode())
     cursor.execute(Pragma.synchronous())
