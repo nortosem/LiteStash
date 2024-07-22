@@ -1,5 +1,5 @@
 annotated-types==0.7.0
-astroid==3.2.3
+astroid==3.2.4
 coverage==7.6.0
 dill==0.3.8
 greenlet==3.0.3
@@ -12,11 +12,9 @@ platformdirs==4.2.2
 pluggy==1.5.0
 pydantic==2.8.2
 pydantic_core==2.20.1
-pylint==3.2.5
-pytest==8.2.2
+pylint==3.2.6
+pytest==8.3.1
 pytest-mock==3.14.0
-python-dotenv==1.0.1
 SQLAlchemy==2.0.31
-sqlmodel==0.0.19
 tomlkit==0.13.0
 typing_extensions==4.12.2
