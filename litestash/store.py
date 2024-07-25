@@ -18,6 +18,7 @@ from litestash.core.schema import Metadata
 from litestash.core.session import Session
 from litestash.models import LiteStashData
 from litestash.core.config.litestash_conf import StashError
+from litestash.core.util import fts
 from litestash.core.util.litestash_util import get_keys
 from litestash.core.util.litestash_util import get_values
 from litestash.core.util.litestash_util import get_datastore
@@ -34,7 +35,7 @@ class LiteStash:
                  StashSlots.DB_SESSION.value
     )
 
-    def __init__(self):
+    def __init__(self, search: bool = True):
         """Initiate a new LiteStash
 
         Creates a empty cache by default.
@@ -42,6 +43,12 @@ class LiteStash:
         self.engine = Engine()
         self.metadata = Metadata(self.engine)
         self.db_session = Session(self.engine)
+        if search:
+            fts.create_all_search_tables(
+                self.engine,
+                self.metadata,
+                self.db_session
+            )
 
     @overload
     def set(self, key: str, value: str = None) -> None:
@@ -108,12 +115,12 @@ class LiteStash:
 
 
     @overload
-    def get(self, data: LiteStashData) -> None:
+    def get(self, data: LiteStashData) -> LiteStashData | None:
         """Overload get using LiteStashData type"""
 
 
     @overload
-    def get(self, data: str) -> None:
+    def get(self, data: str) -> LiteStashData | None:
         """Overload get using string type"""
 
 
