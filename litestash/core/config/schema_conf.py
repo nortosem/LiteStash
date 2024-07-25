@@ -56,6 +56,7 @@ class ColumnSetup(Valid):
     VALUE = 'value'
     TIMESTAMP = 'timestamp'
     MICROSECOND = 'microsecond'
+    TABLE_NAME = 'table_name'
 
 
 class ColumnConfig(Valid):
