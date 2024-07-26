@@ -4,16 +4,13 @@ The Full-Text Search module defines the columns used by the FTS virtual table.
 The Schema class and the setup_metadata utility function use the fts_model to
 return valid data used in search results.
 """
-import orjson
 from typing import Union
 from typing import Literal
 from sqlalchemy import JSON
 from sqlalchemy import String
 from sqlalchemy import Integer
-from pydantic import Json
 from pydantic import Field
 from pydantic import StrictStr
-from pydantic import StrictInt
 from pydantic import field_validator
 from pydantic.dataclasses import dataclass
 from litestash.core.util.model_util import StrType
@@ -22,9 +19,9 @@ from litestash.core.util.model_util import JsonType
 from litestash.core.util.model_util import ColumnType
 from litestash.core.config.schema_conf import ColumnConfig
 
-   # key_hash: StrictStr
-   # table_name: StrictStr
-   # value: Json
+# key_hash: StrictStr
+# table_name: StrictStr
+# value: Json
 
 
 @dataclass(slots=True)
@@ -55,10 +52,10 @@ class ValueSearchColumn:
             case _:
                 raise ValueError(ColumnConfig.ERROR.value)
 
-    # key_hash: StrictStr
-    # table_name: StrictStr
-    # timestamp: StrictInt
-    # microsecond: StrictInt
+# key_hash: StrictStr
+# table_name: StrictStr
+# timestamp: StrictInt
+# microsecond: StrictInt
 
 
 @dataclass(slots=True)
