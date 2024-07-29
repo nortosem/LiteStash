@@ -194,21 +194,6 @@ SessionAttributes = namedtuple(
 SessionAttributes.__doc__ = SessionAttr.DOC.value
 
 
-def digest_key(key: str) -> bytes:
-    """Generates a bytes digest of the given key.
-
-    Args:
-        key (str): The key string to hash.
-
-    Returns:
-        bytes: The digest of the key in bytes.
-    """
-    return blake2b(
-        key.encode(),
-        digest_size=Utils.SIZE.value
-    ).digest()
-
-
 def allot(size: int = 6) -> str:
     """Generates a unique random string for key distribution.
 
@@ -222,6 +207,20 @@ def allot(size: int = 6) -> str:
         raise ValueError()
     lot = SystemRandom().randbytes(size)
     return base64.urlsafe_b64encode(lot).decode()
+
+
+def digest_key(key: str) -> bytes:
+    """Generates a bytes digest of the given key.
+
+    Args:
+        key (str): The key string to hash.
+        time (GetTime): The GetTime namedtuple record of key creation.
+
+    Returns:
+        bytes: The digest of the key in bytes.
+    """
+    digest = blake2b(key.encode(), digest_size=Utils.SIZE.value).digest()
+    return digest
 
 
 def mk_hash(digest: bytes) -> str:
