@@ -8,6 +8,7 @@ def test_viewsetup_values():
 
 def test_viewsetup_create():
     assert ViewSetup.create() == 'CREATE VIEW IF NOT EXISTS'
+    assert ViewSetup.all_values() == 'all_values'
 
 
 def test_searchsetup_values():
