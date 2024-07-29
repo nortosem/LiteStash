@@ -218,6 +218,11 @@ class LiteStash:
         pass
 
 
+    def search(text: str = None):
+        """Search all of the JSON stored for a key and return the value"""
+        pass
+
+
     def keys(self) -> list[str]:
         """Returns a list of all keys in the database."""
         keys = []
