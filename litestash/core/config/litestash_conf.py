@@ -29,7 +29,7 @@ class DataScheme(Valid):
     """
     TITLE = 'Data'
     DESCRIPTION = 'The key name and JSON data for the given key.'
-    MIN_LENGTH = 4
+    MIN_LENGTH = 3
     MAX_LENGTH = 999
     FORBID_EXTRA = 'forbid'
 
@@ -52,7 +52,7 @@ class Utils(Valid):
 
 class EngineAttr(Valid):
     """The namedtuple config for all engine attributes of a LiteStash"""
-    TYPE_NAME = 'EngineAttr'
+    TYPE_NAME = 'EngineAttributes'
     DB_NAME = 'db_name'
     ENGINE = 'engine'
     DOC = '''Defines a named tuple for tuple returned by utils.setup_engine.
@@ -65,7 +65,7 @@ class EngineAttr(Valid):
 
 class MetaAttr(Valid):
     """The namedtuple config for all metadata attributes of a LiteStash"""
-    TYPE_NAME = 'MetaAttr'
+    TYPE_NAME = 'MetaAttributes'
     DB_NAME = f'{EngineAttr.DB_NAME.value}'
     METADATA = 'metadata'
     DOC = '''todo'''
@@ -73,7 +73,7 @@ class MetaAttr(Valid):
 
 class SessionAttr(Valid):
     """The namedtuple config for all session attribues of a LiteStash """
-    TYPE_NAME = 'SessionAttr'
+    TYPE_NAME = 'SessionAttributes'
     DB_NAME = f'{EngineAttr.DB_NAME.value}'
     SESSION = 'session'
     VALUE_ERROR = 'Invalid database: no tables found'
