@@ -21,28 +21,26 @@ class Pragma(Valid):
     The default pragma configuration.
     """
     CONNECT = 'connect'
-    PRAGMA = 'PRAGMA'
     JOURNAL_MODE = 'journal_mode=WAL;'
     SYNCHRONOUS = 'synchronous=NORMAL;'
     FOREIGN_KEYS = 'foreign_keys=ON;'
     JSON = 'json_valid = 1;'
-    BEGIN = 'BEGIN'
 
     @staticmethod
     def journal_mode() -> str:
-        return f'{Pragma.PRAGMA.value} {Pragma.JOURNAL_MODE.value}'
+        return f'{Sql.PRAGMA.value} {Pragma.JOURNAL_MODE.value}'
 
     @staticmethod
     def synchronous() -> str:
-        return f'{Pragma.PRAGMA.value} {Pragma.SYNCHRONOUS.value}'
+        return f'{Sql.PRAGMA.value} {Pragma.SYNCHRONOUS.value}'
 
     @staticmethod
     def foreign_keys() -> str:
-        return f'{Pragma.PRAGMA.value} {Pragma.FOREIGN_KEYS.value}'
+        return f'{Sql.PRAGMA.value} {Pragma.FOREIGN_KEYS.value}'
 
     @staticmethod
     def valid_json() -> str:
-        return f'{Pragma.PRAGMA.value} {Pragma.JSON.value}'
+        return f'{Sql.PRAGMA.value} {Pragma.JSON.value}'
 
 
 class Sql(Valid):
@@ -60,6 +58,7 @@ class Sql(Valid):
         OLD:
         END:
     """
+    PRAGMA = 'PRAGMA'
     BEGIN = 'BEGIN'
     INSERT = 'INSERT INTO'
     DELETE = 'DELETE FROM'
@@ -88,7 +87,7 @@ class Sql(Valid):
 
     @staticmethod
     def values():
-        return f'{Sql.VALUES}'
+        return f'{Sql.VALUES.value}'
 
     @staticmethod
     def new():
@@ -103,41 +102,18 @@ class Sql(Valid):
         return f'{Sql.END.value}'
 
 
-class ColumnSetup(Valid):
+class ColumnFields(Valid):
     """The Column Setup
 
     Define the column attributes for each table
     """
+    TABLE_NAME = 'table_name'
     HASH = 'key_hash'
     KEY = 'key'
     VALUE = 'value'
     TIMESTAMP = 'timestamp'
     MICROSECOND = 'microsecond'
-    TABLE_NAME = 'table_name'
 
-    @staticmethod
-    def hash():
-        return f'{ColumnSetup.HASH.value}'
-
-    @staticmethod
-    def key():
-        return f'{ColumnSetup.KEY.value}'
-
-    @staticmethod
-    def value():
-        return f'{ColumnSetup.VALUE.value}'
-
-    @staticmethod
-    def timestamp():
-        return f'{ColumnSetup.TIMESTAMP.value}'
-
-    @staticmethod
-    def microsecond():
-        return f'{ColumnSetup.MICROSECOND.value}'
-
-    @staticmethod
-    def table_name():
-        return f'{ColumnSetup.TABLE_NAME.value}'
 
 class ColumnConfig(Valid):
     """The namedtuple Column config
