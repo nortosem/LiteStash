@@ -3,33 +3,25 @@
 The Full-Text Search module provides the fts search capability for each
 database. Each value and time column is usable for fts in a functional way.
 def search_all_tables(search_term):
-    with sqlite3.connect('your_database.db') as conn:
-        cursor = conn.cursor()
-        cursor.execute(
-
-            SELECT rowid, table_name
-            FROM all_values_fts
-            WHERE all_values_fts MATCH ?
-           ,
-            (search_term,)
-        )
-
-        results = cursor.fetchall()
-        return results
 """
+import orjson
 from typing import Generator
+from typing import List
 from sqlalchemy import Column
 from sqlalchemy import DDL
 from sqlalchemy import event
+from sqlalchemy import func
 from sqlalchemy import select
 from sqlalchemy import text
 from sqlalchemy import union_all
+from sqlalchemy.orm import Session
+from litestash.models import LiteStashData
 from litestash.core.config.root import Tables as DB_Names
 from litestash.core.fts_model import ValueSearchColumn
 from litestash.core.config.schema_conf import Sql
-from litestash.core.config.schema_conf import ViewSetup as View
-from litestash.core.config.schema_conf import SearchSetup as Search
-from litestash.core.config.schema_conf import Trigger
+from litestash.core.config.fts_conf import ViewSetup as View
+from litestash.core.config.fts_conf import SearchSetup as Search
+from litestash.core.config.fts_conf import Trigger
 from litestash.core.config.schema_conf import ColumnSetup as C
 from litestash.core.config.schema_conf import ColumnConfig as Conf
 from litestash.core.util.litestash_util import EngineAttributes
@@ -37,14 +29,40 @@ from litestash.core.util.litestash_util import MetaAttributes
 from litestash.core.util.litestash_util import SessionAttributes
 from litestash.core.util.schema_util import mk_table_names
 
-#def search(text: str = None):
-#    """Search all values in LitesStash for some text string"""
-#    pass
+def db_key_search(
+        session: Session,
+        search_term: str
+) -> List[LiteStashData]:
+    """Full-text search for a database
 
+    The data being search is json.  The key is a key for some data in the json
+    Other values will likely fail
 
-#def db_search(db_name: str, text: str):
-#    """Full-text search of the values stored in the given database"""
-#    pass
+    Args:
+        session (Session): the session reference for a database
+        search_term (str): the search string for a key within the json stash.
+    """
+    search_statement = select(
+        func.key_hash.label(f'{C.HASH.value}'),
+        text(
+            f"json_extract({C.VALUE.value}, '$.{search_term}')"
+        ).label(f'{C.VALUE.value}')
+    ).where(
+        text(f'{Search.table_name()} {Search.match()} :search_term')
+    ).params(search_term=search_term)
+
+    with session() as search_session:
+        json_results = search_session.execute(search_statement).fetchall()
+
+        if json_results is []:
+            return []
+
+        matches = []
+        for row in json_results:
+            match = LiteStashData(key=row.key, value=orjson.loads(row.value))
+            matches.append(match)
+        search_session.commit()
+        return matches
 
 
 def create_all_search_tables(
