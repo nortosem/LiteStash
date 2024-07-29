@@ -44,7 +44,7 @@ from litestash.core.config.litestash_conf import TimeAttr
 from litestash.core.config.litestash_conf import EngineConf
 from litestash.core.config.litestash_conf import Utils
 from litestash.core.config.schema_conf import Pragma
-from litestash.core.config.schema_conf import ColumnSetup as C
+from litestash.core.config.schema_conf import ColumnFields as C
 from litestash.core.util.schema_util import mk_tables
 
 def set_pragma(db_connection, connect):

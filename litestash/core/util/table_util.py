@@ -10,7 +10,7 @@ objects used in the LiteStash key-value store. It includes functions for:
 from sqlalchemy import Column
 from typing import Generator
 from litestash.models import StashColumn
-from litestash.core.config.schema_conf import ColumnSetup as Col
+from litestash.core.config.schema_conf import ColumnFields as Col
 from litestash.core.config.schema_conf import ColumnConfig as Conf
 from litestash.core.config.tables.tables_03 import Tables03
 from litestash.core.config.tables.tables_47 import Tables47
