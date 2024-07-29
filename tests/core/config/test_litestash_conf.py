@@ -7,7 +7,7 @@ from litestash.core.config.litestash_conf import (
 def test_data_scheme_values():
     assert DataScheme.TITLE.value == 'Data'
     assert DataScheme.DESCRIPTION.value == 'The key name and JSON data for the given key.'
-    assert DataScheme.MIN_LENGTH.value == 4
+    assert DataScheme.MIN_LENGTH.value == 3
     assert DataScheme.MAX_LENGTH.value == 999
     assert DataScheme.FORBID_EXTRA.value == 'forbid'
 
@@ -21,17 +21,17 @@ def test_utils_values():
     assert Utils.DB_NAME_ERROR.value == 'Invalid character'
 
 def test_engine_attr_values():
-    assert EngineAttr.TYPE_NAME.value == 'EngineAttr'
+    assert EngineAttr.TYPE_NAME.value == 'EngineAttributes'
     assert EngineAttr.DB_NAME.value == 'db_name'
     assert EngineAttr.ENGINE.value == 'engine'
 
 def test_meta_attr_values():
-    assert MetaAttr.TYPE_NAME.value == 'MetaAttr'
+    assert MetaAttr.TYPE_NAME.value == 'MetaAttributes'
     assert MetaAttr.DB_NAME.value == 'db_name'
     assert MetaAttr.METADATA.value == 'metadata'
 
 def test_session_attr_values():
-    assert SessionAttr.TYPE_NAME.value == 'SessionAttr'
+    assert SessionAttr.TYPE_NAME.value == 'SessionAttributes'
     assert SessionAttr.DB_NAME.value == 'db_name'
     assert SessionAttr.SESSION.value == 'session'
     assert SessionAttr.VALUE_ERROR.value == 'Invalid database: no tables found'
