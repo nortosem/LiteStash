@@ -60,12 +60,12 @@
             <button type="button" class="exc show_exc button_toggle_exc" value="exc" data-shortcut="x" title="Toggle lines excluded">0<span class="text"> excluded</span></button>
         </h2>
         <p class="text">
-            <a id="prevFileLink" class="nav" href="z_9826966a7511a4b7_test_tables_yz_py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a id="prevFileLink" class="nav" href="z_8ab37d8ccd2c6ddb_test_fts_conf_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="z_8ab37d8ccd2c6ddb_test_model_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.0">coverage.py v7.6.0</a>,
-            created at 2024-07-21 17:37 -0500
+            created at 2024-07-29 12:48 -0500
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"></button>
@@ -89,7 +89,7 @@
     <p class="run"><span class="n"><a id="t7" href="#t7">7</a></span><span class="t"><span class="key">def</span> <span class="nam">test_data_scheme_values</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t8" href="#t8">8</a></span><span class="t">    <span class="key">assert</span> <span class="nam">DataScheme</span><span class="op">.</span><span class="nam">TITLE</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'Data'</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t9" href="#t9">9</a></span><span class="t">    <span class="key">assert</span> <span class="nam">DataScheme</span><span class="op">.</span><span class="nam">DESCRIPTION</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'The key name and JSON data for the given key.'</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t">    <span class="key">assert</span> <span class="nam">DataScheme</span><span class="op">.</span><span class="nam">MIN_LENGTH</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="num">4</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t10" href="#t10">10</a></span><span class="t">    <span class="key">assert</span> <span class="nam">DataScheme</span><span class="op">.</span><span class="nam">MIN_LENGTH</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="num">3</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t11" href="#t11">11</a></span><span class="t">    <span class="key">assert</span> <span class="nam">DataScheme</span><span class="op">.</span><span class="nam">MAX_LENGTH</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="num">999</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t12" href="#t12">12</a></span><span class="t">    <span class="key">assert</span> <span class="nam">DataScheme</span><span class="op">.</span><span class="nam">FORBID_EXTRA</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'forbid'</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t13" href="#t13">13</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -103,17 +103,17 @@
     <p class="run"><span class="n"><a id="t21" href="#t21">21</a></span><span class="t">    <span class="key">assert</span> <span class="nam">Utils</span><span class="op">.</span><span class="nam">DB_NAME_ERROR</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'Invalid character'</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t22" href="#t22">22</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t23" href="#t23">23</a></span><span class="t"><span class="key">def</span> <span class="nam">test_engine_attr_values</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t24" href="#t24">24</a></span><span class="t">    <span class="key">assert</span> <span class="nam">EngineAttr</span><span class="op">.</span><span class="nam">TYPE_NAME</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'EngineAttr'</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t24" href="#t24">24</a></span><span class="t">    <span class="key">assert</span> <span class="nam">EngineAttr</span><span class="op">.</span><span class="nam">TYPE_NAME</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'EngineAttributes'</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t25" href="#t25">25</a></span><span class="t">    <span class="key">assert</span> <span class="nam">EngineAttr</span><span class="op">.</span><span class="nam">DB_NAME</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'db_name'</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t26" href="#t26">26</a></span><span class="t">    <span class="key">assert</span> <span class="nam">EngineAttr</span><span class="op">.</span><span class="nam">ENGINE</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'engine'</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t27" href="#t27">27</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t28" href="#t28">28</a></span><span class="t"><span class="key">def</span> <span class="nam">test_meta_attr_values</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t29" href="#t29">29</a></span><span class="t">    <span class="key">assert</span> <span class="nam">MetaAttr</span><span class="op">.</span><span class="nam">TYPE_NAME</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'MetaAttr'</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t29" href="#t29">29</a></span><span class="t">    <span class="key">assert</span> <span class="nam">MetaAttr</span><span class="op">.</span><span class="nam">TYPE_NAME</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'MetaAttributes'</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t30" href="#t30">30</a></span><span class="t">    <span class="key">assert</span> <span class="nam">MetaAttr</span><span class="op">.</span><span class="nam">DB_NAME</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'db_name'</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t31" href="#t31">31</a></span><span class="t">    <span class="key">assert</span> <span class="nam">MetaAttr</span><span class="op">.</span><span class="nam">METADATA</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'metadata'</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t32" href="#t32">32</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t33" href="#t33">33</a></span><span class="t"><span class="key">def</span> <span class="nam">test_session_attr_values</span><span class="op">(</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">    <span class="key">assert</span> <span class="nam">SessionAttr</span><span class="op">.</span><span class="nam">TYPE_NAME</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'SessionAttr'</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t34" href="#t34">34</a></span><span class="t">    <span class="key">assert</span> <span class="nam">SessionAttr</span><span class="op">.</span><span class="nam">TYPE_NAME</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'SessionAttributes'</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t35" href="#t35">35</a></span><span class="t">    <span class="key">assert</span> <span class="nam">SessionAttr</span><span class="op">.</span><span class="nam">DB_NAME</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'db_name'</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t36" href="#t36">36</a></span><span class="t">    <span class="key">assert</span> <span class="nam">SessionAttr</span><span class="op">.</span><span class="nam">SESSION</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'session'</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t37" href="#t37">37</a></span><span class="t">    <span class="key">assert</span> <span class="nam">SessionAttr</span><span class="op">.</span><span class="nam">VALUE_ERROR</span><span class="op">.</span><span class="nam">value</span> <span class="op">==</span> <span class="str">'Invalid database: no tables found'</span>&nbsp;</span><span class="r"></span></p>
@@ -141,12 +141,12 @@
 <footer>
     <div class="content">
         <p>
-            <a class="nav" href="z_9826966a7511a4b7_test_tables_yz_py.html">&#xab; prev</a> &nbsp; &nbsp;
+            <a class="nav" href="z_8ab37d8ccd2c6ddb_test_fts_conf_py.html">&#xab; prev</a> &nbsp; &nbsp;
             <a class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a class="nav" href="z_8ab37d8ccd2c6ddb_test_model_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
             <a class="nav" href="https://coverage.readthedocs.io/en/7.6.0">coverage.py v7.6.0</a>,
-            created at 2024-07-21 17:37 -0500
+            created at 2024-07-29 12:48 -0500
         </p>
     </div>
 </footer>
