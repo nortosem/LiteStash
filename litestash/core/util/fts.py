@@ -22,7 +22,7 @@ from litestash.core.config.schema_conf import Sql
 from litestash.core.config.fts_conf import ViewSetup as View
 from litestash.core.config.fts_conf import SearchSetup as Search
 from litestash.core.config.fts_conf import Trigger
-from litestash.core.config.schema_conf import ColumnSetup as C
+from litestash.core.config.schema_conf import ColumnFields as C
 from litestash.core.config.schema_conf import ColumnConfig as Conf
 from litestash.core.util.litestash_util import EngineAttributes
 from litestash.core.util.litestash_util import MetaAttributes
@@ -36,7 +36,7 @@ def db_key_search(
     """Full-text search for a database
 
     The data being search is json.  The key is a key for some data in the json
-    Other values will likely fail
+    Other values will likely fail.
 
     Args:
         session (Session): the session reference for a database
@@ -131,13 +131,13 @@ def create_search_table(
             {Trigger.create()} {table_name}{Trigger.name_insert()}
             {Trigger.after_insert()} {table_name}
             {Sql.begin()}
-                {Sql.insert()} {Search.table_name()}(
-                    {C.hash()}, {C.table_name()}, {C.value()}
+                {Sql.insert()} fts_all_values(
+                    {C.HASH.value}, {C.TABLE_NAME.value}, {C.VALUE.value}
                 )
-                {Sql.values()} (
-                    {Sql.new()}.{C.hash()},
+                Sql.VALUES.value(
+                    {Sql.new()}.{C.HASH.value},
                     '{table_name}',
-                    {Sql.new()}.{C.value()}
+                    {Sql.new()}.{C.VALUE.value}
                 );
             {Sql.end()}
             """
@@ -152,15 +152,15 @@ def create_search_table(
             {Sql.begin()}
                 {Sql.delete()} {Search.table_name()}
                 {Sql.where()}
-                    {C.hash()} = {Sql.old()}.{C.hash()} {Sql.AND.value}
+                    {C.HASH.value} = {Sql.old()}.{C.HASH.value} {Sql.AND.value}
                     table_name = '{table_name}';
-                {Sql.insert()} {Search.table_name()}(
-                    {C.hash()}, {C.table_name()}, {C.value()}
+                {Sql.insert()} fts_all_values(
+                    {C.HASH.value}, {C.TABLE_NAME.value}, {C.VALUE.value}
                 )
                 {Sql.values()} (
-                    {Sql.new()}.{C.hash()},
+                    {Sql.new()}.{C.HASH.value},
                     '{table_name}',
-                    {Sql.new()}{C.value()}
+                    {Sql.new()}{C.VALUE.value}
                 );
             {Sql.end()}
             """
@@ -175,7 +175,7 @@ def create_search_table(
             {Trigger.after_delete()} {table_name}
             {Sql.begin()}
                 {Sql.delete()} {Search.table_name()} {Sql.where()}
-                    {C.hash()} = {Sql.old()}.{C.hash()} {Sql.AND.value}
+                    {C.HASH.value} = {Sql.old()}.{C.HASH.value} {Sql.AND.value}
                     {C.table_name()} = '{table_name}';
             {Sql.end()}
             """
