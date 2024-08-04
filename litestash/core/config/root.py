@@ -17,6 +17,16 @@ class Valid(Enum):
     """Valid Root"""
     pass
 
+class Log(Valid):
+    """Logging Configuration
+
+    The loggers configuration file names
+    """
+    DEV_FILE = 'logging_dev.conf'
+    PROD_FILE = 'logging_prod.conf'
+    DEV = 'DEV'
+    PROD = 'PROD'
+
 
 class Main(Valid):
     """The main __all__"""
