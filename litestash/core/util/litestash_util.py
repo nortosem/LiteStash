@@ -35,8 +35,11 @@ from datetime import datetime
 from hashlib import blake2b
 from secrets import base64
 from secrets import SystemRandom
+from litestash.logging import ENV
+from litestash.logging import root_logger as logger
 from litestash.models import LiteStashData
 from litestash.models import LiteStashStore
+from litestash.core.config.root import Log
 from litestash.core.config.litestash_conf import EngineAttr
 from litestash.core.config.litestash_conf import MetaAttr
 from litestash.core.config.litestash_conf import SessionAttr
@@ -44,6 +47,7 @@ from litestash.core.config.litestash_conf import TimeAttr
 from litestash.core.config.litestash_conf import EngineConf
 from litestash.core.config.litestash_conf import Utils
 from litestash.core.config.schema_conf import Pragma
+from litestash.core.config.schema_conf import Sql
 from litestash.core.config.schema_conf import ColumnFields as C
 from litestash.core.util.schema_util import mk_tables
 
@@ -54,20 +58,26 @@ def set_pragma(db_connection, connect):
     synchronous mode, foreign key enforcement, and JSON handling.
 
     Args:
-        dbapi_connection: The raw DBAPI connection object
+        db_connection: The raw DBAPI connection object
         (e.g., sqlite3.Connection).
 
-        connection_record:  The SQLAlchemy connection record
-        (not used in this implementation).
+        connect:  The SQLAlchemy internal connection record object
     """
-    if connect.in_use:
-        print('how?')
+    logger.debug(f'Set PRAGMA on {db_connection}')
     cursor = db_connection.cursor()
     cursor.execute(Pragma.journal_mode())
+    logger.debug(f'executed journal_mode {connect.last_connect_time}')
     cursor.execute(Pragma.synchronous())
+    logger.debug(f'executed synchronous {connect.last_connect_time}')
     cursor.execute(Pragma.valid_json())
+    logger.debug(f'executed valid_json {connect.last_connect_time}')
     cursor.close()
+    logger.debug(f'all pragmas executed, close cursor {cursor}')
     db_connection.isolation_level = None
+    logger.debug(
+        f'db_connection isolation set to {db_connection.isolation_level}'
+    )
+    logger.debug(f'last_connect: {connect.last_connect_time}')
 
 
 def set_begin(db_connection):
@@ -80,7 +90,7 @@ def set_begin(db_connection):
     Args:
         dbapi_connection: The raw DBAPI connection object.
     """
-    db_connection.exec_driver_sql(Pragma.BEGIN.value)
+    db_connection.exec_driver_sql(Sql.BEGIN.value)
 
 
 def setup_engine(db_name: str) -> Engine:
@@ -93,6 +103,12 @@ def setup_engine(db_name: str) -> Engine:
         EngineAttributes: A namedtuple containing the database name and the
         engine.
     """
+    echo = None
+    if ENV == Log.DEV.value:
+        echo=EngineConf.echo()
+    elif ENV == Log.PROD.value:
+        echo=EngineConf.no_echo()
+
     data_path = Path(
         f'{EngineConf.dirname()}/{db_name}'
     )
@@ -100,7 +116,7 @@ def setup_engine(db_name: str) -> Engine:
 
     engine = create_engine(
         f'{EngineConf.sqlite()}{data_path}/{db_name}.db',
-        echo=EngineConf.no_echo(),
+        echo=echo,
         echo_pool=EngineConf.no_echo(),
         pool_size=EngineConf.pool_size(),
         max_overflow=EngineConf.max_overflow(),
@@ -113,7 +129,7 @@ def setup_engine(db_name: str) -> Engine:
     )
     event.listen(
         engine,
-        Pragma.BEGIN.value.lower(),
+        Sql.BEGIN.value.lower(),
         set_begin
     )
     quality_engine = EngineAttributes(db_name, engine)
