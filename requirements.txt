@@ -17,5 +17,5 @@ pytest==8.3.2
 pytest-mock==3.14.0
 python-dotenv==1.0.1
 SQLAlchemy==2.0.32
-tomlkit==0.13.0
+tomlkit==0.13.2
 typing_extensions==4.12.2
