@@ -80,3 +80,8 @@ class Tables(Valid):
     TABLES_UV = 'tables_uv'
     TABLES_WX = 'tables_wx'
     TABLES_YZ = 'tables_yz'
+
+
+class ErrorMessage(Valid):
+    """Error messages for core package modules"""
+    GET_ENGINE = 'Unknown table name:'
