@@ -127,6 +127,9 @@ def get_db_name(char: str) -> str:
     Raises:
         ValueError: If the character doesn't match any valid table prefix.
     """
+    if len(char) != 1:
+        raise ValueError(Utils.INVALID_CHAR_LENGTH.value)
+
     match char:
         case char if char in prefix_util.tables_03():
             return Tables.TABLES_03.value
@@ -193,6 +196,9 @@ def get_table_name(char: str) -> str:
     Raises:
         ValueError: If the character doesn't match any valid table prefix.
     """
+    if len(char) != 1:
+        raise ValueError(Utils.INVALID_CHAR_LENGTH.value)
+
     match char:
         case char if char in Tables03:
             return Tables03.get_table_name(char)
