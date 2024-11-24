@@ -62,3 +62,19 @@ packages = [
 
 #[project.scripts]
 #litestash = "litestash.main:app"  # TODO
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+
+# Additional directories to add to sys.path when collecting tests
+pythonpath = [
+    "litestash",
+    "tests"
+]
+
+# Configure logging for tests
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s %(levelname)s %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
