@@ -8,6 +8,7 @@ Classes:
     LiteStashStore: Represents the structure of data stored in the database.
     StashColumn: Defines a column for a LiteStash database table.
 """
+import re
 import orjson
 from typing import Union
 from typing import Literal
@@ -25,6 +26,7 @@ from litestash.core.util.model_util import IntType
 from litestash.core.util.model_util import JsonType
 from litestash.core.util.model_util import ColumnType
 from litestash.core.config.model import StashConf
+from litestash.core.config.model import StashField
 from litestash.core.config.schema_conf import ColumnConfig
 from litestash.core.config.litestash_conf import DataScheme
 
@@ -60,20 +62,21 @@ class LiteStashData:
             key (str): the name for the json being stashed
         """
         if not key.isascii():
-            raise ValueError('ascii')
+            raise ValueError(StashField.VALID_KEY_ASCII.value)
+
+        empty_space = re.compile(StashField.SPACE_PATTERN.value)
+        if empty_space.match(key):
+            raise ValueError(StashField.VALID_KEY_TEXT.value)
+
         return key
 
 
     @field_validator(ColumnConfig.DATA_VALUE.value)
     def valid_value(cls, value):
         """Validate & serialize the value to JSON"""
-        if not isinstance(value, (dict,list,str,type(None))):
-            raise TypeError('no')
-
-        if isinstance(value, (dict,list)):
+        if isinstance(value, (dict,list,str,type(None))):
             value = orjson.dumps(value).decode()
-
-        return value
+            return value
 
 
 @dataclass(slots=True)
@@ -90,6 +93,12 @@ class LiteStashStore:
         date_time (int): POSIX timestamp.
         ms_time (int): Microseconds.
     """
+    model_config = {
+        StashConf.ORM_MODE.value: True,
+        StashConf.JSON_LOADS.value: orjson.loads,
+        StashConf.JSON_DUMPS.value: orjson.dumps
+    }
+
     key_hash: StrictStr = Field(...)
     key: StrictStr = Field(...)
     value: Json | None = Field(default=None)
