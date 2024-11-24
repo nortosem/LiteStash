@@ -9,6 +9,7 @@ objects used in the LiteStash key-value store. It includes functions for:
 """
 from sqlalchemy import Column
 from typing import Generator
+from typing import Callable
 from litestash.models import StashColumn
 from litestash.core.config.schema_conf import ColumnFields as Col
 from litestash.core.config.schema_conf import ColumnConfig as Conf
@@ -29,111 +30,64 @@ from litestash.core.config.tables.tables_uv import TablesUV
 from litestash.core.config.tables.tables_wx import TablesWX
 from litestash.core.config.tables.tables_yz import TablesYZ
 
-def get_tables_03() -> Generator[str, None, None]:
-    """Generates table names for the '0-3' hash prefix database."""
-    for char in Tables03:
-        table_name = Tables03.get_table_name(char.value)
-        yield table_name
+def mk_table_generator(
+    table_class: type) -> Callable[[], Generator[str, None, None]]:
+        """Tablename generator factory"""
+        def generator():
+            for char in table_class:
+                table_name = table_class.get_table_name(char.value)
+                yield table_name
+        return generator
 
 
-def get_tables_47() -> Generator[str, None, None]:
-    """Generates table names for the '4-7' hash prefix database."""
-    for char in Tables47:
-        table_name = Tables47.get_table_name(char.value)
-        yield table_name
+get_tables_03 = mk_table_generator(Tables03)
+"""Generates table names for the '0-3' hash prefix database."""
 
+get_tables_47 = mk_table_generator(Tables47)
+"""Generates table names for the '4-7' hash prefix database."""
 
-def get_tables_89hu() -> Generator[str, None, None]:
-    """Generates table names for the '8,9,-,_' hash prefix database"""
-    for char in Tables89hu:
-        table_name = Tables89hu.get_table_name(char.value)
-        yield table_name
+get_tables_89hu = mk_table_generator(Tables89hu)
+"""Generates table names for the '8,9,-,_' hash prefix database"""
 
+get_tables_ab = mk_table_generator(TablesAB)
+"""Generates table names for the 'a,b,A,B' hash prefix database"""
 
-def get_tables_ab() -> Generator[str, None, None]:
-    """Generates table names for the 'a,b,A,B' hash prefix database"""
-    for char in TablesAB:
-        table_name = TablesAB.get_table_name(char.value)
-        yield table_name
+get_tables_cd = mk_table_generator(TablesCD)
+"""Generates table names for the c,d,C,D hash prefix database"""
 
+get_tables_ef = mk_table_generator(TablesEF)
+"""Generates table names for the e,f,E,F hash prefix database"""
 
-def get_tables_cd() -> Generator[str, None, None]:
-    """Generates table names for the c,d,C,D hash prefix database"""
-    for char in TablesCD:
-        table_name = TablesCD.get_table_name(char.value)
-        yield table_name
+get_tables_gh = mk_table_generator(TablesGH)
+"""Generates table names for the g,h,G,H hash prefix database"""
 
+get_tables_ij = mk_table_generator(TablesIJ)
+"""Generates table names for the i,j,I,J hash prefix database"""
 
-def get_tables_ef() -> Generator[str, None, None]:
-    """Generates table names for the e,f,E,F hash prefix database"""
-    for char in TablesEF:
-        table_name = TablesEF.get_table_name(char.value)
-        yield table_name
+get_tables_kl = mk_table_generator(TablesKL)
+"""Generates table names for the k,l,K,L  hash prefix database"""
 
+get_tables_mn = mk_table_generator(TablesMN)
+"""Generates table names for the m,n,M,N hash prefix database"""
 
-def get_tables_gh() -> Generator[str, None, None]:
-    """Generates table names for the g,h,G,H hash prefix database"""
-    for char in TablesGH:
-        table_name = TablesGH.get_table_name(char.value)
-        yield table_name
+get_tables_op = mk_table_generator(TablesOP)
+"""Generates table names for the o,p,O,P hash prefix database"""
 
+get_tables_qr = mk_table_generator(TablesQR)
+"""Generates table names for the q,r,Q,R hash prefix database"""
 
-def get_tables_ij() -> Generator[str, None, None]:
-    """Generates table names for the i,j,I,J hash prefix database"""
-    for char in TablesIJ:
-        table_name = TablesIJ.get_table_name(char.value)
-        yield table_name
+get_tables_st = mk_table_generator(TablesST)
+"""Generates table names for the s,t,S,T hash prefix database"""
 
-def get_tables_kl() -> Generator[str, None, None]:
-    """Generates table names for the k,l,K,L  hash prefix database"""
-    for char in TablesKL:
-        table_name = TablesKL.get_table_name(char.value)
-        yield table_name
+get_tables_uv = mk_table_generator(TablesUV)
+"""Generates table names for the u,v,U,V hash prefix database"""
 
-def get_tables_mn() -> Generator[str, None, None]:
-    """Generates table names for the m,n,M,N hash prefix database"""
-    for char in TablesMN:
-        table_name = TablesMN.get_table_name(char.value)
-        yield table_name
+get_tables_wx = mk_table_generator(TablesWX)
+"""Generates table names for the w,x,W,X hash prefix database"""
 
+get_tables_yz = mk_table_generator(TablesYZ)
+"""Generates table names for the y,z,Y,Z hash prefix database"""
 
-def get_tables_op() -> Generator[str, None, None]:
-    """Generates table names for the o,p,O,P hash prefix database"""
-    for char in TablesOP:
-        table_name = TablesOP.get_table_name(char.value)
-        yield table_name
-
-
-def get_tables_qr() -> Generator[str, None, None]:
-    """Generates table names for the q,r,Q,R hash prefix database"""
-    for char in TablesQR:
-        table_name = TablesQR.get_table_name(char.value)
-        yield table_name
-
-
-def get_tables_st() -> Generator[str, None, None]:
-    """Generates table names for the s,t,S,T hash prefix database"""
-    for char in TablesST:
-        table_name = TablesST.get_table_name(char.value)
-        yield table_name
-
-def get_tables_uv() -> Generator[str, None, None]:
-    """Generates table names for the u,v,U,V hash prefix database"""
-    for char in TablesUV:
-        table_name = TablesUV.get_table_name(char.value)
-        yield table_name
-
-def get_tables_wx() -> Generator[str, None, None]:
-    """Generates table names for the w,x,W,X hash prefix database"""
-    for char in TablesWX:
-        table_name = TablesWX.get_table_name(char.value)
-        yield table_name
-
-def get_tables_yz() -> Generator[str, None, None]:
-    """Generates table names for the y,z,Y,Z hash prefix database"""
-    for char in TablesYZ:
-        table_name = TablesYZ.get_table_name(char.value)
-        yield table_name
 
 def get_column(stash_column: StashColumn) -> Column:
     """Creates a SQLAlchemy Column object from a StashColumn definition."""
@@ -145,6 +99,7 @@ def get_column(stash_column: StashColumn) -> Column:
         unique=stash_column.unique,
     )
     return column
+
 
 def mk_hash_column() -> Column:
     """Returns a SQLAlchemy Column for the 'key_hash' column."""
@@ -192,6 +147,7 @@ def mk_microseconds_column() -> Column:
         type_=Conf.INT.value
     )
     return get_column(ms)
+
 
 def mk_columns() -> Generator[Column, None, None]:
     """Generates all SQLAlchemy Column objects for a standard LiteStash table.
