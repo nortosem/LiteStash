@@ -11,11 +11,26 @@ import logging
 from logging import config
 from litestash.core.config.root import Log
 
-def log_env(env=None):
-    """Functionla set and return for ENV"""
-    if env not in [Log.DEV.value, Log.PROD.value] and env is not None:
+import os
+from litestash.core.config.root import Log
+
+def log_env(env: str = Log.PROD.value) -> str:  # Provide a default value
+    """
+    Gets the logging environment from the 'RUN_ENV' environment variable.
+
+    Args:
+        env:  Optional default environment to use if 'RUN_ENV' is not set.
+
+    Returns:
+        The logging environment ('dev' or 'prod').
+
+    Raises:
+        ValueError: If an invalid environment value is provided.
+    """
+    if env not in [Log.DEV.value, Log.PROD.value]:
         raise ValueError("Invalid environment")
     return os.getenv('RUN_ENV', env)
+
 
 ENV = log_env()
 
