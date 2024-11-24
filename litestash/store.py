@@ -11,6 +11,7 @@ from typing import List
 from sqlalchemy import insert
 from sqlalchemy import select
 from sqlalchemy import delete
+from litestash.logging import root_logger as logger
 from litestash.core.config.root import Tables as All_Tables
 from litestash.core.config.litestash_conf import StashSlots
 from litestash.core.engine import Engine
@@ -28,14 +29,14 @@ from litestash.core.util.schema_util import get_table_name
 from litestash.core.util.schema_util import mk_table_names
 
 class LiteStash:
-    """A high-performance in-memory key-value store using SQLite."""
+    """A high-performance key-value store using SQLite."""
 
     __slots__ = (StashSlots.ENGINE.value,
                  StashSlots.METADATA.value,
                  StashSlots.DB_SESSION.value
     )
 
-    def __init__(self, search: bool = True):
+    def __init__(self, search: bool = False):
         """Initiate a new LiteStash
 
         Creates a empty cache by default.
@@ -43,6 +44,8 @@ class LiteStash:
         self.engine = Engine()
         self.metadata = Metadata(self.engine)
         self.db_session = Session(self.engine)
+        if type(search) is not bool:
+            raise TypeError(StashError.SEARCH_TYPE.value)
         if search:
             fts.create_all_search_tables(
                 self.engine,
@@ -73,6 +76,7 @@ class LiteStash:
             ValidationError: If the `LiteStashData` object fails validation.
         """
         if isinstance(data, LiteStashData) and value is None:
+#            logger.debug(f'litestash data type check: {type(data)}')
             data = get_datastore(data)
 
         elif not isinstance(data, str):
@@ -85,20 +89,25 @@ class LiteStash:
         ):
             raise TypeError(StashError.SET_TYPE.value)
 
-        if value is not None:
+        if isinstance(value, (int, float, bool)):
+            value = str(value)
+
+        if isinstance(data, str):
             value = orjson.dumps(value)
             data = LiteStashData(key=data, value=value)
+            logger.debug(f'data: {data}')
             data = get_datastore(data)
+            logger.debug(f'data2store: {data}')
 
-        if isinstance(data, str) and value is None:
-            data = LiteStashData(key=data, value=value)
-            data = get_datastore(data)
         table_name = get_table_name(data.key_hash[0])
+        logger.debug(f'table_name for data: {table_name}')
         db_name = get_db_name(data.key_hash[0])
+        logger.debug(f'db _name for data: {db_name}')
         metadata = self.metadata.get(db_name).metadata
+        logger.debug(f'metadata tables: {metadata.tables}')
         session = self.db_session.get(db_name).session
+        logger.debug(f'session: {session.kw}')
         table = metadata.tables[table_name]
-
         sql_statement = (
             insert(table)
             .values(
@@ -339,9 +348,17 @@ class LiteStash:
 
 
     def __repr__(self) -> str:
-        """Detailed string representation"""
-        pass
+        """Detailed string representation of the LiteStash instance"""
+        repr_str = 'LiteStash('
+
+        repr_str += '\n  Databases:'
+        for db_name in self.metadata.__slots__:
+            metadata = self.metadata.get(db_name).metadata
+            repr_str += f'\n    - {db_name}: {list(metadata.tables.keys())}'
+        repr_str += '\n)'
+        return repr_str
+
 
     def __str__(self) -> str:
-        """Quick and minimal string"""
-        pass
+        """Returns a concise string representation of the LiteStash instance."""
+        return f'LiteStash(databases={len(self.metadata.__slots__)})'
