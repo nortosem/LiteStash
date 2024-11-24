@@ -5,6 +5,7 @@ key-value store.
 """
 from sqlalchemy import Engine as SQL_Engine
 from litestash.core.config.root import Tables
+from litestash.core.config.root import ErrorMessage
 from litestash.core.util.litestash_util import setup_engine
 
 class Engine:
@@ -81,6 +82,8 @@ class Engine:
         Raises:
             AttributeError: If no engine is found with the given name.
         """
+        if name not in [table.value for table in Tables]:
+            raise ValueError(f'{ErrorMessage.GET_ENGINE.value} {name}')
         attribute = getattr(self, name)
         return attribute
 
@@ -89,10 +92,22 @@ class Engine:
         """Yields all engine attributes (name, engine tuples)."""
         yield from (getattr(self, slot) for slot in self.__slots__)
 
+
     def __repr__(self):
-        """"""
-        pass
+        """Return the details for each engine stored in the Engine object."""
+        rstr = "Engine(\n"
+        for table in Tables:
+            engine_attr = getattr(self, table.value)
+            name = table.value
+            db = engine_attr.db_name
+            url = engine_attr.engine
+            rstr += f"{name}: {db}.db, {url}\n"
+        rstr += ")"
+        return rstr
+
 
     def __str__(self):
-        """"""
-        pass
+        """Concise string representation of the LiteStash Engine"""
+        data = self.__slots__
+        s = f'Engine(databases={data},length={len(data)})'
+        return s
