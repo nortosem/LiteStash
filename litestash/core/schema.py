@@ -5,6 +5,7 @@ LiteStash.
 """
 from litestash.core.engine import Engine as EngineStash
 from litestash.core.config.root import Tables
+from litestash.core.config.root import ErrorMessage
 from litestash.core.config.litestash_conf import StashSlots
 from litestash.core.util.litestash_util import setup_metadata
 
@@ -118,6 +119,8 @@ class Metadata:
             AttributeError: If no metadata is found for the given database
             name.
         """
+        if db_name not in [table.value for table in Tables]:
+            raise ValueError(f'{ErrorMessage.GET_ENGINE.value} {db_name}')
         attribute = getattr(self, db_name)
         return attribute
 
