@@ -5,6 +5,7 @@ LiteStash.
 """
 from litestash.core.engine import Engine as EngineStash
 from litestash.core.config.root import Tables
+from litestash.core.config.root import ErrorMessage
 from litestash.core.util.litestash_util import setup_sessions
 
 class Session:
@@ -117,8 +118,11 @@ class Session:
             AttributeError: If no session factory exists for the given
             database name.
         """
+        if db_name not in [table.value for table in Tables]:
+            raise ValueError(f'{ErrorMessage.GET_ENGINE.value} {db_name}')
         attribute = getattr(self, db_name)
         return attribute
+
 
     def __iter__(self):
         """
@@ -127,10 +131,13 @@ class Session:
 
         yield from (getattr(self, slot) for slot in self.__slots__)
 
+
     def __repr__(self):
         """TODO"""
-        pass
+        return(self)
+
 
     def __str__(self):
         """TODO"""
         pass
+
