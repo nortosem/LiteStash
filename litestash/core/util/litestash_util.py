@@ -5,6 +5,8 @@ store.
 
 Functions:
 
+- `set_pragma`: Apply configuration for sqlite engine
+- `set_begin`: SqlAlchemy workaround for pysqlite driver
 - `setup_engine`: Creates a SQLAlchemy engine for a given database.
 - `setup_metadata`: Sets up database metadata and tables.
 - `setup_sessions`: Creates a session factory for a database.
@@ -20,6 +22,7 @@ Functions:
 - `get_values`: Retrieves all values from a table.
 
 """
+import orjson
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy import create_engine
 from sqlalchemy import event
@@ -66,13 +69,13 @@ def set_pragma(db_connection, connect):
     logger.debug(f'Set PRAGMA on {db_connection}')
     cursor = db_connection.cursor()
     cursor.execute(Pragma.journal_mode())
-    logger.debug(f'executed journal_mode {connect.last_connect_time}')
+    logger.debug(f'journal_mode: {connect.last_connect_time}')
     cursor.execute(Pragma.synchronous())
-    logger.debug(f'executed synchronous {connect.last_connect_time}')
+    logger.debug(f'synchronous: {connect.last_connect_time}')
     cursor.execute(Pragma.valid_json())
-    logger.debug(f'executed valid_json {connect.last_connect_time}')
+    logger.debug(f'valid_json: {connect.last_connect_time}')
     cursor.close()
-    logger.debug(f'all pragmas executed, close cursor {cursor}')
+    logger.debug(f'all pragmas set, close cursor {cursor}')
     db_connection.isolation_level = None
     logger.debug(
         f'db_connection isolation set to {db_connection.isolation_level}'
@@ -89,6 +92,8 @@ def set_begin(db_connection):
 
     Args:
         dbapi_connection: The raw DBAPI connection object.
+
+    Optionally TODO: consider deferred, exclusive, or immediate BEGINs
     """
     db_connection.exec_driver_sql(Sql.BEGIN.value)
 
@@ -103,35 +108,39 @@ def setup_engine(db_name: str) -> Engine:
         EngineAttributes: A namedtuple containing the database name and the
         engine.
     """
-    echo = None
-    if ENV == Log.DEV.value:
-        echo=EngineConf.echo()
-    elif ENV == Log.PROD.value:
-        echo=EngineConf.no_echo()
-
     data_path = Path(
         f'{EngineConf.dirname()}/{db_name}'
     )
+    logger.debug(f'data_path: {data_path}')
     data_path.mkdir(parents=True, exist_ok=True)
+    logger.debug(f'data_path mkdir if needed')
+
+    database = f'{EngineConf.sqlite()}{data_path}/{db_name}.db'
+    logger.debug(f'database url: {database}')
 
     engine = create_engine(
-        f'{EngineConf.sqlite()}{data_path}/{db_name}.db',
-        echo=echo,
+        database,
+        logging_name=f'{db_name}_engine',
+        pool_logging_name=f'{db_name}_pool',
+        echo=EngineConf.no_echo(),
         echo_pool=EngineConf.no_echo(),
         pool_size=EngineConf.pool_size(),
         max_overflow=EngineConf.max_overflow(),
-        pool_logging_name=db_name,
     )
+    logger.debug(f'db engine: {engine}')
+
     event.listen(
         engine,
         Pragma.CONNECT.value,
         set_pragma
     )
+    logger.debug(f'default pragma event listener added')
     event.listen(
         engine,
         Sql.BEGIN.value.lower(),
         set_begin
     )
+    logger.debug(f'applied explicit BEGIN event listener for sql begin')
     quality_engine = EngineAttributes(db_name, engine)
     return quality_engine
 
@@ -158,8 +167,14 @@ def setup_metadata(engine_stash: EngineAttributes):
         initialized `MetaData` object.
     """
     metadata = MetaData()
+    logger.debug(f'{engine_stash.db_name} init {metadata}')
     metadata = mk_tables(engine_stash.db_name, metadata)
+    logger.debug(f'added tables to {metadata}')
     metadata.create_all(bind=engine_stash.engine, checkfirst=True)
+    logger.debug(
+        f'create and bind metadata to {engine_stash.engine}'
+    )
+    logger.debug(f'tables: {metadata.sorted_tables}')
     quality_metadata = MetaAttributes(engine_stash.db_name, metadata)
     return quality_metadata
 
@@ -193,10 +208,16 @@ def setup_sessions(engine_stash: EngineAttributes):
         ValueError: If no tables are found in the database.
     """
     if inspect(engine_stash.engine).get_table_names():
+        logger.debug(f'sessionmaker called for {engine_stash.engine}')
         session = sessionmaker(engine_stash.engine)
+        logger.debug(f'sessionmaker created {session}')
     else:
         raise ValueError(f'{SessionAttr.VALUE_ERROR.value}')
+    logger.debug(
+        f'Call SessionAttributes with {engine_stash.db_name}, {session}'
+    )
     quality_session = SessionAttributes(engine_stash.db_name, session)
+    logger.debug(f'return quality_session {quality_session}')
     return quality_session
 
 
@@ -220,7 +241,11 @@ def allot(size: int = 6) -> str:
         A URL-safe Base64-encoded string of the specified size.
     """
     if size < 6:
-        raise ValueError()
+        raise ValueError('min size')
+
+    if size % 3 != 0:
+        raise ValueError('must be divisible by three')
+
     lot = SystemRandom().randbytes(size)
     return base64.urlsafe_b64encode(lot).decode()
 
@@ -230,7 +255,6 @@ def digest_key(key: str) -> bytes:
 
     Args:
         key (str): The key string to hash.
-        time (GetTime): The GetTime namedtuple record of key creation.
 
     Returns:
         bytes: The digest of the key in bytes.
@@ -259,7 +283,7 @@ def get_time() -> tuple[int, int]:
     now = GetTime(store_timestamp, store_ms)
     return now
 
-
+#        time (GetTime): The GetTime namedtuple record of key creation.
 GetTime = namedtuple(
     TimeAttr.TYPE_NAME.value,
     [
@@ -280,7 +304,9 @@ def get_datastore(data: LiteStashData) -> LiteStashStore:
         A `LiteStashStore` object ready for database storage.
     """
     primary_key = get_primary_key(data.key)
+    logger.debug(f'get_datastore primary_key: {primary_key}')
     now = get_time()
+    logger.debug(f'get_datastore time@now: {now}')
     stash_data = LiteStashStore(
         key_hash = primary_key,
         key = data.key,
@@ -288,6 +314,11 @@ def get_datastore(data: LiteStashData) -> LiteStashStore:
         timestamp = now.timestamp,
         microsecond = now.microsecond
             )
+    logger.debug(f'stash_data key_hash: {stash_data.key_hash}')
+    logger.debug(f'stash_data key: {stash_data.key}')
+    logger.debug(f'stash_data value: {stash_data.value}')
+    logger.debug(f'stash_data timestamp: {stash_data.timestamp}')
+    logger.debug(f'stash_data microsecond: {stash_data.microsecond}')
     return stash_data
 
 
@@ -305,6 +336,7 @@ def get_keys(session: Session, table: Table) -> list[str]:
         sql_statement = select(table.c[C.KEY.value])
         keys = keys_get.execute(sql_statement).scalars().all()
     return keys
+
 
 def get_values(session: Session, table: Table) -> list[dict]:
     """Retrieves all values from the specified table.
