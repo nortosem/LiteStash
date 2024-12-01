@@ -22,6 +22,7 @@ Functions:
 - `get_values`: Retrieves all values from a table.
 
 """
+import re
 import orjson
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy import create_engine
@@ -98,7 +99,7 @@ def set_begin(db_connection):
     db_connection.exec_driver_sql(Sql.BEGIN.value)
 
 
-def setup_engine(db_name: str) -> Engine:
+def setup_engine(db_name: str, data_path: str = None) -> Engine:
     """Sets up a SQLAlchemy engine for the given database.
 
     Args:
@@ -108,10 +109,44 @@ def setup_engine(db_name: str) -> Engine:
         EngineAttributes: A namedtuple containing the database name and the
         engine.
     """
-    data_path = Path(
-        f'{EngineConf.dirname()}/{db_name}'
-    )
-    logger.debug(f'data_path: {data_path}')
+    space = re.compile(r'\s+')
+    file_name = re.compile(f'\w+', flags=re.A)
+    if db_name is None:
+        logger.error(f'Valid database name required')
+        raise ValueError(f'Database name missing')
+    if not file_name.match(db_name):
+        logger.error(f'')
+        raise ValueError(f'{EngineConf.db_name_ascii()}: {db_name}')
+    if space.match(db_name):
+        logger.error(f'')
+        raise ValueError(f'{EngineConf.db_name_space()}: {db_name}')
+    if len(db_name) < EngineConf.min_name_length():
+        logger.error(f'')
+        raise ValueError(f'{EngineConf.db_name_length()}: {db_name}')
+    if len(db_name) > Engine.max_name_length():
+        logger.error(f'')
+        raise ValueError(f'{EngineConf.db_name_length()}: {db_name}')
+
+    if data_path is None
+        data_path = Path(
+            f'{EngineConf.dirname()}/{db_name}'
+        )
+        logger.debug(f'data_path: {data_path}')
+    else:
+        try:
+            data_path =Path(
+                f'{data_path}/{db_name}'
+            )
+            logger.debug(f'data_path: {data_path}')
+        except FileNotFoundError as path_error:
+            logger.error(f'{EngineConf.dir_not_found()}: {path_error}')
+            raise
+        except PermissionError as path_error:
+            logger.error(f'{EngineConf.no_dir_access()}: {path_error}')
+            raise
+        except Exception as path_error:
+            logger.error(f'{EngineConf.dir_path_error()}: {path_error}')
+
     data_path.mkdir(parents=True, exist_ok=True)
     logger.debug(f'data_path mkdir if needed')
 
