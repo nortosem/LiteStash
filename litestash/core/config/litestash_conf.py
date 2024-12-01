@@ -21,6 +21,8 @@ class StashError(Valid):
     """
     SET_TYPE = 'value must be JSON serializable'
     KEY_TYPE = 'Key must be a string'
+    SEARCH_TYPE = 'Enable full-text search accepts boolean only.'
+
 
 class DataScheme(Valid):
     """LiteStashData Scheme
@@ -32,6 +34,7 @@ class DataScheme(Valid):
     MIN_LENGTH = 3
     MAX_LENGTH = 999
     FORBID_EXTRA = 'forbid'
+    FROM_ATTRIBUTES = False
 
 
 class StashSlots(Valid):
@@ -48,6 +51,7 @@ class Utils(Valid):
     """
     SIZE = 41
     DB_NAME_ERROR = 'Invalid character'
+    INVALID_CHAR_LENGTH = 'Incorrect number characters'
 
 
 class EngineAttr(Valid):
@@ -95,13 +99,21 @@ class EngineConf(Valid):
     Provide the configuation to setup a database engine.
     """
     SQLITE = 'sqlite:///'
-    DIR_NAME = 'data'
+    DIR_NAME = '/mnt/ram/data'
+    NAME_MIN_LENGTH = 3
+    NAME_MAX_LENGTH = 128
     ECHO = True
     FUTURE = True
     NO_ECHO = False
     NO_FUTURE = False
     POOL_SIZE = 50
     MAX_OVERFLOW = 10
+    DB_NAME_SPACE = 'No spaces permitted in database name'
+    DB_NAME_ASCII = 'Database name permits only ASCII characters'
+    DB_NAME_LENGTH = 'Invalid database name length provided'
+    DIR_NOT_FOUND = 'No such file or directory'
+    NO_DIR_ACCESS = 'Directory inaccessible'
+    DIR_PATH_ERROR = 'Path Exception'
 
 
     @staticmethod
@@ -111,6 +123,14 @@ class EngineConf(Valid):
     @staticmethod
     def dirname() -> str:
         return EngineConf.DIR_NAME.value
+
+    @staticmethod
+    def min_name_length() -> int:
+        return EngineConf.NAME_MIN_LENGTH.value
+
+    @staticmethod
+    def max_name_length() -> int:
+        return EngineConf.NAME_MAX_LENGTH.value
 
     @staticmethod
     def echo() -> str:
@@ -135,3 +155,27 @@ class EngineConf(Valid):
     @staticmethod
     def max_overflow() -> int:
         return EngineConf.MAX_OVERFLOW.value
+
+    @staticmethod
+    def db_name_space() -> str:
+        return EngineConf.DB_NAME_SPACE.value
+
+    @staticmethod
+    def db_name_ascii() -> str:
+        return EngineConf.DB_NAME_ASCII.value
+
+    @staticmethod
+    def db_name_length() -> str:
+        return EngineConf.DB_NAME_LENGTH.value
+
+    @staticmethod
+    def dir_not_found() -> str:
+        return EngineConf.DIR_NOT_FOUND.value
+
+    @staticmethod
+    def no_dir_access() -> str:
+        return EngineConf.NO_DIR_ACCESS.value
+
+    @staticmethod
+    def dir_path_error() -> str:
+        return EngineConf.DIR_PATH_ERROR.value
