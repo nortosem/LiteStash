@@ -7,11 +7,11 @@ within the SQLite database associated with hash values starting with 'y', 'Y',
 Each member of the enum represents a valid hash prefix, and provides methods for
 retrieving the corresponding full table name.
 """
-from litestash.core.config.root import Valid
+from litestash.core.config.root import Table
 from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
-class TablesYZ(Valid):
+class TablesYZ(Table):
     """
     Enumeration for table names based on the initial character of the hash.
 

@@ -10,9 +10,9 @@ objects used in the LiteStash key-value store. It includes functions for:
 from sqlalchemy import Column
 from typing import Generator
 from typing import Callable
+from litestash.logging import root_logger as logger
 from litestash.models import StashColumn
-from litestash.core.config.schema_conf import ColumnFields as Col
-from litestash.core.config.schema_conf import ColumnConfig as Conf
+from litestash.core.config.root import Table
 from litestash.core.config.tables.tables_03 import Tables03
 from litestash.core.config.tables.tables_47 import Tables47
 from litestash.core.config.tables.tables_89hu import Tables89hu
@@ -29,10 +29,22 @@ from litestash.core.config.tables.tables_st import TablesST
 from litestash.core.config.tables.tables_uv import TablesUV
 from litestash.core.config.tables.tables_wx import TablesWX
 from litestash.core.config.tables.tables_yz import TablesYZ
+from litestash.core.config.schema_conf import ColumnFields as Col
+from litestash.core.config.schema_conf import ColumnConfig as Conf
+
 
 def mk_table_generator(
     table_class: type) -> Callable[[], Generator[str, None, None]]:
         """Tablename generator factory"""
+        if table_class is None:
+            logger.error('Tables cannot be Nothing')
+            raise ValueError('Invalide value: None')
+
+        if not issubclass(table_class, Table):
+            print(f'table_class type: {table_class}')
+            logger.error('Invalid type of table')
+            raise TypeError(f'Incorrect table type: {type(table_class)}')
+
         def generator():
             for char in table_class:
                 table_name = table_class.get_table_name(char.value)
@@ -91,6 +103,14 @@ get_tables_yz = mk_table_generator(TablesYZ)
 
 def get_column(stash_column: StashColumn) -> Column:
     """Creates a SQLAlchemy Column object from a StashColumn definition."""
+    if stash_column is None:
+        logger.error('None is not a valid table column')
+        raise ValueError('Table column cannot be None')
+
+    if not isinstance(stash_column, StashColumn):
+        logger.error('Column must be of the StashColumn type')
+        raise TypeError(f'Invalid stash_column type: {type(stash_column)}')
+
     column = Column(
         stash_column.name,
         stash_column.type_,
