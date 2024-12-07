@@ -8,11 +8,11 @@ The module facilitates consistent and type-safe access to these table names
 within the LiteStash library. Each member of the enum corresponds to a specific
 hash prefix and provides a method to construct the full table name.
 """
-from litestash.core.config.root import Valid
+from litestash.core.config.root import Table
 from litestash.core.config.root import Tables
 from litestash.core.config.schema_conf import Names
 
-class TablesAB(Valid):
+class TablesAB(Table):
     """
     Enumeration for table names based on the initial character of the hash.
 

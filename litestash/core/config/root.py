@@ -17,6 +17,15 @@ class Valid(Enum):
     """Valid Root"""
     pass
 
+
+class Table(Valid):
+    """Table
+
+    Valid parent class for all tables.
+    """
+    pass
+
+
 class Log(Valid):
     """Logging Configuration
 
