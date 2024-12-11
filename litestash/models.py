@@ -19,18 +19,23 @@ from pydantic import Json
 from pydantic import Field
 from pydantic import StrictStr
 from pydantic import StrictInt
+from pydantic import StrictBool
+from pydantic import ConfigDict
 from pydantic import field_validator
 from pydantic.dataclasses import dataclass
 from litestash.core.util.model_util import StrType
 from litestash.core.util.model_util import IntType
 from litestash.core.util.model_util import JsonType
 from litestash.core.util.model_util import ColumnType
-from litestash.core.config.model import StashConf
+from litestash.core.config.model import Parameter
 from litestash.core.config.model import StashField
+from litestash.core.config.model import StashDataclass
 from litestash.core.config.schema_conf import ColumnConfig
 from litestash.core.config.litestash_conf import DataScheme
 
-@dataclass(slots=True)
+
+@dataclass(slots=Parameter.SLOTS.value,
+    config=ConfigDict(StashDataclass.CONFIG.value))
 class LiteStashData:
     """Data Transfer Object (DTO) for key-value pairs.
 
@@ -39,13 +44,6 @@ class LiteStashData:
         only).
         value (Json): The JSON data to be stored or retrieved.
     """
-    model_config = {
-        StashConf.ORM_MODE.value: False,
-        StashConf.EXTRA.value: DataScheme.FORBID_EXTRA.value,
-        StashConf.JSON_LOADS.value: orjson.loads,
-        StashConf.JSON_DUMPS.value: orjson.dumps
-    }
-
     key: StrictStr = Field(
         ...,
         min_length=DataScheme.MIN_LENGTH.value,
@@ -64,12 +62,10 @@ class LiteStashData:
         if not key.isascii():
             raise ValueError(StashField.VALID_KEY_ASCII.value)
 
-        empty_space = re.compile(StashField.SPACE_PATTERN.value)
-        if empty_space.match(key):
+        if not key.isalnum():
             raise ValueError(StashField.VALID_KEY_TEXT.value)
 
         return key
-
 
     @field_validator(ColumnConfig.DATA_VALUE.value)
     def valid_value(cls, value):
@@ -79,7 +75,8 @@ class LiteStashData:
             return value
 
 
-@dataclass(slots=True)
+@dataclass(slots=Parameter.SLOTS.value,
+    config=ConfigDict(StashDataclass.CONFIG.value))
 class LiteStashStore:
     """Database model for key-value pairs.
 
@@ -90,15 +87,9 @@ class LiteStashStore:
         key_hash (str):  Base64 URL-safe primary key.
         key (str):  The original key (unique and indexed).
         value (Json): The JSON data (optional).
-        date_time (int): POSIX timestamp.
-        ms_time (int): Microseconds.
+        timestamp (int): POSIX timestamp.
+        microsecond (int): Microseconds.
     """
-    model_config = {
-        StashConf.ORM_MODE.value: True,
-        StashConf.JSON_LOADS.value: orjson.loads,
-        StashConf.JSON_DUMPS.value: orjson.dumps
-    }
-
     key_hash: StrictStr = Field(...)
     key: StrictStr = Field(...)
     value: Json | None = Field(default=None)
@@ -106,7 +97,8 @@ class LiteStashStore:
     microsecond: StrictInt | None = Field(default=None)
 
 
-@dataclass(slots=True)
+@dataclass(slots=Parameter.SLOTS.value,
+    config=ConfigDict(StashDataclass.CONFIG.value))
 class StashColumn:
     """Defines the structure of a column in a LiteStash database table.
 
@@ -120,15 +112,15 @@ class StashColumn:
         unique (bool): Whether the column has a unique constraint
         (default: False).
     """
-    name: str
+    name: StrictStr
     type_: Literal[
         StrType.literal,
         IntType.literal,
         JsonType.literal
     ] = Field(...)
-    primary_key: bool = False
-    index: bool = False
-    unique: bool = False
+    primary_key: StrictBool = False
+    index: StrictBool = False
+    unique: StrictBool = False
 
     @field_validator(ColumnConfig.STASH_COLUMN.value)
     def valid_type(cls, column_type: ColumnType) -> Union[String,Integer,JSON]:
@@ -137,7 +129,7 @@ class StashColumn:
         Take a Literal and return sqlite column type.
         Args:
             column_type (ColumnType):
-                A namedtuple for str, float, or json types.
+                A namedtuple for str, int, or json types.
         """
         match column_type:
             case StrType.literal:
