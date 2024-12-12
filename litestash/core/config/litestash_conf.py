@@ -14,6 +14,44 @@ organizing engine, metadata, session, and time-related information.
 """
 from litestash.core.config.root import Valid
 
+
+class Key(Valid):
+    """Key Error
+
+    Configuration strings for key errors.
+    """
+    LOG_ERROR = 'Expected a string, but got incorrect type: '
+    TYPE_ERROR = 'Key must be a string'
+
+    @staticmethod
+    def log_error():
+        return f'{Key.LOG_ERROR.value}'
+
+    @staticmethod
+    def type_error():
+        return f'{Key.TYPE_ERROR.value}'
+
+
+class MkHash(Valid):
+    """mk_hash digest
+
+    Configuration strings for logging and errors of the mk_hash function.
+    """
+    NONE_LOG
+    VALUE_ERROR
+    BYTES_LOG
+    BYTES_ERROR
+    DIGEST_LOG
+
+
+class DigestKey(Valid):
+    """
+
+
+    """
+    DIGEST_KEY_LOG
+    DIGETS_KEY_ERROR
+
 class StashError(Valid):
     """StashError
 
@@ -21,7 +59,6 @@ class StashError(Valid):
     """
     SET_TYPE = 'value must be JSON serializable'
     KEY_TYPE = 'Key must be a string'
-    SEARCH_TYPE = 'Enable full-text search accepts boolean only.'
 
 
 class DataScheme(Valid):
@@ -81,6 +118,28 @@ class SessionAttr(Valid):
     DB_NAME = f'{EngineAttr.DB_NAME.value}'
     SESSION = 'session'
     VALUE_ERROR = 'Invalid database: no tables found'
+    DOC = '''todo'''
+
+
+class TaskSlots(Valid):
+    """The attribute Slots for a Task thread."""
+    DB_NAME = f'{EngineAttr.DB_NAME.value}'
+    SESSION = f'{SessionAttr.SESSION.value}'
+    QUEUE = 'queue'
+    LOCK = 'lock'
+
+    @staticmethod
+    def get():
+        """Get the slots for a Task"""
+        return tuple([slot.value for slot in TaskSlots])
+
+
+class TaskAttr(Valid):
+    """The namedtuple config for all task attributes of a LiteStash"""
+    TYPE_NAME = 'TaskAttributes'
+    DB_NAME = f'{EngineAttr.DB_NAME.value}'
+    TASK = 'task'
+    VALUE_ERROR = 'todo'
     DOC = '''todo'''
 
 
