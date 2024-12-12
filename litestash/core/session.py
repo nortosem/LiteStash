@@ -8,8 +8,9 @@ from litestash.core.config.root import Tables
 from litestash.core.config.root import ErrorMessage
 from litestash.core.util.litestash_util import setup_sessions
 
+
 class Session:
-    """LiteStash Session Class
+    """LiteStash Session
 
     This class manages the creation and access of SQLAlchemy sessions for each
     SQLite database file used in the LiteStash key-value store. Each database
