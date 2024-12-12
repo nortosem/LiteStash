@@ -8,9 +8,14 @@ import orjson
 from typing import overload
 from typing import Dict
 from typing import List
+from typing import Union
+from pydantic import Json
+from pydantic import StrictStr
+from pydantic import StrictBool
 from sqlalchemy import insert
 from sqlalchemy import select
 from sqlalchemy import delete
+from concurrent.futures import ThreadPoolExecutor, Future
 from litestash.logging import root_logger as logger
 from litestash.core.config.root import Tables as All_Tables
 from litestash.core.config.litestash_conf import StashSlots
@@ -36,7 +41,7 @@ class LiteStash:
                  StashSlots.DB_SESSION.value
     )
 
-    def __init__(self, search: bool = False):
+    def __init__(self, search: StrictBool = False):
         """Initiate a new LiteStash
 
         Creates a empty cache by default.
@@ -44,8 +49,7 @@ class LiteStash:
         self.engine = Engine()
         self.metadata = Metadata(self.engine)
         self.db_session = Session(self.engine)
-        if type(search) is not bool:
-            raise TypeError(StashError.SEARCH_TYPE.value)
+
         if search:
             fts.create_all_search_tables(
                 self.engine,
@@ -54,73 +58,77 @@ class LiteStash:
             )
 
     @overload
-    def set(self, key: str, value: str = None) -> None:
+    def set(self,
+            key: StrictStr,
+            value: Union[StrictStr, Json, None] = None) -> None:
         """Overload set using key,value string"""
 
 
     @overload
-    def set(self, data: LiteStashData) -> None:
+    def set(self, key: LiteStashData) -> None:
         """Overload set using LiteStashData"""
 
 
-    def set(self, data: str | LiteStashData, value: str = None):
+    def set(self,
+            key: StrictStr | LiteStashData,
+            value: Union[StrictStr, Json, None] = None):
         """Inserts or updates a key-value pair.
 
         Args:
-            data: Either a `LiteStashData` object or a string key.
-            value: The JSON value to store (only required when `data` is a
-            string).
+            key: Either a `LiteStashData` object or a string key.
+            value: The JSON value to store
 
         Raises:
-            ValueError: If the key or value is invalid.
             ValidationError: If the `LiteStashData` object fails validation.
+            Exception: For unexpected errors
         """
-        if isinstance(data, LiteStashData) and value is None:
-#            logger.debug(f'litestash data type check: {type(data)}')
-            data = get_datastore(data)
+        try:
+            if isinstance(key, LiteStashData):
+                if value is not None:
+                    logger.error(f'Value supplied with LiteStashData')
+                    raise ValidationError(
+                        'Possible duplicate values for a key.')
 
-        elif not isinstance(data, str):
-            raise TypeError(
-                f'{StashError.KEY_TYPE.value} not {type(data).__name__}'
+                logger.debug(f'litestash data type check: {type(data)}')
+                data = get_datastore(key)
+
+            else:
+                if value is None:
+                    raise TypeError(f'{StashError.KEY_TYPE.value} ')
+
+                data = LiteStashData(key=data, value=value)
+                logger.debug(f'data: {data}')
+                data = get_datastore(data)
+                logger.debug(f'data2store: {data}')
+
+            table_name = get_table_name(data.key_hash[0])
+            logger.debug(f'table_name for data: {table_name}')
+            db_name = get_db_name(data.key_hash[0])
+            logger.debug(f'db _name for data: {db_name}')
+            metadata = self.metadata.get(db_name).metadata
+            logger.debug(f'metadata tables: {metadata.tables}')
+            session = self.db_session.get(db_name).session
+            logger.debug(f'session: {session.kw}')
+            table = metadata.tables[table_name]
+            sql_statement = (
+                insert(table)
+                .values(
+                    key_hash=data.key_hash,
+                    key=data.key,
+                    value=data.value,
+                    timestamp=data.timestamp,
+                    microsecond=data.microsecond
+                )
             )
-
-        if not isinstance(
-                value, (dict, list, str, int, float, bool, type(None))
-        ):
-            raise TypeError(StashError.SET_TYPE.value)
-
-        if isinstance(value, (int, float, bool)):
-            value = str(value)
-
-        if isinstance(data, str):
-            value = orjson.dumps(value)
-            data = LiteStashData(key=data, value=value)
-            logger.debug(f'data: {data}')
-            data = get_datastore(data)
-            logger.debug(f'data2store: {data}')
-
-        table_name = get_table_name(data.key_hash[0])
-        logger.debug(f'table_name for data: {table_name}')
-        db_name = get_db_name(data.key_hash[0])
-        logger.debug(f'db _name for data: {db_name}')
-        metadata = self.metadata.get(db_name).metadata
-        logger.debug(f'metadata tables: {metadata.tables}')
-        session = self.db_session.get(db_name).session
-        logger.debug(f'session: {session.kw}')
-        table = metadata.tables[table_name]
-        sql_statement = (
-            insert(table)
-            .values(
-                key_hash=data.key_hash,
-                key=data.key,
-                value=data.value,
-                timestamp=data.timestamp,
-                microsecond=data.microsecond
-            )
-        )
-        with session() as set_session:
-            set_session.execute(sql_statement)
-            set_session.commit()
+            with session() as set_session:
+                set_session.execute(sql_statement)
+                set_session.commit()
+        except ValidationError as invalid_error:
+            logger.error(f'Validation error: {invalid_error}')
+            raise
+        except Exception as error:
+            logger.error(f'An unexpected error: {error}')
+            raise
 
 
     @overload
@@ -145,14 +153,12 @@ class LiteStash:
         """
         if isinstance(data, LiteStashData):
             data = get_datastore(data)
-
-        elif not isinstance(data, str):
+        elif isinstance(data, str):
+            data = LiteStashData(key=data)
+        else:
             raise TypeError(
                 f'{StashError.KEY_TYPE.value} not {type(data).__name__}'
             )
-
-        if isinstance(data, str):
-            data = LiteStashData(key=data)
 
         hash_key = get_primary_key(data.key)
         table_name = get_table_name(hash_key[0])
@@ -160,21 +166,19 @@ class LiteStash:
         metadata = self.metadata.get(db_name).metadata
         session = self.db_session.get(db_name).session
         table = metadata.tables[table_name]
-        sql_statement = (
-            select(table).where(table.c.key_hash == hash_key)
-        )
+        sql_statement = select(table).where(table.c.key_hash == hash_key)
 
         with session() as get_session:
-            data = get_session.execute(sql_statement).first()
+            result = get_session.execute(sql_statement).first()
             get_session.commit()
 
-        if data:
-            json_data = str(data[2])
-            return orjson.dumps(json_data)
-
+        if result:
+            return LiteStashData(
+                key=result[1],
+                value=orjson.loads(result[2])
+            )
         else:
             return None
-
 
     @overload
     def mget(self, keys: List[LiteStashData]) -> List[LiteStashData]:
