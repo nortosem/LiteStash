@@ -6,7 +6,7 @@ key-value store.
 from sqlalchemy import Engine as SQL_Engine
 from litestash.core.config.root import Tables
 from litestash.core.config.root import ErrorMessage
-from litestash.core.util.litestash_util import setup_engine
+from litestash.core.util.engine_util import setup_engine
 
 class Engine:
     """LiteStash Engine Class
