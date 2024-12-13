@@ -3,10 +3,10 @@
 Creates and provides access to session factories for each database in
 LiteStash.
 """
-from litestash.core.engine import Engine as EngineStash
+from litestash.core.engine import Engine
 from litestash.core.config.root import Tables
 from litestash.core.config.root import ErrorMessage
-from litestash.core.util.litestash_util import setup_sessions
+from litestash.core.util.core_util import setup_sessions
 
 
 class Session:
@@ -30,78 +30,62 @@ class Session:
         __iter__(): Returns an iterator that yields all the sesssion
         attributes.
     """
-    __slots__ = (Tables.TABLES_03.value,
-                 Tables.TABLES_47.value,
-                 Tables.TABLES_89HU.value,
-                 Tables.TABLES_AB.value,
-                 Tables.TABLES_CD.value,
-                 Tables.TABLES_EF.value,
-                 Tables.TABLES_GH.value,
-                 Tables.TABLES_IJ.value,
-                 Tables.TABLES_KL.value,
-                 Tables.TABLES_MN.value,
-                 Tables.TABLES_OP.value,
-                 Tables.TABLES_QR.value,
-                 Tables.TABLES_ST.value,
-                 Tables.TABLES_UV.value,
-                 Tables.TABLES_WX.value,
-                 Tables.TABLES_YZ.value
-                )
+    __slots__ = Tables.slots()
 
-    def __init__(self, engine_stash: EngineStash):
+    def __init__(self, engine: Engine):
         """Initializes session factories for each database.
 
         Args:
-            engine_stash (EngineStash): An instance of the `EngineStash` class
+            engine (EngineStash): An instance of the `EngineStash` class
             containing the database engines.
         """
         self.tables_03 = setup_sessions(
-            engine_stash.get(Tables.TABLES_03.value)
+            engine.get(Tables.TABLES_03.value)
         )
         self.tables_47 = setup_sessions(
-            engine_stash.get(Tables.TABLES_47.value)
+            engine.get(Tables.TABLES_47.value)
         )
         self.tables_89hu = setup_sessions(
-            engine_stash.get(Tables.TABLES_89HU.value)
+            engine.get(Tables.TABLES_89HU.value)
         )
         self.tables_ab = setup_sessions(
-            engine_stash.get(Tables.TABLES_AB.value)
+            engine.get(Tables.TABLES_AB.value)
         )
         self.tables_cd = setup_sessions(
-            engine_stash.get(Tables.TABLES_CD.value)
+            engine.get(Tables.TABLES_CD.value)
         )
         self.tables_ef = setup_sessions(
-            engine_stash.get(Tables.TABLES_EF.value)
+            engine.get(Tables.TABLES_EF.value)
         )
         self.tables_gh = setup_sessions(
-            engine_stash.get(Tables.TABLES_GH.value)
+            engine.get(Tables.TABLES_GH.value)
         )
         self.tables_ij = setup_sessions(
-            engine_stash.get(Tables.TABLES_IJ.value)
+            engine.get(Tables.TABLES_IJ.value)
         )
         self.tables_kl = setup_sessions(
-            engine_stash.get(Tables.TABLES_KL.value)
+            engine.get(Tables.TABLES_KL.value)
         )
         self.tables_mn = setup_sessions(
-            engine_stash.get(Tables.TABLES_MN.value)
+            engine.get(Tables.TABLES_MN.value)
         )
         self.tables_op = setup_sessions(
-            engine_stash.get(Tables.TABLES_OP.value)
+            engine.get(Tables.TABLES_OP.value)
         )
         self.tables_qr = setup_sessions(
-            engine_stash.get(Tables.TABLES_QR.value)
+            engine.get(Tables.TABLES_QR.value)
         )
         self.tables_st = setup_sessions(
-            engine_stash.get(Tables.TABLES_ST.value)
+            engine.get(Tables.TABLES_ST.value)
         )
         self.tables_uv = setup_sessions(
-            engine_stash.get(Tables.TABLES_UV.value)
+            engine.get(Tables.TABLES_UV.value)
         )
         self.tables_wx = setup_sessions(
-            engine_stash.get(Tables.TABLES_WX.value)
+            engine.get(Tables.TABLES_WX.value)
         )
         self.tables_yz = setup_sessions(
-            engine_stash.get(Tables.TABLES_YZ.value)
+            engine.get(Tables.TABLES_YZ.value)
         )
 
 
@@ -135,10 +119,8 @@ class Session:
 
     def __repr__(self):
         """TODO"""
-        return(self)
-
+        pass
 
     def __str__(self):
         """TODO"""
         pass
-

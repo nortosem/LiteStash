@@ -3,11 +3,11 @@
 Creates and provides access to metadata objects for each database in
 LiteStash.
 """
-from litestash.core.engine import Engine as EngineStash
+from litestash.core.engine import Engine
 from litestash.core.config.root import Tables
 from litestash.core.config.root import ErrorMessage
 from litestash.core.config.litestash_conf import StashSlots
-from litestash.core.util.litestash_util import setup_metadata
+from litestash.core.util.core_util import setup_metadata
 
 class Metadata:
     """LiteStash Metadata Class
@@ -30,79 +30,64 @@ class Metadata:
         __iter__(): Returns an iterator that yields all the sesssion
         attributes.
     """
-    __slots__ = (Tables.TABLES_03.value,
-                 Tables.TABLES_47.value,
-                 Tables.TABLES_89HU.value,
-                 Tables.TABLES_AB.value,
-                 Tables.TABLES_CD.value,
-                 Tables.TABLES_EF.value,
-                 Tables.TABLES_GH.value,
-                 Tables.TABLES_IJ.value,
-                 Tables.TABLES_KL.value,
-                 Tables.TABLES_MN.value,
-                 Tables.TABLES_OP.value,
-                 Tables.TABLES_QR.value,
-                 Tables.TABLES_ST.value,
-                 Tables.TABLES_UV.value,
-                 Tables.TABLES_WX.value,
-                 Tables.TABLES_YZ.value
-                )
+    __slots__ = Tables.slots()
 
-    def __init__(self, engine_stash: EngineStash):
+
+    def __init__(self, engine: Engine):
         """Create and bind each metadata object for each database to a
         matching engine.
 
         Args:
-            engine_stash (EngineStash): The EngineStash object containing the
+            engine (EngineStash): The EngineStash object containing the
             database engines.
         """
         self.tables_03 = setup_metadata(
-            engine_stash.get(Tables.TABLES_03.value)
+            engine.get(Tables.TABLES_03.value)
         )
         self.tables_47 = setup_metadata(
-            engine_stash.get(Tables.TABLES_47.value)
+            engine.get(Tables.TABLES_47.value)
         )
         self.tables_89hu = setup_metadata(
-            engine_stash.get(Tables.TABLES_89HU.value)
+            engine.get(Tables.TABLES_89HU.value)
         )
         self.tables_ab = setup_metadata(
-            engine_stash.get(Tables.TABLES_AB.value)
+            engine.get(Tables.TABLES_AB.value)
         )
         self.tables_cd = setup_metadata(
-            engine_stash.get(Tables.TABLES_CD.value)
+            engine.get(Tables.TABLES_CD.value)
         )
         self.tables_ef = setup_metadata(
-            engine_stash.get(Tables.TABLES_EF.value)
+            engine.get(Tables.TABLES_EF.value)
         )
         self.tables_gh = setup_metadata(
-            engine_stash.get(Tables.TABLES_GH.value)
+            engine.get(Tables.TABLES_GH.value)
         )
         self.tables_ij = setup_metadata(
-            engine_stash.get(Tables.TABLES_IJ.value)
+            engine.get(Tables.TABLES_IJ.value)
         )
         self.tables_kl = setup_metadata(
-            engine_stash.get(Tables.TABLES_KL.value)
+            engine.get(Tables.TABLES_KL.value)
         )
         self.tables_mn = setup_metadata(
-            engine_stash.get(Tables.TABLES_MN.value)
+            engine.get(Tables.TABLES_MN.value)
         )
         self.tables_op = setup_metadata(
-            engine_stash.get(Tables.TABLES_OP.value)
+            engine.get(Tables.TABLES_OP.value)
         )
         self.tables_qr = setup_metadata(
-            engine_stash.get(Tables.TABLES_QR.value)
+            engine.get(Tables.TABLES_QR.value)
         )
         self.tables_st = setup_metadata(
-            engine_stash.get(Tables.TABLES_ST.value)
+            engine.get(Tables.TABLES_ST.value)
         )
         self.tables_uv = setup_metadata(
-            engine_stash.get(Tables.TABLES_UV.value)
+            engine.get(Tables.TABLES_UV.value)
         )
         self.tables_wx = setup_metadata(
-            engine_stash.get(Tables.TABLES_WX.value)
+            engine.get(Tables.TABLES_WX.value)
         )
         self.tables_yz = setup_metadata(
-            engine_stash.get(Tables.TABLES_YZ.value)
+            engine.get(Tables.TABLES_YZ.value)
         )
 
 
