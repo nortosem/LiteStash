@@ -23,7 +23,7 @@ from pydantic import StrictStr
 from pydantic import StrictBytes
 from sqlalchemy import select
 from sqlalchemy import Table
-from sqlalchemy import Session
+from sqlalchemy.orm import Session
 #from litestash.logging import ENV
 from litestash.logging import root_logger as logger
 from litestash.models import LiteStashData
