@@ -15,7 +15,6 @@ from pydantic import StrictBool
 from sqlalchemy import insert
 from sqlalchemy import select
 from sqlalchemy import delete
-from concurrent.futures import ThreadPoolExecutor, Future
 from litestash.logging import root_logger as logger
 from litestash.core.config.root import Tables as All_Tables
 from litestash.core.config.litestash_conf import StashSlots
@@ -85,30 +84,29 @@ class LiteStash:
         try:
             if isinstance(key, LiteStashData):
                 if value is not None:
-                    logger.error(f'Value supplied with LiteStashData')
-                    raise ValidationError(
+                    logger.error('Value supplied with LiteStashData')
+                    raise ValueError(
                         'Possible duplicate values for a key.')
 
-                logger.debug(f'litestash data type check: {type(data)}')
+                logger.debug('litestash data type check: %s', type(data))
                 data = get_datastore(key)
 
             else:
                 if value is None:
                     raise TypeError(f'{StashError.KEY_TYPE.value} ')
-
                 data = LiteStashData(key=data, value=value)
-                logger.debug(f'data: {data}')
+                logger.debug('data: %s', data)
                 data = get_datastore(data)
-                logger.debug(f'data2store: {data}')
+                logger.debug('data2store: %s', data)
 
             table_name = get_table_name(data.key_hash[0])
-            logger.debug(f'table_name for data: {table_name}')
+            logger.debug('table_name for data: %s', table_name)
             db_name = get_db_name(data.key_hash[0])
-            logger.debug(f'db _name for data: {db_name}')
+            logger.debug('db _name for data: %s', db_name)
             metadata = self.metadata.get(db_name).metadata
-            logger.debug(f'metadata tables: {metadata.tables}')
+            logger.debug('metadata tables: %s', metadata.tables)
             session = self.db_session.get(db_name).session
-            logger.debug(f'session: {session.kw}')
+            logger.debug('session: %s', session.kw)
             table = metadata.tables[table_name]
             sql_statement = (
                 insert(table)
@@ -123,11 +121,11 @@ class LiteStash:
             with session() as set_session:
                 set_session.execute(sql_statement)
                 set_session.commit()
-        except ValidationError as invalid_error:
-            logger.error(f'Validation error: {invalid_error}')
+        except ValueError as invalid_error:
+            logger.error('Value error: %s', invalid_error)
             raise
         except Exception as error:
-            logger.error(f'An unexpected error: {error}')
+            logger.error('An unexpected error: %s', error)
             raise
 
 
