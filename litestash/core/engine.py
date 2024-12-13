@@ -29,23 +29,7 @@ class Engine:
 
         __iter__(): Returns an iterator that yields all the engine attributes.
     """
-    __slots__ = (Tables.TABLES_03.value,
-                 Tables.TABLES_47.value,
-                 Tables.TABLES_89HU.value,
-                 Tables.TABLES_AB.value,
-                 Tables.TABLES_CD.value,
-                 Tables.TABLES_EF.value,
-                 Tables.TABLES_GH.value,
-                 Tables.TABLES_IJ.value,
-                 Tables.TABLES_KL.value,
-                 Tables.TABLES_MN.value,
-                 Tables.TABLES_OP.value,
-                 Tables.TABLES_QR.value,
-                 Tables.TABLES_ST.value,
-                 Tables.TABLES_UV.value,
-                 Tables.TABLES_WX.value,
-                 Tables.TABLES_YZ.value
-                )
+    __slots__ = Tables.slots()
 
 
     def __init__(self):
