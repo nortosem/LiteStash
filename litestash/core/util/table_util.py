@@ -154,7 +154,7 @@ def mk_value_column() -> Column:
 def mk_timestamp_column() -> Column:
     """Returns a SQLAlchemy Column for the 'timestamp' column."""
     timestamp = StashColumn(
-        name=Col.TIMESTAMP,
+        name=Col.TIMESTAMP.value,
         type_=Conf.INT.value
     )
     return get_column(timestamp)
