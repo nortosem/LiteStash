@@ -10,6 +10,7 @@ Modules:
 * `engine`:  Manages database engines.
 * `schema`:  Handles database schema definitions and metadata.
 * `session`: Provides session management for database interactions.
+* `tasks`: Manages the Queue and threads for each database.
 """
 from litestash.core.config.root import Core
 from litestash.core import config
@@ -17,11 +18,13 @@ from litestash.core import util
 from litestash.core.engine import Engine
 from litestash.core.schema import Metadata
 from litestash.core.session import Session
+from litestash.core.tasks import Tasks
 
 __all__ = [
     Core.CONFIG.value,
     Core.UTIL.value,
     Core.ENGINE.value,
     Core.SCHEMA.value,
-    Core.SESSION.value
+    Core.SESSION.value,
+    Core.TASKS.value
 ]
