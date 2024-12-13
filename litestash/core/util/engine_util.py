@@ -73,7 +73,8 @@ def set_begin(db_connection):
 
 def setup_engine(db_name: StrictStr, data_path: StrictStr = None) -> Engine:
     """Sets up a SQLAlchemy engine for the given database.
-
+    #!@@!# Add Permission check for default or given data dir
+    #!@@!# The default is /mnt/ram
     Args:
         db_name: The name of the database file.
 
@@ -93,7 +94,7 @@ def setup_engine(db_name: StrictStr, data_path: StrictStr = None) -> Engine:
     if len(db_name) < EngineConf.min_name_length():
         logger.error('todo')
         raise ValueError(f'{EngineConf.db_name_length()}: {db_name}')
-    if len(db_name) > Engine.max_name_length():
+    if len(db_name) > EngineConf.max_name_length():
         logger.error('todo')
         raise ValueError(f'{EngineConf.db_name_length()}: {db_name}')
 
