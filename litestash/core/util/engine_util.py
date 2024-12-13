@@ -4,8 +4,7 @@ The engine_util module provides functions to assemble the LiteStash engine
 module.
 
 Functions:
-
-- `set_pragma`: Apply configuration for sqlite engine
+- `set_pragma`: Configures SQLite PRAGMAs for the engine.
 - `set_begin`: SqlAlchemy workaround for pysqlite driver
 - `setup_engine`: Creates a SQLAlchemy engine for a given database.*
 
