@@ -5,15 +5,8 @@ store.
 
 Functions:
 
-- `set_pragma`: Apply configuration for sqlite engine
-- `set_begin`: SqlAlchemy workaround for pysqlite driver
-- `setup_engine`: Creates a SQLAlchemy engine for a given database.
-- `setup_metadata`: Sets up database metadata and tables.
-- `setup_sessions`: Creates a session factory for a database.
-- `set_pragma`: Configures SQLite PRAGMAs for the engine.
-- `set_begin`: Begins a transaction with a specified isolation level.
+
 - `digest_key`: Generates a hexadecimal digest of a key.
-- `allot`: Creates a random string for key distribution.
 - `mk_hash`: Generates a hash for a key.
 - `get_primary_key`: Generates a primary database key for a key-value pair.
 - `get_time`: Gets the current time as a Unix timestamp and microseconds.
@@ -22,158 +15,26 @@ Functions:
 - `get_values`: Retrieves all values from a table.
 
 """
-#import orjson
-#from pathlib import Path
 from hashlib import blake2b
-#from typing import Callable
 from datetime import datetime
 from secrets import base64
-from secrets import SystemRandom
 from collections import namedtuple
 from pydantic import StrictStr
 from pydantic import StrictBytes
 from sqlalchemy import select
-from sqlalchemy import inspect
-from sqlalchemy import MetaData
 from sqlalchemy import Table
-from sqlalchemy.orm.session import Session
-from sqlalchemy.orm.session import sessionmaker
+from sqlalchemy import Session
 #from litestash.logging import ENV
 from litestash.logging import root_logger as logger
 from litestash.models import LiteStashData
 from litestash.models import LiteStashStore
-#from litestash.core.schema import Metadata as StashMetadata
-#from litestash.core.session import Session as Stashsession
 #from litestash.core.config.root import Log
 from litestash.core.config.litestash_conf import Key
 from litestash.core.config.litestash_conf import Utils
-from litestash.core.config.litestash_conf import MetaAttr
-from litestash.core.config.litestash_conf import SessionAttr
-from litestash.core.util.engine_util import EngineAttributes
 from litestash.core.config.litestash_conf import TimeAttr
 from litestash.core.config.schema_conf import ColumnFields as C
-from litestash.core.util.schema_util import mk_tables
 from litestash.core.util.misc_util import name_match
 from litestash.core.util.misc_util import spaces_match
-
-
-def setup_metadata(engine_stash: EngineAttributes):
-    """Sets up and returns SQLAlchemy metadata for the given database engine.
-
-    Args:
-        engine_stash: A namedtuple containing the database name
-        (`db_name`) and SQLAlchemy `Engine` object.
-
-    Returns:
-        MetaAttributes: A namedtuple containing the database name and the
-        initialized `MetaData` object.
-    """
-    if engine_stash is None:
-        logger.error('Database engine attributes are missing')
-        raise ValueError('Engine attributes cannot be None')
-
-    if not isinstance(engine_stash, EngineAttributes):
-        logger.error('%s: invalid EngineAttributes', type(engine_stash))
-        raise TypeError(f'Invalid engine attributes: {engine_stash}')
-
-    metadata = MetaData()
-    logger.debug('%s init %s', engine_stash.db_name, metadata)
-    metadata = mk_tables(engine_stash.db_name, metadata)
-    logger.debug('added tables to %s', metadata)
-    metadata.create_all(bind=engine_stash.engine, checkfirst=True)
-    logger.debug(
-        'create and bind metadata to %s', engine_stash.engine
-    )
-    logger.debug('tables: %s', metadata.sorted_tables)
-    quality_metadata = MetaAttributes(engine_stash.db_name, metadata)
-    return quality_metadata
-
-
-MetaAttributes = namedtuple(
-    MetaAttr.TYPE_NAME.value,
-    [
-        MetaAttr.DB_NAME.value,
-        MetaAttr.METADATA.value
-    ]
-)
-MetaAttributes.__doc__ = MetaAttr.DOC.value
-
-
-def setup_sessions(engine_stash: EngineAttributes):
-    """Creates and returns a session factory for the given database engine.
-
-    This function checks if the database has tables before creating the session
-    factory.
-    If no tables are found, it raises a `ValueError`.
-
-    Args:
-        engine_stash: A namedtuple containing the database name
-        (`db_name`) and SQLAlchemy `Engine` object.
-
-    Returns:
-        SessionAttributes: A namedtuple containing the database name and the
-        session factory.
-
-    Raises:
-        ValueError: If no tables are found in the database.
-    """
-    if engine_stash is None:
-        logger.error('Session engine attributes missing')
-        raise ValueError('EngineAttributes cannot be None')
-
-    if not isinstance(engine_stash, EngineAttributes):
-        logger.error('%s: invalid type', type(engine_stash))
-        raise TypeError(f'EngineAttributes not found: {engine_stash}')
-
-    if inspect(engine_stash.engine).get_table_names():
-        logger.debug('sessionmaker called for %s', engine_stash.engine)
-        session = sessionmaker(engine_stash.engine)
-        logger.debug('sessionmaker created %s', session)
-    else:
-        raise ValueError(f'{SessionAttr.VALUE_ERROR.value}')
-    logger.debug(
-        'Call SessionAttributes with %s, %s', engine_stash.db_name, session
-    )
-    quality_session = SessionAttributes(engine_stash.db_name, session)
-    logger.debug('return quality_session %s', quality_session)
-    return quality_session
-
-
-SessionAttributes = namedtuple(
-    SessionAttr.TYPE_NAME.value,
-    [
-        SessionAttr.DB_NAME.value,
-        SessionAttr.SESSION.value
-    ]
-)
-SessionAttributes.__doc__ = SessionAttr.DOC.value
-
-
-def allot(size: int = 6) -> StrictStr:
-    """Generates a unique random string for key distribution.
-
-    Args:
-        size: The number of random bytes to use (must be divisible by 3).
-
-    Returns:
-        A URL-safe Base64-encoded string of the specified size.
-    """
-    if size is None:
-        logger.error('No size provided for the random bytes')
-        raise ValueError('A value of six or more is required')
-
-    if not isinstance(size, int):
-        logger.error('Integer size not provided: %s', size)
-        raise TypeError(f'Invalid size type: {type(size)}')
-
-    if size < 6:
-        raise ValueError('min size')
-
-    if size % 3 != 0:
-        raise ValueError('must be divisible by three')
-
-    lot = SystemRandom().randbytes(size)
-    return base64.urlsafe_b64encode(lot).decode()
 
 
 def digest_key(key: StrictStr) -> bytes:
