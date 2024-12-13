@@ -52,6 +52,7 @@ class Core(Valid):
     ENGINE = 'engine'
     SCHEMA = 'schema'
     SESSION = 'session'
+    TASKS = 'tasks'
 
 
 class Util(Valid):
@@ -89,6 +90,10 @@ class Tables(Valid):
     TABLES_UV = 'tables_uv'
     TABLES_WX = 'tables_wx'
     TABLES_YZ = 'tables_yz'
+
+    @staticmethod
+    def slots():
+        return tuple(slot.value for slot in Tables)
 
 
 class ErrorMessage(Valid):
