@@ -37,20 +37,20 @@ class MkHash(Valid):
 
     Configuration strings for logging and errors of the mk_hash function.
     """
-    NONE_LOG
-    VALUE_ERROR
-    BYTES_LOG
-    BYTES_ERROR
-    DIGEST_LOG
+    NONE_LOG = ''
+    VALUE_ERROR = ''
+    BYTES_LOG = ''
+    BYTES_ERROR = ''
+    DIGEST_LOG = ''
 
 
 class DigestKey(Valid):
-    """
+    """Digest Key
 
 
     """
-    DIGEST_KEY_LOG
-    DIGETS_KEY_ERROR
+    DIGEST_KEY_LOG = ''
+    DIGETS_KEY_ERROR = ''
 
 class StashError(Valid):
     """StashError
@@ -79,7 +79,11 @@ class StashSlots(Valid):
     ENGINE = 'engine'
     METADATA = 'metadata'
     DB_SESSION = 'db_session'
+    TASKS = 'tasks'
 
+    @staticmethod
+    def slots():
+        return tuple(slot.value for slot in StashSlots)
 
 class Utils(Valid):
     """Defaults for util functions
@@ -121,28 +125,6 @@ class SessionAttr(Valid):
     DOC = '''todo'''
 
 
-class TaskSlots(Valid):
-    """The attribute Slots for a Task thread."""
-    DB_NAME = f'{EngineAttr.DB_NAME.value}'
-    SESSION = f'{SessionAttr.SESSION.value}'
-    QUEUE = 'queue'
-    LOCK = 'lock'
-
-    @staticmethod
-    def get():
-        """Get the slots for a Task"""
-        return tuple([slot.value for slot in TaskSlots])
-
-
-class TaskAttr(Valid):
-    """The namedtuple config for all task attributes of a LiteStash"""
-    TYPE_NAME = 'TaskAttributes'
-    DB_NAME = f'{EngineAttr.DB_NAME.value}'
-    TASK = 'task'
-    VALUE_ERROR = 'todo'
-    DOC = '''todo'''
-
-
 class TimeAttr(Valid):
     """The namedtuple config for the unix timestamp from datetime"""
     TYPE_NAME = 'GetTime'
@@ -158,7 +140,7 @@ class EngineConf(Valid):
     Provide the configuation to setup a database engine.
     """
     SQLITE = 'sqlite:///'
-    DIR_NAME = '/mnt/ram/data'
+    DIR_NAME = 'data'#/mnt/ram/data'
     NAME_MIN_LENGTH = 3
     NAME_MAX_LENGTH = 128
     ECHO = True
