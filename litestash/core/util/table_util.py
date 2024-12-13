@@ -35,21 +35,21 @@ from litestash.core.config.schema_conf import ColumnConfig as Conf
 
 def mk_table_generator(
     table_class: type) -> Callable[[], Generator[str, None, None]]:
-        """Tablename generator factory"""
-        if table_class is None:
-            logger.error('Tables cannot be Nothing')
-            raise ValueError('Invalide value: None')
+    """Tablename generator factory"""
+    if table_class is None:
+        logger.error('Tables cannot be Nothing')
+        raise ValueError('Invalide value: None')
 
-        if not issubclass(table_class, Table):
-            print(f'table_class type: {table_class}')
-            logger.error('Invalid type of table')
-            raise TypeError(f'Incorrect table type: {type(table_class)}')
+    if not issubclass(table_class, Table):
+        print(f'table_class type: {table_class}')
+        logger.error('Invalid type of table')
+        raise TypeError(f'Incorrect table type: {type(table_class)}')
 
-        def generator():
-            for char in table_class:
-                table_name = table_class.get_table_name(char.value)
-                yield table_name
-        return generator
+    def generator():
+        for char in table_class:
+            table_name = table_class.get_table_name(char.value)
+            yield table_name
+    return generator
 
 
 get_tables_03 = mk_table_generator(Tables03)
