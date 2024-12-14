@@ -5,11 +5,13 @@ interacting with the distributed SQLite-based key-value store. It offers methods
 for setting, getting, deleting, and listing key-value pairs.
 """
 import orjson
+import asyncio
 from typing import overload
 from typing import Dict
 from typing import List
 from typing import Union
 from pydantic import Json
+from pydantic import StrictInt
 from pydantic import StrictStr
 from pydantic import StrictBool
 from sqlalchemy import insert
@@ -21,6 +23,7 @@ from litestash.core.config.litestash_conf import StashSlots
 from litestash.core.engine import Engine
 from litestash.core.schema import Metadata
 from litestash.core.session import Session
+from litestash.core.tasks import Tasks
 from litestash.models import LiteStashData
 from litestash.core.config.litestash_conf import StashError
 from litestash.core.util import fts
@@ -35,19 +38,18 @@ from litestash.core.util.schema_util import mk_table_names
 class LiteStash:
     """A high-performance key-value store using SQLite."""
 
-    __slots__ = (StashSlots.ENGINE.value,
-                 StashSlots.METADATA.value,
-                 StashSlots.DB_SESSION.value
-    )
+    __slots__ = StashSlots.slots()
+
 
     def __init__(self, search: StrictBool = False):
         """Initiate a new LiteStash
 
-        Creates a empty cache by default.
+        Creates an empty cache by default.
         """
         self.engine = Engine()
         self.metadata = Metadata(self.engine)
         self.db_session = Session(self.engine)
+        self.tasks = Tasks(self.db_session)
 
         if search:
             fts.create_all_search_tables(
@@ -57,89 +59,16 @@ class LiteStash:
             )
 
     @overload
-    def set(self,
-            key: StrictStr,
-            value: Union[StrictStr, Json, None] = None) -> None:
-        """Overload set using key,value string"""
-
-
-    @overload
-    def set(self, key: LiteStashData) -> None:
-        """Overload set using LiteStashData"""
-
-
-    def set(self,
-            key: StrictStr | LiteStashData,
-            value: Union[StrictStr, Json, None] = None):
-        """Inserts or updates a key-value pair.
-
-        Args:
-            key: Either a `LiteStashData` object or a string key.
-            value: The JSON value to store
-
-        Raises:
-            ValidationError: If the `LiteStashData` object fails validation.
-            Exception: For unexpected errors
-        """
-        try:
-            if isinstance(key, LiteStashData):
-                if value is not None:
-                    logger.error('Value supplied with LiteStashData')
-                    raise ValueError(
-                        'Possible duplicate values for a key.')
-
-                logger.debug('litestash data type check: %s', type(data))
-                data = get_datastore(key)
-
-            else:
-                if value is None:
-                    raise TypeError(f'{StashError.KEY_TYPE.value} ')
-                data = LiteStashData(key=data, value=value)
-                logger.debug('data: %s', data)
-                data = get_datastore(data)
-                logger.debug('data2store: %s', data)
-
-            table_name = get_table_name(data.key_hash[0])
-            logger.debug('table_name for data: %s', table_name)
-            db_name = get_db_name(data.key_hash[0])
-            logger.debug('db _name for data: %s', db_name)
-            metadata = self.metadata.get(db_name).metadata
-            logger.debug('metadata tables: %s', metadata.tables)
-            session = self.db_session.get(db_name).session
-            logger.debug('session: %s', session.kw)
-            table = metadata.tables[table_name]
-            sql_statement = (
-                insert(table)
-                .values(
-                    key_hash=data.key_hash,
-                    key=data.key,
-                    value=data.value,
-                    timestamp=data.timestamp,
-                    microsecond=data.microsecond
-                )
-            )
-            with session() as set_session:
-                set_session.execute(sql_statement)
-                set_session.commit()
-        except ValueError as invalid_error:
-            logger.error('Value error: %s', invalid_error)
-            raise
-        except Exception as error:
-            logger.error('An unexpected error: %s', error)
-            raise
-
-
-    @overload
-    def get(self, data: LiteStashData) -> LiteStashData | None:
+    def get(self, key: LiteStashData) -> LiteStashData | None:
         """Overload get using LiteStashData type"""
 
 
     @overload
-    def get(self, data: str) -> LiteStashData | None:
+    def get(self, key: str) -> LiteStashData | None:
         """Overload get using string type"""
 
 
-    def get(self, data: str | LiteStashData) -> LiteStashData | None:
+    async def get(self, key: str | LiteStashData) -> LiteStashData | None:
         """Retrieves a value from the cache by key.
 
         Args:
@@ -149,34 +78,55 @@ class LiteStash:
         Returns:
             LiteStashData: The retrieved key-value pair, or None if not found.
         """
-        if isinstance(data, LiteStashData):
-            data = get_datastore(data)
-        elif isinstance(data, str):
-            data = LiteStashData(key=data)
-        else:
-            raise TypeError(
-                f'{StashError.KEY_TYPE.value} not {type(data).__name__}'
-            )
+        try:
+            if isinstance(key, LiteStashData):
+                data = get_datastore(data)
+            elif isinstance(key, str):
+                data = LiteStashData(key=key)
+            else:
+                raise TypeError(
+                    f'{StashError.KEY_TYPE.value} not {type(data).__name__}'
+                )
+            hash_key = get_primary_key(data.key)
+            db_name = get_db_name(hash_key[0])
+            logger.debug('db _name for data: %s', db_name)
+            task = self.tasks.get(db_name)
 
-        hash_key = get_primary_key(data.key)
-        table_name = get_table_name(hash_key[0])
-        db_name = get_db_name(hash_key[0])
-        metadata = self.metadata.get(db_name).metadata
-        session = self.db_session.get(db_name).session
-        table = metadata.tables[table_name]
-        sql_statement = select(table).where(table.c.key_hash == hash_key)
+            def work(data: LiteStashData):
+                try:
+                    hash_key = get_primary_key(data.key)
+                    db_name = get_db_name(hash_key[0])
+                    table_name = get_table_name(hash_key[0])
+                    metadata = self.metadata.get(db_name).metadata
+                    session = self.db_session.get(db_name).session
+                    table = metadata.tables[table_name]
+                    sql_statement = select(table).where(
+                        table.c.key_hash == hash_key
+                    )
 
-        with session() as get_session:
-            result = get_session.execute(sql_statement).first()
-            get_session.commit()
+                    with session() as get_session:
+                        result = get_session.execute(sql_statement).first()
+                        get_session.commit()
+                    if result:
+                        print(f'result: {result}')
+                        print(f'{result[1]}')
+                        print(f'{result[2]}')
+                        print(f'{orjson.dumps(result[2])}')
+                        return LiteStashData(
+                        key=result[1],
+                        value=orjson.dumps(result[2])
+                        )
+                    else: return None
+                except Exception as error:
+                    logger.error('Unknown error: %s', error)
+                    raise
 
-        if result:
-            return LiteStashData(
-                key=result[1],
-                value=orjson.loads(result[2])
-            )
-        else:
-            return None
+            future = task.send(work, data)
+            return await asyncio.wrap_future(future)
+        except Exception as error:
+            logger.error('Task error on set: %s', error)
+            raise
+
 
     @overload
     def mget(self, keys: List[LiteStashData]) -> List[LiteStashData]:
@@ -192,6 +142,98 @@ class LiteStash:
              keys: List[str] | List[LiteStashData]) -> List[LiteStashData]:
         """Bulk get of multiple keys"""
         pass
+
+
+    @overload
+    async def set(self,
+            key: StrictStr,
+            value: Union[StrictStr, Json, None] = None) -> StrictBool:
+        """Overload set using key,value string"""
+
+
+    @overload
+    async def set(self, key: LiteStashData) -> StrictBool:
+        """Overload set using LiteStashData"""
+
+
+    async def set(self,
+            key: StrictStr | LiteStashData,
+            value: Union[StrictStr, Json, None] = None) -> StrictBool:
+        """Inserts or updates a key-value pair.
+
+        Args:
+            key: Either a `LiteStashData` object or a string key.
+            value: The JSON value to store
+
+        Returns:
+            True: On successfully setting a key-value to the database.
+
+        Raises:
+            ValidationError: If the `LiteStashData` object fails validation.
+            Exception: For unexpected errors
+        """
+        try:
+            if isinstance(key, LiteStashData):
+                if value is not None:
+                    logger.error('Value supplied with LiteStashData')
+                    raise ValueError(
+                        'Possible duplicate values for a key.')
+                data = key
+                logger.debug('litestash data type check: %s', type(data))
+
+            else:
+                if value is None:
+                    raise TypeError(f'{StashError.KEY_TYPE.value} ')
+                data = LiteStashData(key=key, value=value)
+                logger.debug('data: %s', data)
+
+            hash_key = get_primary_key(data.key)
+            db_name = get_db_name(hash_key[0])
+            logger.debug('db _name for data: %s', db_name)
+            task = self.tasks.get(db_name)
+
+            def work(data: LiteStashData):
+                try:
+                    data = get_datastore(data)
+                    db_name = get_db_name(data.key_hash[0])
+                    table_name = get_table_name(data.key_hash[0])
+                    logger.debug('table_name for data: %s', table_name)
+                    metadata = self.metadata.get(db_name).metadata
+                    logger.debug('metadata tables: %s', metadata.tables)
+                    session = self.db_session.get(db_name).session
+                    logger.debug('session: %s', session.kw)
+                    table = metadata.tables[table_name]
+                    sql_statement = (
+                        insert(table)
+                        .values(
+                            key_hash=data.key_hash,
+                            key=data.key,
+                            value=data.value,
+                            timestamp=data.timestamp,
+                            microsecond=data.microsecond
+                        )
+                    )
+                    with session() as set_session:
+                        set_session.execute(sql_statement)
+                        set_session.commit()
+                    return True
+                except ValueError as invalid_error:
+                    logger.error('Work value error: %s', invalid_error)
+                    raise
+                except Exception as unknown:
+                    logger.error('Unknown work error: %s', unknown)
+                    raise
+
+            future = task.send(work, data)
+            return await asyncio.wrap_future(future)
+
+        except ValueError as invalid:
+            logger.error('ValueError: %s', invalid)
+            raise
+        except Exception as error:
+            logger.error('An unexpected error: %s', error)
+            raise
+
 
     @overload
     def mset(self, data: List[LiteStashData], ttl: int) -> None:
@@ -220,8 +262,8 @@ class LiteStash:
 
 
     def expire(self,
-               keys: str | List[str] | None = None,
-               ttl: int = None) -> int:
+               keys: StrictStr | List[StrictStr] | None = None,
+               ttl: StrictInt = None) -> None:
         """Expire a key, some keys, or all keys
 
         Todo
@@ -234,7 +276,7 @@ class LiteStash:
         pass
 
 
-    def keys(self) -> list[str]:
+    def keys(self) -> List[StrictStr]:
         """Returns a list of all keys in the database."""
         keys = []
         for db_name in All_Tables:
@@ -248,7 +290,7 @@ class LiteStash:
         return keys
 
 
-    def values(self) -> list[dict]:
+    def values(self) -> List[Json]:
         """Returns a list of all values (as dictionaries) in the database."""
         values = []
         for db_name in All_Tables:
@@ -262,7 +304,7 @@ class LiteStash:
         return values
 
 
-    def exists(self, key: str) -> bool:
+    def exists(self, key: str) -> StrictBool:
         """Checks if a key exists in the database.
 
         Args:
@@ -363,4 +405,4 @@ class LiteStash:
 
     def __str__(self) -> str:
         """Returns a concise string representation of the LiteStash instance."""
-        return f'LiteStash(databases={len(self.metadata.__slots__)})'
+        return f'LiteStash(databases={len(self.__slots__)})'

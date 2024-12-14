@@ -61,7 +61,7 @@ def spaces_match(value: StrictStr) -> bool:
             If the input is not a string.
     """
     try:
-        spaces = re.compile(r'\s+')
+        spaces = re.compile(r'.*?\s+')
         return bool(spaces.match(value))
     except ValidationError as value_error:
         logger.error('%s%s', Matches.log_error(), value_error)

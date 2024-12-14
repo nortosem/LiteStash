@@ -27,6 +27,7 @@ from litestash.core.util.model_util import StrType
 from litestash.core.util.model_util import IntType
 from litestash.core.util.model_util import JsonType
 from litestash.core.util.model_util import ColumnType
+from litestash.core.util.misc_util import spaces_match
 from litestash.core.config.model import Parameter
 from litestash.core.config.model import StashField
 from litestash.core.config.model import StashDataclass
@@ -62,7 +63,7 @@ class LiteStashData:
         if not key.isascii():
             raise ValueError(StashField.VALID_KEY_ASCII.value)
 
-        if not key.isalnum():
+        if spaces_match(key):
             raise ValueError(StashField.VALID_KEY_TEXT.value)
 
         return key
