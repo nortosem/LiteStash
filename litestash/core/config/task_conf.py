@@ -12,6 +12,7 @@ class TaskSlots(Valid):
     DB_NAME = f'{EngineAttr.DB_NAME.value}'
     SESSION = f'{SessionAttr.SESSION.value}'
     LOCK = 'lock'
+    LOOP = 'loop'
 
     @staticmethod
     def slots():
