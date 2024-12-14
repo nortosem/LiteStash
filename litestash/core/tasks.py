@@ -40,7 +40,7 @@ class Tasks:
         """
         attribute = getattr(self, db_name, None)
         if attribute is None:
-            raise AttributeError('Datbase %s not found', db_name)
+            raise AttributeError(f'Datbase {db_name} not found')
         return attribute.task
 
 
