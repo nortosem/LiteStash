@@ -39,54 +39,8 @@ class Session:
             engine (EngineStash): An instance of the `EngineStash` class
             containing the database engines.
         """
-        self.tables_03 = setup_sessions(
-            engine.get(Tables.TABLES_03.value)
-        )
-        self.tables_47 = setup_sessions(
-            engine.get(Tables.TABLES_47.value)
-        )
-        self.tables_89hu = setup_sessions(
-            engine.get(Tables.TABLES_89HU.value)
-        )
-        self.tables_ab = setup_sessions(
-            engine.get(Tables.TABLES_AB.value)
-        )
-        self.tables_cd = setup_sessions(
-            engine.get(Tables.TABLES_CD.value)
-        )
-        self.tables_ef = setup_sessions(
-            engine.get(Tables.TABLES_EF.value)
-        )
-        self.tables_gh = setup_sessions(
-            engine.get(Tables.TABLES_GH.value)
-        )
-        self.tables_ij = setup_sessions(
-            engine.get(Tables.TABLES_IJ.value)
-        )
-        self.tables_kl = setup_sessions(
-            engine.get(Tables.TABLES_KL.value)
-        )
-        self.tables_mn = setup_sessions(
-            engine.get(Tables.TABLES_MN.value)
-        )
-        self.tables_op = setup_sessions(
-            engine.get(Tables.TABLES_OP.value)
-        )
-        self.tables_qr = setup_sessions(
-            engine.get(Tables.TABLES_QR.value)
-        )
-        self.tables_st = setup_sessions(
-            engine.get(Tables.TABLES_ST.value)
-        )
-        self.tables_uv = setup_sessions(
-            engine.get(Tables.TABLES_UV.value)
-        )
-        self.tables_wx = setup_sessions(
-            engine.get(Tables.TABLES_WX.value)
-        )
-        self.tables_yz = setup_sessions(
-            engine.get(Tables.TABLES_YZ.value)
-        )
+        for table in self.__slots__:
+            setattr(self, table, setup_sessions(engine.get(table)))
 
 
     def get(self, db_name):
@@ -103,7 +57,7 @@ class Session:
             AttributeError: If no session factory exists for the given
             database name.
         """
-        if db_name not in [table.value for table in Tables]:
+        if db_name not in self.__slots__:
             raise ValueError(f'{ErrorMessage.GET_ENGINE.value} {db_name}')
         attribute = getattr(self, db_name)
         return attribute
