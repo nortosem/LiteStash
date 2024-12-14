@@ -5,7 +5,6 @@ interacting with the distributed SQLite-based key-value store. It offers methods
 for setting, getting, deleting, and listing key-value pairs.
 """
 import orjson
-import asyncio
 from typing import overload
 from typing import Dict
 from typing import List
@@ -49,7 +48,6 @@ class LiteStash:
         self.engine = Engine()
         self.metadata = Metadata(self.engine)
         self.db_session = Session(self.engine)
-        self.tasks = Tasks(self.db_session)
 
         if search:
             fts.create_all_search_tables(
@@ -68,7 +66,7 @@ class LiteStash:
         """Overload get using string type"""
 
 
-    async def get(self, key: str | LiteStashData) -> LiteStashData | None:
+    def get(self, key: str | LiteStashData) -> LiteStashData | None:
         """Retrieves a value from the cache by key.
 
         Args:
@@ -87,44 +85,33 @@ class LiteStash:
                 raise TypeError(
                     f'{StashError.KEY_TYPE.value} not {type(data).__name__}'
                 )
+
             hash_key = get_primary_key(data.key)
             db_name = get_db_name(hash_key[0])
-            logger.debug('db _name for data: %s', db_name)
-            task = self.tasks.get(db_name)
+            table_name = get_table_name(hash_key[0])
+            metadata = self.metadata.get(db_name).metadata
+            session = self.db_session.get(db_name).session
+            table = metadata.tables[table_name]
+            sql_statement = select(table).where(
+                table.c.key_hash == hash_key
+            )
 
-            def work(data: LiteStashData):
-                try:
-                    hash_key = get_primary_key(data.key)
-                    db_name = get_db_name(hash_key[0])
-                    table_name = get_table_name(hash_key[0])
-                    metadata = self.metadata.get(db_name).metadata
-                    session = self.db_session.get(db_name).session
-                    table = metadata.tables[table_name]
-                    sql_statement = select(table).where(
-                        table.c.key_hash == hash_key
-                    )
+            with session() as get_session:
+                result = get_session.execute(sql_statement).first()
+                get_session.commit()
+            if result:
+                # print(f'result: {result}')
+                # print(f'{result[1]}')
+                # print(f'{result[2]}')
+                # print(f'{orjson.dumps(result[2])}')
+                return LiteStashData(
+                key=result[1],
+                value=orjson.dumps(result[2])
+                )
+            else: return None
 
-                    with session() as get_session:
-                        result = get_session.execute(sql_statement).first()
-                        get_session.commit()
-                    if result:
-                        print(f'result: {result}')
-                        print(f'{result[1]}')
-                        print(f'{result[2]}')
-                        print(f'{orjson.dumps(result[2])}')
-                        return LiteStashData(
-                        key=result[1],
-                        value=orjson.dumps(result[2])
-                        )
-                    else: return None
-                except Exception as error:
-                    logger.error('Unknown error: %s', error)
-                    raise
-
-            future = task.send(work, data)
-            return await asyncio.wrap_future(future)
         except Exception as error:
-            logger.error('Task error on set: %s', error)
+            logger.error('Unknown error on set: %s', error)
             raise
 
 
@@ -145,20 +132,20 @@ class LiteStash:
 
 
     @overload
-    async def set(self,
-            key: StrictStr,
-            value: Union[StrictStr, Json, None] = None) -> StrictBool:
+    def set(self,
+        key: StrictStr,
+        value: Union[StrictStr, Json, None] = None) -> StrictBool:
         """Overload set using key,value string"""
 
 
     @overload
-    async def set(self, key: LiteStashData) -> StrictBool:
+    def set(self, key: LiteStashData) -> StrictBool:
         """Overload set using LiteStashData"""
 
 
-    async def set(self,
-            key: StrictStr | LiteStashData,
-            value: Union[StrictStr, Json, None] = None) -> StrictBool:
+    def set(self,
+        key: StrictStr | LiteStashData,
+        value: Union[StrictStr, Json, None] = None) -> StrictBool:
         """Inserts or updates a key-value pair.
 
         Args:
@@ -187,45 +174,29 @@ class LiteStash:
                 data = LiteStashData(key=key, value=value)
                 logger.debug('data: %s', data)
 
-            hash_key = get_primary_key(data.key)
-            db_name = get_db_name(hash_key[0])
-            logger.debug('db _name for data: %s', db_name)
-            task = self.tasks.get(db_name)
-
-            def work(data: LiteStashData):
-                try:
-                    data = get_datastore(data)
-                    db_name = get_db_name(data.key_hash[0])
-                    table_name = get_table_name(data.key_hash[0])
-                    logger.debug('table_name for data: %s', table_name)
-                    metadata = self.metadata.get(db_name).metadata
-                    logger.debug('metadata tables: %s', metadata.tables)
-                    session = self.db_session.get(db_name).session
-                    logger.debug('session: %s', session.kw)
-                    table = metadata.tables[table_name]
-                    sql_statement = (
-                        insert(table)
-                        .values(
-                            key_hash=data.key_hash,
-                            key=data.key,
-                            value=data.value,
-                            timestamp=data.timestamp,
-                            microsecond=data.microsecond
-                        )
-                    )
-                    with session() as set_session:
-                        set_session.execute(sql_statement)
-                        set_session.commit()
-                    return True
-                except ValueError as invalid_error:
-                    logger.error('Work value error: %s', invalid_error)
-                    raise
-                except Exception as unknown:
-                    logger.error('Unknown work error: %s', unknown)
-                    raise
-
-            future = task.send(work, data)
-            return await asyncio.wrap_future(future)
+            data = get_datastore(data)
+            db_name = get_db_name(data.key_hash[0])
+            table_name = get_table_name(data.key_hash[0])
+            logger.debug('table_name for data: %s', table_name)
+            metadata = self.metadata.get(db_name).metadata
+            logger.debug('metadata tables: %s', metadata.tables)
+            session = self.db_session.get(db_name).session
+            logger.debug('session: %s', session.kw)
+            table = metadata.tables[table_name]
+            sql_statement = (
+                insert(table)
+                .values(
+                    key_hash=data.key_hash,
+                    key=data.key,
+                    value=data.value,
+                    timestamp=data.timestamp,
+                    microsecond=data.microsecond
+                )
+            )
+            with session() as set_session:
+                set_session.execute(sql_statement)
+                set_session.commit()
+            return True
 
         except ValueError as invalid:
             logger.error('ValueError: %s', invalid)
