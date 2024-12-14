@@ -177,14 +177,6 @@ def get_keys(session: Session, table: Table) -> list[StrictStr]:
         logger.error('todo')
         raise ValueError('todo')
 
-    if not isinstance(session, Session):
-        logger.error('todo')
-        raise TypeError('todo')
-
-    if not isinstance(table, Table):
-        logger.error('todo')
-        raise TypeError('todo')
-
     with session() as keys_get:
         sql_statement = select(table.c[C.KEY.value])
         keys = keys_get.execute(sql_statement).scalars().all()
@@ -208,14 +200,6 @@ def get_values(session: Session, table: Table) -> list[dict]:
     if table is None:
         logger.error('todo')
         raise ValueError('todo')
-
-    if not isinstance(session, Session):
-        logger.error('todo')
-        raise TypeError('todo')
-
-    if not isinstance(table, Table):
-        logger.error('todo')
-        raise TypeError('todo')
 
     with session() as values_get:
         sql_statement = select(table.c[C.VALUE.value])
