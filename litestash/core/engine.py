@@ -36,7 +36,7 @@ class Engine:
         """Initializes the Engine object by creating SQLAlchemy engines for
         each database file.
         """
-        for table in self.__slots__;
+        for table in self.__slots__:
             setattr(self, table, setup_engine(table))
 
 
