@@ -36,22 +36,8 @@ class Engine:
         """Initializes the Engine object by creating SQLAlchemy engines for
         each database file.
         """
-        self.tables_03 = setup_engine(Tables.TABLES_03.value)
-        self.tables_47 = setup_engine(Tables.TABLES_47.value)
-        self.tables_89hu = setup_engine(Tables.TABLES_89HU.value)
-        self.tables_ab = setup_engine(Tables.TABLES_AB.value)
-        self.tables_cd = setup_engine(Tables.TABLES_CD.value)
-        self.tables_ef = setup_engine(Tables.TABLES_EF.value)
-        self.tables_gh = setup_engine(Tables.TABLES_GH.value)
-        self.tables_ij = setup_engine(Tables.TABLES_IJ.value)
-        self.tables_kl = setup_engine(Tables.TABLES_KL.value)
-        self.tables_mn = setup_engine(Tables.TABLES_MN.value)
-        self.tables_op = setup_engine(Tables.TABLES_OP.value)
-        self.tables_qr = setup_engine(Tables.TABLES_QR.value)
-        self.tables_st = setup_engine(Tables.TABLES_ST.value)
-        self.tables_uv = setup_engine(Tables.TABLES_UV.value)
-        self.tables_wx = setup_engine(Tables.TABLES_WX.value)
-        self.tables_yz = setup_engine(Tables.TABLES_YZ.value)
+        for table in self.__slots__;
+            setattr(self, table, setup_engine(table))
 
 
     def get(self, name: str) -> SQL_Engine:
@@ -66,7 +52,7 @@ class Engine:
         Raises:
             AttributeError: If no engine is found with the given name.
         """
-        if name not in [table.value for table in Tables]:
+        if name not in self.__slots__:
             raise ValueError(f'{ErrorMessage.GET_ENGINE.value} {name}')
         attribute = getattr(self, name)
         return attribute

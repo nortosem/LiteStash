@@ -1,6 +1,7 @@
 """LiteStash Task Manager
 
-Creates and provides access to task facotories for each database in LiteStash.
+Manages the creation and access to task threads for each database in LiteStash,
+facilitating concurrent operations across multiple SQLite databases.
 """
 from litestash.core.config.root import Tables
 from litestash.core.util.task_util import setup_tasks
@@ -21,22 +22,8 @@ class Tasks:
 
         Initialize the thread Task and link it to a database.
         """
-        self.tables_03 = setup_tasks(session.get(Tables.TABLES_03.value))
-        self.tables_47 = setup_tasks(session.get(Tables.TABLES_47.value))
-        self.tables_89hu = setup_tasks(session.get(Tables.TABLES_89HU.value))
-        self.tables_ab = setup_tasks(session.get(Tables.TABLES_AB.value))
-        self.tables_cd = setup_tasks(session.get(Tables.TABLES_CD.value))
-        self.tables_ef = setup_tasks(session.get(Tables.TABLES_EF.value))
-        self.tables_gh = setup_tasks(session.get(Tables.TABLES_GH.value))
-        self.tables_ij = setup_tasks(session.get(Tables.TABLES_IJ.value))
-        self.tables_kl = setup_tasks(session.get(Tables.TABLES_KL.value))
-        self.tables_mn = setup_tasks(session.get(Tables.TABLES_MN.value))
-        self.tables_op = setup_tasks(session.get(Tables.TABLES_OP.value))
-        self.tables_qr = setup_tasks(session.get(Tables.TABLES_QR.value))
-        self.tables_st = setup_tasks(session.get(Tables.TABLES_ST.value))
-        self.tables_uv = setup_tasks(session.get(Tables.TABLES_UV.value))
-        self.tables_wx = setup_tasks(session.get(Tables.TABLES_WX.value))
-        self.tables_yz = setup_tasks(session.get(Tables.TABLES_YZ.value))
+        for table in self.__slots__:
+            setattr(self, table, setup_tasks(session.get(table)))
 
 
     def get(self, db_name):
@@ -51,7 +38,9 @@ class Tasks:
         Raises:
             AttributeError:
         """
-        attribute = getattr(self, db_name)
+        attribute = getattr(self, db_name, None)
+        if attribute is None:
+            raise AttributeError('Datbase %s not found', db_name)
         return attribute.task
 
 
@@ -61,10 +50,21 @@ class Tasks:
 
 
     def __repr__(self):
-        """todo"""
-        pass
+        """Representation of Tasks
 
+        Provides a string representation of the Tasks instance.
+
+        Returns:
+            str: A string describing the Tasks instance.
+        """
+        return f"Tasks({', '.join(self.__slots__)})"
 
     def __str__(self):
-        """todo"""
-        pass
+        """String of Tasks
+
+        Gives a concise string of the Tasks instance.
+
+        Returns:
+            str: A string with the number of managed databases.
+        """
+        return f"Tasks(databases={len(self.__slots__)})"
