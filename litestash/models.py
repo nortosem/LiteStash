@@ -8,31 +8,34 @@ Classes:
     LiteStashStore: Represents the structure of data stored in the database.
     StashColumn: Defines a column for a LiteStash database table.
 """
-import re
 import orjson
-from typing import Union
+
 from typing import Literal
+from typing import Union
+
+from sqlalchemy import Integer
 from sqlalchemy import JSON
 from sqlalchemy import String
-from sqlalchemy import Integer
-from pydantic import Json
-from pydantic import Field
-from pydantic import StrictStr
-from pydantic import StrictInt
-from pydantic import StrictBool
+
 from pydantic import ConfigDict
+from pydantic import Field
 from pydantic import field_validator
+from pydantic import Json
+from pydantic import StrictBool
+from pydantic import StrictInt
+from pydantic import StrictStr
 from pydantic.dataclasses import dataclass
-from litestash.core.util.model_util import StrType
+
+from litestash.core.util.misc_util import spaces_match
+from litestash.core.util.model_util import ColumnType
 from litestash.core.util.model_util import IntType
 from litestash.core.util.model_util import JsonType
-from litestash.core.util.model_util import ColumnType
-from litestash.core.util.misc_util import spaces_match
+from litestash.core.util.model_util import StrType
+from litestash.core.config.litestash_conf import DataScheme
 from litestash.core.config.model import Parameter
 from litestash.core.config.model import StashField
 from litestash.core.config.model import StashDataclass
 from litestash.core.config.schema_conf import ColumnConfig
-from litestash.core.config.litestash_conf import DataScheme
 
 
 @dataclass(slots=Parameter.SLOTS.value,
