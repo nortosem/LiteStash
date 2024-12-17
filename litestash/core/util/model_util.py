@@ -9,11 +9,14 @@ Key Components:
 * `StrType`, `IntType`, `JsonType`: Predefined ColumnType objects for common
 SQLite data types.
 """
-from litestash.core.config.schema_conf import ColumnConfig
 from collections import namedtuple
+
 from sqlalchemy import Integer
 from sqlalchemy import JSON
 from sqlalchemy import String
+
+from litestash.core.config.schema_conf import ColumnConfig
+
 
 # General Column KVS
 ColumnType = namedtuple(
@@ -24,6 +27,7 @@ ColumnType = namedtuple(
     ]
 )
 ColumnType.__doc__ = ColumnConfig.DOC.value
+
 
 # sqlalchemy sqlite data types
 StrType = ColumnType(ColumnConfig.STR.value, String)
