@@ -23,7 +23,6 @@ from litestash.core.config.schema_conf import Sql
 from litestash.core.config.schema_conf import Pragma
 from litestash.core.config.litestash_conf import EngineAttr
 from litestash.core.config.litestash_conf import EngineConf
-from litestash.core.util.misc_util import name_match
 from litestash.core.util.misc_util import spaces_match
 
 
@@ -85,7 +84,7 @@ def setup_engine(db_name: StrictStr, data_path: StrictStr = None) -> Engine:
     if db_name is None:
         logger.error('Valid database name required')
         raise ValueError('Database name missing')
-    if not name_match(db_name):
+    if not db_name.isascii():
         logger.error('Invalid file name %s. ASCII only', db_name)
         raise ValueError(f'{EngineConf.db_name_ascii()}: {db_name}')
     if spaces_match(db_name):
