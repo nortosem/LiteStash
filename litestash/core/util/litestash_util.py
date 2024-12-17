@@ -30,7 +30,7 @@ from secrets import base64
 from secrets import randbelow
 
 from sqlalchemy import delete
-from sqlalchemy import insert
+from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy import select
 from sqlalchemy import Table
 from sqlalchemy.exc import IntegrityError
@@ -251,7 +251,7 @@ def connect(data: Union[LiteStashData | LiteStashStore],
     table = metadata.tables[table_name]
 
     connection = None
-    if connection_type is ConnectionType.Get.value:
+    if connection_type is ConnectionType.GET.value:
         connection = GetConnection(key_hash, table, session)
     elif connection_type is ConnectionType.SET.value:
         connection = SetConnection(data, table, session)
@@ -369,7 +369,7 @@ def mget_data(mget_connections: GetDataConnections,
 
 def set_query(data: LiteStashStore, table: Table):
     """Return a SQL insert statement."""
-    return (insert(table)
+    statement = (insert(table)
         .values(
             key_hash=data.key_hash,
             key=data.key,
@@ -377,6 +377,10 @@ def set_query(data: LiteStashStore, table: Table):
             timestamp=data.timestamp,
             microsecond=data.microsecond
         )
+    )
+    return statement.on_conflict_do_update(
+        index_elements=[C.HASH.value],
+        set_=statement.excluded,
     )
 
 

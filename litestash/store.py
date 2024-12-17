@@ -194,8 +194,9 @@ class LiteStash:
             else:
                 data = LiteStashData(key=key, value=value)
                 logger.debug('stashdata: %s', data)
-                data = mk_datastore(data)
-                logger.debug('litestash datastore: %s', data)
+
+            data = mk_datastore(data)
+            logger.debug('litestash datastore: %s', data)
 
             set_data(connect(
                 data=data, metadata=self.metadata, db_session=self.db_session
