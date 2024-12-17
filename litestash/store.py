@@ -5,34 +5,47 @@ interacting with the distributed SQLite-based key-value store. It offers methods
 for setting, getting, deleting, and listing key-value pairs.
 """
 import orjson
-from typing import overload
+
+from datetime import datetime
+
 from typing import Dict
 from typing import List
+from typing import Optional
+from typing import overload
 from typing import Union
+
 from pydantic import Json
+from pydantic import StrictFloat
 from pydantic import StrictInt
 from pydantic import StrictStr
 from pydantic import StrictBool
-from sqlalchemy import insert
-from sqlalchemy import select
-from sqlalchemy import delete
-from litestash.logging import root_logger as logger
-from litestash.core.config.root import Tables as All_Tables
+from pydantic import ValidationError
+
+from litestash.core.config.litestash_conf import StashError
 from litestash.core.config.litestash_conf import StashSlots
+from litestash.core.config.root import Tables as All_Tables
 from litestash.core.engine import Engine
+from litestash.core.util import fts
+from litestash.core.util.connection_util import GetTime
+from litestash.core.util.litestash_util import connect
+from litestash.core.util.litestash_util import connections
+from litestash.core.util.litestash_util import does_exist
+from litestash.core.util.litestash_util import delete_data
+from litestash.core.util.litestash_util import get_data
+#from litestash.core.util.litestash_util import get_datastore
+from litestash.core.util.litestash_util import get_keys
+from litestash.core.util.litestash_util import get_time
+from litestash.core.util.litestash_util import get_values
+from litestash.core.util.litestash_util import mget_data
+from litestash.core.util.litestash_util import mset_data
+from litestash.core.util.litestash_util import mk_datastore
+from litestash.core.util.litestash_util import set_data
+from litestash.core.util.schema_util import mk_table_names
 from litestash.core.schema import Metadata
 from litestash.core.session import Session
-from litestash.core.tasks import Tasks
+from litestash.logging import root_logger as logger
 from litestash.models import LiteStashData
-from litestash.core.config.litestash_conf import StashError
-from litestash.core.util import fts
-from litestash.core.util.litestash_util import get_keys
-from litestash.core.util.litestash_util import get_values
-from litestash.core.util.litestash_util import get_datastore
-from litestash.core.util.litestash_util import get_primary_key
-from litestash.core.util.schema_util import get_db_name
-from litestash.core.util.schema_util import get_table_name
-from litestash.core.util.schema_util import mk_table_names
+
 
 class LiteStash:
     """A high-performance key-value store using SQLite."""
@@ -57,95 +70,109 @@ class LiteStash:
             )
 
     @overload
-    def get(self, key: LiteStashData) -> LiteStashData | None:
+    def get(self, key: LiteStashData) -> Optional[LiteStashData]:
         """Overload get using LiteStashData type"""
 
 
     @overload
-    def get(self, key: str) -> LiteStashData | None:
+    def get(self, key: StrictStr) -> Optional[LiteStashData]:
         """Overload get using string type"""
 
 
-    def get(self, key: str | LiteStashData) -> LiteStashData | None:
+    def get(self, key: StrictStr | LiteStashData) -> Optional[LiteStashData]:
         """Retrieves a value from the cache by key.
 
         Args:
-            key_or_data (str | LiteStashData): The key (string) or a
+            key (str | LiteStashData): The key (string) or a
             `LiteStashData` object containing the key.
 
         Returns:
             LiteStashData: The retrieved key-value pair, or None if not found.
         """
         try:
-            if isinstance(key, LiteStashData):
-                data = get_datastore(data)
-            elif isinstance(key, str):
+            data = None
+            if isinstance(key, str):
                 data = LiteStashData(key=key)
-            else:
-                raise TypeError(
-                    f'{StashError.KEY_TYPE.value} not {type(data).__name__}'
-                )
+            elif isinstance(key, LiteStashData):
+                data = key
 
-            hash_key = get_primary_key(data.key)
-            db_name = get_db_name(hash_key[0])
-            table_name = get_table_name(hash_key[0])
-            metadata = self.metadata.get(db_name).metadata
-            session = self.db_session.get(db_name).session
-            table = metadata.tables[table_name]
-            sql_statement = select(table).where(
-                table.c.key_hash == hash_key
-            )
-
-            with session() as get_session:
-                result = get_session.execute(sql_statement).first()
-                get_session.commit()
-            if result:
-                # print(f'result: {result}')
-                # print(f'{result[1]}')
-                # print(f'{result[2]}')
-                # print(f'{orjson.dumps(result[2])}')
-                return LiteStashData(
-                key=result[1],
-                value=orjson.dumps(result[2])
-                )
-            else: return None
-
-        except Exception as error:
-            logger.error('Unknown error on set: %s', error)
+            return get_data(connect(
+                data=data,
+				metadata=self.metadata,
+                db_session=self.db_session
+            ))
+        except ValidationError as error:
+            logger.error('invalid: %s', error)
+            raise
+        except ValueError as error:
+            logger.error('invalid: %s', error)
             raise
 
 
     @overload
-    def mget(self, keys: List[LiteStashData]) -> List[LiteStashData]:
-        """Get many keys using LiteStashData Objects"""
-
+    def mget(self, keys: List[StrictStr]) -> Optional[LiteStashData]:
+        """"""
 
     @overload
-    def mget(self, keys: List[str]) -> List[LiteStashData]:
-        """Get many keys by string list of key names"""
-
+    def mget(self, keys: List[LiteStashData]) -> Optional[LiteStashData]:
+        """"""
 
     def mget(self,
-             keys: List[str] | List[LiteStashData]) -> List[LiteStashData]:
-        """Bulk get of multiple keys"""
-        pass
+        keys: List[StrictStr | LiteStashData]) -> Optional[LiteStashData]:
+        """mget
+
+        Retrieves multiple values from the key-value store.
+
+        Args:
+            keys (List[StrictStr | LiteStashData]): A list of keys to retrieve.
+
+        Returns:
+            List[LiteStashData | None]:
+                A list of retrieved LiteStashData objects or None for keys not
+                found.
+
+        Raises:
+
+        """
+        def setup_keys(keys):
+            to_connect = []
+            if all(isinstance(item, str) for item in keys):
+                to_connect = [LiteStashData(key=key) for key in keys]
+                return to_connect
+            elif all(isinstance(key, LiteStashData) for key in keys):
+                return keys
+
+        try:
+            return mget_data(connections(setup_keys(keys)),
+                             self.metadata,
+                             self.db_session)
+
+        except TypeError as error:
+            logger.error('%s is not a %s: %s',
+                         type(keys).__name__,
+                         StashError.KEY_TYPE.value,
+                         error)
+            raise
+        except ValidationError as error:
+            logger.error('invalid: %s', error)
+            raise
 
 
     @overload
     def set(self,
         key: StrictStr,
-        value: Union[StrictStr, Json, None] = None) -> StrictBool:
+        value: Union[StrictStr, Json, None] = None) -> None:
         """Overload set using key,value string"""
 
 
     @overload
-    def set(self, key: LiteStashData) -> StrictBool:
+    def set(self, key: LiteStashData) -> None:
         """Overload set using LiteStashData"""
 
 
     def set(self,
         key: StrictStr | LiteStashData,
-        value: Union[StrictStr, Json, None] = None) -> StrictBool:
+        value: Union[StrictStr, Json, None] = None) -> None:
         """Inserts or updates a key-value pair.
 
         Args:
@@ -161,93 +188,163 @@ class LiteStash:
         """
         try:
             if isinstance(key, LiteStashData):
-                if value is not None:
-                    logger.error('Value supplied with LiteStashData')
-                    raise ValueError(
-                        'Possible duplicate values for a key.')
                 data = key
                 logger.debug('litestash data type check: %s', type(data))
 
             else:
-                if value is None:
-                    raise TypeError(f'{StashError.KEY_TYPE.value} ')
                 data = LiteStashData(key=key, value=value)
-                logger.debug('data: %s', data)
+                logger.debug('stashdata: %s', data)
+                data = mk_datastore(data)
+                logger.debug('litestash datastore: %s', data)
 
-            data = get_datastore(data)
-            db_name = get_db_name(data.key_hash[0])
-            table_name = get_table_name(data.key_hash[0])
-            logger.debug('table_name for data: %s', table_name)
-            metadata = self.metadata.get(db_name).metadata
-            logger.debug('metadata tables: %s', metadata.tables)
-            session = self.db_session.get(db_name).session
-            logger.debug('session: %s', session.kw)
-            table = metadata.tables[table_name]
-            sql_statement = (
-                insert(table)
-                .values(
-                    key_hash=data.key_hash,
-                    key=data.key,
-                    value=data.value,
-                    timestamp=data.timestamp,
-                    microsecond=data.microsecond
-                )
-            )
-            with session() as set_session:
-                set_session.execute(sql_statement)
-                set_session.commit()
-            return True
+            set_data(connect(
+                data=data, metadata=self.metadata, db_session=self.db_session
+            ))
 
         except ValueError as invalid:
             logger.error('ValueError: %s', invalid)
             raise
-        except Exception as error:
-            logger.error('An unexpected error: %s', error)
+        except ValidationError as invalid:
+            logger.error('Unexpected type of argument: %s', invalid)
             raise
 
 
     @overload
-    def mset(self, data: List[LiteStashData], ttl: int) -> None:
+    def mset(self, data: List[LiteStashData]) -> None:
         """"""
 
 
     @overload
-    def mset(self, data: List[Dict], ttl: int) -> None:
+    def mset(self, data: List[Dict]) -> None:
         """"""
 
 
     @overload
-    def mset(self, data: List[str], ttl: int) -> None:
+    def mset(self, data: List[StrictStr]) -> None:
         """"""
 
 
     def mset(
         self,
-        data: List[str] | List[Dict] | List[LiteStashData],
-        ttl: int) -> None:
+        data: List[Union[StrictStr | Dict | LiteStashData]]
+        ) -> None:
+        """mset
+
+        Batch multiple key-value entries.
         """
+        def parse_str(data):
+            parsed = []
+            try:
+                for element in data:
+                    e = orjson.loads(element)
+                    if isinstance(e, dict):
+                        raise ValueError(f'invalid json: {type(e)} for {e}')
+                    parsed.append(e.popitem())
+                return parsed
+            except ValueError as error:
+                logger.error('Expected JSON, not: %s', error)
+                raise
+            except ValidationError as error:
+                logger.error('Invalid string input: %s', error)
+                raise
 
-        todo
+        def setup_data(data):
+            to_connect = []
+            if all(isinstance(item, dict) for item in data):
+                to_connect = [
+                    mk_datastore(LiteStashData(key=k, value=orjson.dumps(v))) \
+                        for d in data for k, v in d.items()
+                ]
+
+            elif all(isinstance(item, str) for item in data):
+                to_connect = [
+                    mk_datastore(LiteStashData(key=e[0],
+                                              value=orjson.dumps(e[1]))) \
+                        for e in parse_str(data)
+                ]
+            elif all(isinstance(item, LiteStashData) for item in data):
+                to_connect = [
+                    mk_datastore(item) for item in data
+                ]
+            return to_connect
+
+        try:
+
+            mset_data(connections(setup_data(data)),
+                      self.metadata,
+                      self.db_session)
+
+        except ValueError as invalid:
+            logger.error('Invalid data: %s', invalid)
+            raise
+        except ValidationError as error:
+            logger.error('An invalid argument: %s', error)
+            raise
+
+
+    def expire(self, keys: Union[StrictStr | List[StrictStr] | None] = None,
+               ttl: Union[StrictFloat | StrictInt | GetTime] = None) -> None:
+        """Expire
+
+        Check the time age of a key with a time-to-live value.
+        One or more keys may be provided to check specific keys.
+        Otherwise if only a time-to-live is given all keys are checked.
+        String keys may be separated by spaces.
+
+        Args:
+Args:
+        keys (Optional[Union[StrictStr, List[StrictStr]]]):
+            Zero or more strings for checking JSON expiration time.
+
+        ttl (Optional[Union[StrictFloat, StrictInt, GetTime]]):
+            A Unix timestamp with or without microseconds or a LiteStash
+            GetTime tuple.
+
+        Raises:
+            TypeError:
+                If ttl is not provided or cannot be converted to GetTime.
+            ValidationError:
+                todo
         """
-        pass
+        try:
+            if ttl is None:
+                raise TypeError('Time to live required to expire data')
 
+            if isinstance(ttl, datetime):
+                ttl = GetTime(int(ttl.timestamp()), ttl.microsecond)
 
-    def expire(self,
-               keys: StrictStr | List[StrictStr] | None = None,
-               ttl: StrictInt = None) -> None:
-        """Expire a key, some keys, or all keys
+            elif isinstance(ttl, (float, int)):
+                ttl = datetime.fromtimestamp(ttl)
+                ttl = GetTime(int(ttl.timestamp()), ttl.microsecond)
 
-        Todo
-        """
-        pass
+            if keys is None:
+                keys = self.keys()
+                if keys is None:
+                    return None
 
+            elif isinstance(keys, str):
+                keys = keys.split()
+
+            if isinstance(keys, list) and all(
+                    isinstance(k, str) for k in keys
+            ):
+                for key in keys:
+                    data = get_time(key)
+                    if data.timestamp >= ttl.timestamp:
+                        self.delete(key)
+        except ValidationError as invalid:
+            logger.error('todo: %s', invalid)
+            raise
+        except TypeError as error:
+            logger.error('ttl required: %s', error)
+            raise
 
     def search(text: str = None):
         """Search all of the JSON stored for a key and return the value"""
         pass
 
 
-    def keys(self) -> List[StrictStr]:
+    def keys(self) -> Optional[List[StrictStr]]:
         """Returns a list of all keys in the database."""
         keys = []
         for db_name in All_Tables:
@@ -257,11 +354,11 @@ class LiteStash:
             for table_name in table_names:
                 table = metadata.tables[table_name]
                 table_keys = get_keys(session, table)
-                keys.append(table_keys)
+                keys.extend(table_keys)
         return keys
 
 
-    def values(self) -> List[Json]:
+    def values(self) -> Optional[List[Json]]:
         """Returns a list of all values (as dictionaries) in the database."""
         values = []
         for db_name in All_Tables:
@@ -271,11 +368,11 @@ class LiteStash:
             for table_name in table_names:
                 table = metadata.tables[table_name]
                 table_values = get_values(session, table)
-                values.append(table_values)
+                values.extend(table_values)
         return values
 
 
-    def exists(self, key: str) -> StrictBool:
+    def exists(self, key: StrictStr) -> StrictBool:
         """Checks if a key exists in the database.
 
         Args:
@@ -284,36 +381,25 @@ class LiteStash:
         Returns:
             bool: True if the key exists, False otherwise.
         """
-        if not isinstance(key, str):
-            raise TypeError(
-                f'{StashError.KEY_TYPE.value} not {type(key).__name__}'
+        try:
+            if isinstance(key, str):
+                data = LiteStashData(key=key)
+                return does_exist(connect(
+                    data=data,
+                    metadata=self.metadata,
+                    db_session=self.db_session
+                ))
+        except ValidationError as error:
+            logger.error(
+                '%s is not %s: %s',
+                StashError.KEY_TYPE.value,
+                type(key).__name__,
+				error
             )
-
-        if isinstance(key, str):
-            key = LiteStashData(key=key)
-
-        hash_key = get_primary_key(key.key)
-        table_name = get_table_name(hash_key[0])
-        db_name = get_db_name(hash_key[0])
-        metadata = self.metadata.get(db_name).metadata
-        session = self.db_session.get(db_name).session
-        table = metadata.tables[table_name]
-        sql_statement = (
-            select(table).where(table.c.key_hash == hash_key)
-        )
-
-        with session() as exist_session:
-            data = exist_session.execute(sql_statement).first()
-            exist_session.commit()
-
-        if data:
-            return True
-        else:
-            return False
 
 
     @overload
-    def delete(self, data: LiteStashData):
+    def delete(self, data: LiteStashData) -> None:
         """LiteStash Delete
 
         Remove a key-value pair from the stash
@@ -322,33 +408,25 @@ class LiteStash:
         """
 
 
-    def delete(self, key: str):
+    def delete(self, key: StrictStr) -> None:
         """Deletes a key-value pair from the database.
 
         Args:
             data: Either a `LiteStashData` object or a string key to delete.
         """
-        if not isinstance(key, str):
-            raise TypeError(
-                f'{StashError.KEY_TYPE.value} not {type(key).__name__}'
-            )
+        try:
+            data = None
+            if isinstance(key, str):
+                data = LiteStashData(key=key)
 
-        if isinstance(key, str):
-            key = LiteStashData(key=key)
-
-        hash_key = get_primary_key(key.key)
-        table_name = get_table_name(hash_key[0])
-        db_name = get_db_name(hash_key[0])
-        metadata = self.metadata.get(db_name).metadata
-        session = self.db_session.get(db_name).session
-        table = metadata.tables[table_name]
-
-        with session() as delete_session:
-            delete_session.execute(
-                delete(table).where(table.c.key_hash == hash_key)
-            )
-            delete_session.commit()
-
+            delete_data(connect(
+                data=data, metadata=self.metadata, db_session=self.db_session
+	        ))
+        except ValidationError as error:
+            logger.error('%s not %s: %s',
+                         StashError.KEY_TYPE.value,
+                         type(key).__name__,
+                         error)
 
     def clear(self) -> None:
         """Clears all entries from the database."""
@@ -356,7 +434,6 @@ class LiteStash:
             metadata = self.metadata.get(db).metadata
             engine = self.engine.get(db).engine
             metadata.drop_all(bind=engine)
-
         self.engine = Engine()
         self.metadata = Metadata(self.engine)
         self.db_session = Session(self.engine)
