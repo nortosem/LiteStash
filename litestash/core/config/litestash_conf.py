@@ -79,7 +79,6 @@ class StashSlots(Valid):
     ENGINE = 'engine'
     METADATA = 'metadata'
     DB_SESSION = 'db_session'
-    TASKS = 'tasks'
 
     @staticmethod
     def slots():
@@ -100,10 +99,10 @@ class EngineAttr(Valid):
     TYPE_NAME = 'EngineAttributes'
     DB_NAME = 'db_name'
     ENGINE = 'engine'
-    DOC = '''Defines a named tuple for tuple returned by utils.setup_engine.
+    DOC = '''Defines a namedtuple for tuple returned by utils.setup_engine.
     Attributes:
         db_name (str): name of the database for this engine
-        engine (Engine): the sqlalchemy engine itself
+        engine (Engine): the sqlalchemy engine object
     '''
     VALUE_ERROR = 'No such engine found'
 
@@ -113,7 +112,11 @@ class MetaAttr(Valid):
     TYPE_NAME = 'MetaAttributes'
     DB_NAME = f'{EngineAttr.DB_NAME.value}'
     METADATA = 'metadata'
-    DOC = '''todo'''
+    DOC = '''Defines a namedtuple for all metadata attributes of a LiteStash.
+    Attributes:
+        db_name (str): name of the database for this metadata
+        metadata (Metadata): the sqlalchemy metadata object
+    '''
 
 
 class SessionAttr(Valid):
@@ -122,16 +125,11 @@ class SessionAttr(Valid):
     DB_NAME = f'{EngineAttr.DB_NAME.value}'
     SESSION = 'session'
     VALUE_ERROR = 'Invalid database: no tables found'
-    DOC = '''todo'''
-
-
-class TimeAttr(Valid):
-    """The namedtuple config for the unix timestamp from datetime"""
-    TYPE_NAME = 'GetTime'
-    TIMESTAMP = 'timestamp'
-    MICROSECOND = 'microsecond'
-    VALUE_ERROR = 'Valid time in integer only'
-    DOC = '''todo'''
+    DOC = '''Defines a namedtuple for all session attributes of a LiteStash.
+    Attributes:
+        db_name (str): nameo fthe database for this session
+        session (Session): the sqlalchemy session object
+    '''
 
 
 class EngineConf(Valid):
