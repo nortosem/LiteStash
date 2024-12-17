@@ -1,6 +1,7 @@
 """Connection Utilities
 
-
+The Connection Utility module provides a set of classes to manage LiteStash
+Database connections and data transfer.
 """
 from abc import ABC
 
@@ -35,6 +36,11 @@ GetTime.__doc__ = TimeAttr.DOC.value
 
 
 class Connection(ABC):
+    """Connection
+
+    An abstract base class for connections. This class is used to define
+    the connection type for all connection types.
+    """
     pass
 
 
@@ -63,7 +69,42 @@ SetConnectionAttr.__doc__ = SetConnectionAttr.DOC.value
 class DatabaseConnections:
     """Database Connections
 
+    Database Connections
+
     The Base class to manage connections for each database of a LiteStash.
+
+    Attributes:
+        __slots__ (tuple): Tuple of database names.
+
+    Methods:
+        __contains__(self, db_name: StrictStr) -> bool:
+            Return boolean if database name is found.
+        __getitem__(self, db_name: StrictStr) -> List[Union[
+            LiteStashData, LiteStashStore]]:
+                Return the self[database] connection list.
+        __setitem__(self, db_name: StrictStr, value: Union[LiteStashData,
+            LiteStashStore,
+            List[LiteStashData],
+            List[LiteStashStore]]) -> None:
+                Update the self[database] connection list.
+        clear(self) -> None:
+            Remove all connections from all databases.
+        get(self, db_name: StrictStr) -> List[Union[LiteStashData,
+            LiteStashStore]]:
+                Return the connection list for the given database.
+        is_data(self, item) -> bool:
+            Return True if the item is LiteStashData.
+        is_store(self, item) -> bool:
+            Return True if the item is LiteStashStore.
+        items(self) -> List[Union[str, List[Union[LiteStashData,
+            LiteStashStore]]]]:
+            Return a list of all database and connection lists.
+        keys(self) -> Set[str]:
+            Return a set of all the databases available.
+        session(self, database: StrictStr, manager: Manager) -> Session:
+            Return a session for the database.
+        values(self) -> List[Union[List[LiteStashData], List[LiteStashStore]]]:
+            Return a list of all the connections for each database.
     """
     __slots__ = Tables.slots()
 
