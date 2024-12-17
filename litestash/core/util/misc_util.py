@@ -66,24 +66,3 @@ def spaces_match(value: StrictStr) -> bool:
     except ValidationError as value_error:
         logger.error('%s%s', Matches.log_error(), value_error)
         raise TypeError(f'{Matches.type_error()}') from value_error
-
-
-def name_match(value: StrictStr):
-    """Name Match Function
-
-    Match value to compiled name patter to check if value is valid ASCII only.
-
-    Args:
-        value (StrictStr) -
-            A Pydantic type that ensures the value is strictly a string.
-
-    Returns:
-        results (Boolean) -
-            True if the value is an ASCII only string.
-    """
-    try:
-        name = re.compile(r'\w+', flags=re.A)
-        return bool(name.match(value))
-    except ValidationError as value_error:
-        logger.error('%s%s', Matches.log_error(), value_error)
-        raise TypeError(f'{Matches.type_error()}') from value_error
