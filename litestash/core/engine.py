@@ -3,7 +3,13 @@
 This module provides engines for all SQLite databases used in the LiteStash
 key-value store.
 """
+from typing import Optional
+
+from pydantic import StrictBool
+from pydantic import StrictStr
+
 from sqlalchemy import Engine as SQL_Engine
+
 from litestash.core.config.root import Tables
 from litestash.core.config.root import ErrorMessage
 from litestash.core.util.engine_util import setup_engine
@@ -32,15 +38,17 @@ class Engine:
     __slots__ = Tables.slots()
 
 
-    def __init__(self):
+    def __init__(self,
+                 cache: StrictBool = False,
+                 data: Optional[StrictStr] = None):
         """Initializes the Engine object by creating SQLAlchemy engines for
         each database file.
         """
-        for table in self.__slots__:
-            setattr(self, table, setup_engine(table))
+        for db in self.__slots__:
+            setattr(self, db, setup_engine(db, cache, data))
 
 
-    def get(self, name: str) -> SQL_Engine:
+    def get(self, name: StrictStr) -> SQL_Engine:
         """Retrieves a specific SQLAlchemy engine by its name.
 
         Args:

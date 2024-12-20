@@ -12,6 +12,8 @@ LiteStash, including:
 organizing engine, metadata, session, and time-related information.
 - **EngineConf:** Configuration parameters for setting up the SQLAlchemy engine.
 """
+from pathlib import Path
+
 from litestash.core.config.root import Valid
 
 
@@ -137,8 +139,9 @@ class EngineConf(Valid):
 
     Provide the configuation to setup a database engine.
     """
+    CACHE = ':memory:'
     SQLITE = 'sqlite:///'
-    DIR_NAME = 'data'#/mnt/ram/data'
+    DIR_NAME = f'{Path.cwd()}/data'
     NAME_MIN_LENGTH = 3
     NAME_MAX_LENGTH = 128
     ECHO = True
@@ -154,6 +157,10 @@ class EngineConf(Valid):
     NO_DIR_ACCESS = 'Directory inaccessible'
     DIR_PATH_ERROR = 'Path Exception'
 
+
+    @staticmethod
+    def cache() -> str:
+        return EngineConf.CACHE.value
 
     @staticmethod
     def sqlite() -> str:

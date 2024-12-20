@@ -12,12 +12,19 @@ Classes:
 * `EnginAttributes`: Namedtuple encapsulation of database name and a sqlalchemy
 engine configured for use.
 """
-from pathlib import Path
-from sqlalchemy import event
-from sqlalchemy import Engine
-from sqlalchemy import create_engine
-from pydantic import StrictStr
 from collections import namedtuple
+
+from pathlib import Path
+
+from sqlalchemy import create_engine
+from sqlalchemy import Engine
+from sqlalchemy import event
+from sqlalchemy.pool import StaticPool
+
+from pydantic import StrictBool
+from pydantic import StrictStr
+from pydantic import ValidationError
+
 from litestash.logging import root_logger as logger
 from litestash.core.config.schema_conf import Sql
 from litestash.core.config.schema_conf import Pragma
@@ -70,7 +77,9 @@ def set_begin(db_connection):
     db_connection.exec_driver_sql(Sql.BEGIN.value)
 
 
-def setup_engine(db_name: StrictStr, data_path: StrictStr = None) -> Engine:
+def setup_engine(db_name: StrictStr,
+                 cache: StrictBool = False,
+                 data_path: StrictStr = f'{EngineConf.dirname()}') -> Engine:
     """Sets up a SQLAlchemy engine for the given database.
     #!@@!# Add Permission check for default or given data dir
     #!@@!# The default is /mnt/ram
@@ -97,11 +106,17 @@ def setup_engine(db_name: StrictStr, data_path: StrictStr = None) -> Engine:
         logger.error('todo')
         raise ValueError(f'{EngineConf.db_name_length()}: {db_name}')
 
-    if data_path is None:
-        data_path = Path(
+    if cache:
+        data_path = f'{EngineConf.cache()}'
+        logger.debug('cache activated: %s', data_path)
+    elif data_path is None:
+        data_path = Path( #TODO test if still necessary?
             f'{EngineConf.dirname()}/{db_name}'
         )
         logger.debug('data_path: %s', data_path)
+    elif cache and not data_path is f'{EngineConf.dirname()}':
+        raise ValidationError('Both cache in memory and file chosen!')
+
     else:
         try:
             data_path =Path(
@@ -118,21 +133,35 @@ def setup_engine(db_name: StrictStr, data_path: StrictStr = None) -> Engine:
             logger.error('%s: %s', EngineConf.dir_path_error(), path_error)
             raise
 
-    data_path.mkdir(parents=True, exist_ok=True)
-    logger.debug('data_path mkdir if needed')
+    if cache:
+        database = f'{EngineConf.sqlite()}{data_path}'
+        logger.debug('cache uri: %s', database)
 
-    database = f'{EngineConf.sqlite()}{data_path}/{db_name}.db'
-    logger.debug('database url: %s', database)
+        engine = create_engine(
+            database,
+            connect_args={'check_same_thread': False},
+            poolclass=StaticPool,
+            logging_name=f'{db_name}_engine',
+            pool_logging_name=f'{db_name}_pool',
+            echo=EngineConf.no_echo(),
+            echo_pool=EngineConf.no_echo(),
+        )
+    else:
+        data_path.mkdir(parents=True, exist_ok=True)
+        logger.debug('data_path mkdir if needed')
 
-    engine = create_engine(
-        database,
-        logging_name=f'{db_name}_engine',
-        pool_logging_name=f'{db_name}_pool',
-        echo=EngineConf.no_echo(),
-        echo_pool=EngineConf.no_echo(),
-        pool_size=EngineConf.pool_size(),
-        max_overflow=EngineConf.max_overflow(),
-    )
+        database = f'{EngineConf.sqlite()}{data_path}/{db_name}.db'
+        logger.debug('database url: %s', database)
+
+        engine = create_engine(
+            database,
+            logging_name=f'{db_name}_engine',
+            pool_logging_name=f'{db_name}_pool',
+            echo=EngineConf.no_echo(),
+            echo_pool=EngineConf.no_echo(),
+            pool_size=EngineConf.pool_size(),
+            max_overflow=EngineConf.max_overflow(),
+        )
     logger.debug('db engine: %s', engine)
 
     event.listen(
