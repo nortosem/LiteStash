@@ -21,6 +21,7 @@ from pydantic import StrictStr
 from pydantic import StrictBool
 from pydantic import ValidationError
 
+from litestash.core.config.litestash_conf import EngineConf
 from litestash.core.config.litestash_conf import StashError
 from litestash.core.config.litestash_conf import StashSlots
 from litestash.core.config.root import Tables as All_Tables
@@ -53,12 +54,15 @@ class LiteStash:
     __slots__ = StashSlots.slots()
 
 
-    def __init__(self, search: StrictBool = False):
+    def __init__(self,
+                 cache: StrictBool = False,
+                 data: Optional[StrictStr] = None,
+                 search: StrictBool = False):
         """Initiate a new LiteStash
 
         Creates an empty cache by default.
         """
-        self.engine = Engine()
+        self.engine = Engine(cache=cache, data=data)
         self.metadata = Metadata(self.engine)
         self.db_session = Session(self.engine)
 
