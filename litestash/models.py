@@ -26,12 +26,12 @@ from pydantic import StrictInt
 from pydantic import StrictStr
 from pydantic.dataclasses import dataclass
 
+from litestash.core.config.litestash_conf import DataScheme
 from litestash.core.util.misc_util import spaces_match
 from litestash.core.util.model_util import ColumnType
 from litestash.core.util.model_util import IntType
 from litestash.core.util.model_util import JsonType
 from litestash.core.util.model_util import StrType
-from litestash.core.config.litestash_conf import DataScheme
 from litestash.core.config.model import Parameter
 from litestash.core.config.model import StashField
 from litestash.core.config.model import StashDataclass
