@@ -12,6 +12,8 @@ LiteStash, including:
 organizing engine, metadata, session, and time-related information.
 - **EngineConf:** Configuration parameters for setting up the SQLAlchemy engine.
 """
+from pathlib import Path
+
 from litestash.core.config.root import Valid
 
 
@@ -79,7 +81,6 @@ class StashSlots(Valid):
     ENGINE = 'engine'
     METADATA = 'metadata'
     DB_SESSION = 'db_session'
-    TASKS = 'tasks'
 
     @staticmethod
     def slots():
@@ -100,10 +101,10 @@ class EngineAttr(Valid):
     TYPE_NAME = 'EngineAttributes'
     DB_NAME = 'db_name'
     ENGINE = 'engine'
-    DOC = '''Defines a named tuple for tuple returned by utils.setup_engine.
+    DOC = '''Defines a namedtuple for tuple returned by utils.setup_engine.
     Attributes:
         db_name (str): name of the database for this engine
-        engine (Engine): the sqlalchemy engine itself
+        engine (Engine): the sqlalchemy engine object
     '''
     VALUE_ERROR = 'No such engine found'
 
@@ -113,7 +114,11 @@ class MetaAttr(Valid):
     TYPE_NAME = 'MetaAttributes'
     DB_NAME = f'{EngineAttr.DB_NAME.value}'
     METADATA = 'metadata'
-    DOC = '''todo'''
+    DOC = '''Defines a namedtuple for all metadata attributes of a LiteStash.
+    Attributes:
+        db_name (str): name of the database for this metadata
+        metadata (Metadata): the sqlalchemy metadata object
+    '''
 
 
 class SessionAttr(Valid):
@@ -122,16 +127,11 @@ class SessionAttr(Valid):
     DB_NAME = f'{EngineAttr.DB_NAME.value}'
     SESSION = 'session'
     VALUE_ERROR = 'Invalid database: no tables found'
-    DOC = '''todo'''
-
-
-class TimeAttr(Valid):
-    """The namedtuple config for the unix timestamp from datetime"""
-    TYPE_NAME = 'GetTime'
-    TIMESTAMP = 'timestamp'
-    MICROSECOND = 'microsecond'
-    VALUE_ERROR = 'Valid time in integer only'
-    DOC = '''todo'''
+    DOC = '''Defines a namedtuple for all session attributes of a LiteStash.
+    Attributes:
+        db_name (str): nameo fthe database for this session
+        session (Session): the sqlalchemy session object
+    '''
 
 
 class EngineConf(Valid):
@@ -139,8 +139,9 @@ class EngineConf(Valid):
 
     Provide the configuation to setup a database engine.
     """
+    CACHE = ':memory:'
     SQLITE = 'sqlite:///'
-    DIR_NAME = 'data'#/mnt/ram/data'
+    DIR_NAME = f'{Path.cwd()}/data'
     NAME_MIN_LENGTH = 3
     NAME_MAX_LENGTH = 128
     ECHO = True
@@ -156,6 +157,10 @@ class EngineConf(Valid):
     NO_DIR_ACCESS = 'Directory inaccessible'
     DIR_PATH_ERROR = 'Path Exception'
 
+
+    @staticmethod
+    def cache() -> str:
+        return EngineConf.CACHE.value
 
     @staticmethod
     def sqlite() -> str:
