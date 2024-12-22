@@ -10,7 +10,10 @@ Classes:
 """
 import orjson
 
+from typing import Dict
+from typing import List
 from typing import Literal
+from typing import Optional
 from typing import Union
 
 from sqlalchemy import Integer
@@ -23,6 +26,7 @@ from pydantic import field_validator
 from pydantic import Json
 from pydantic import StrictBool
 from pydantic import StrictInt
+from pydantic import StrictFloat
 from pydantic import StrictStr
 from pydantic.dataclasses import dataclass
 
@@ -53,7 +57,9 @@ class LiteStashData:
         min_length=DataScheme.MIN_LENGTH.value,
         max_length=DataScheme.MAX_LENGTH.value,
     )
-    value: Json | None = Field(default=None)
+    value: Optional[
+        Json | Dict | List | StrictFloat | StrictInt
+    ] = Field(default=None)
 
     @field_validator(ColumnConfig.DATA_KEY.value)
     def valid_key(cls, key: str):
@@ -74,7 +80,7 @@ class LiteStashData:
     @field_validator(ColumnConfig.DATA_VALUE.value)
     def valid_value(cls, value):
         """Validate & serialize the value to JSON"""
-        if isinstance(value, (dict,list,str,type(None))):
+        if isinstance(value, (dict,list,str,int,float,type(None))):
             value = orjson.dumps(value).decode()
             return value
 
