@@ -11,8 +11,6 @@ import logging
 from logging import config
 from litestash.core.config.root import Log
 
-import os
-from litestash.core.config.root import Log
 
 def log_env(env: str = Log.PROD.value) -> str:  # Provide a default value
     """
@@ -28,13 +26,17 @@ def log_env(env: str = Log.PROD.value) -> str:  # Provide a default value
         ValueError: If an invalid environment value is provided.
     """
     if env not in [Log.DEV.value, Log.PROD.value]:
-        raise ValueError("Invalid environment")
+        raise ValueError('Invalid environment')
     return os.getenv('RUN_ENV', env)
 
 
 ENV = log_env()
 
-def load_config(config_file=""):
+def configfile_not_found(e):
+    return f'Error loading logging configuraiton: {e}'
+
+
+def load_config(config_file=''):
     """Load the config function
 
     Loads the default configuration or a custom config file.
@@ -48,7 +50,7 @@ def load_config(config_file=""):
     try:
         config.fileConfig(config_file)
     except (FileNotFoundError, ValueError) as e:
-        logging.error(f'Error loading logging configuration: {e}')
+        logging.error(configfile_not_found(e))
 
 load_config()
 root_logger = logging.getLogger()
