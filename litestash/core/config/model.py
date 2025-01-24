@@ -34,7 +34,7 @@ class StashField(Valid):
     """
     VALID_KEY_ASCII = 'Value error, ASCII keys only'
     VALID_KEY_TEXT = 'Key text missing'
-    VALID_VALUE_JSON = 'JSON input should be string, bytes or bytearray'
+    VALID_VALUE_JSON = 'JSON input should be string, bytes, or bytearray'
     VALID_VALUE_TYPE = 'Input should be a valid string'
     VALID_KEY_LENGTH = '1 validation error for'
     AT_MOST = 'String should have at most 999 characters'
