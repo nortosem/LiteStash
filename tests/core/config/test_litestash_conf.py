@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 from litestash.core.config.litestash_conf import (
     DataScheme, StashSlots, Utils, EngineAttr, MetaAttr,
     SessionAttr, EngineConf
@@ -38,7 +39,7 @@ def test_session_attr_values():
 
 def test_engine_conf_values():
     assert EngineConf.SQLITE.value == 'sqlite:///'
-    assert EngineConf.DIR_NAME.value == 'data'
+    assert EngineConf.DIR_NAME.value == f'{Path.cwd()}/data'
     assert EngineConf.ECHO.value == True
     assert EngineConf.FUTURE.value == True
     assert EngineConf.NO_ECHO.value == False
@@ -48,7 +49,7 @@ def test_engine_conf_values():
 
 def test_engine_conf_methods():
     assert EngineConf.sqlite() == 'sqlite:///'
-    assert EngineConf.dirname() == 'data'
+    assert EngineConf.dirname() == f'{Path.cwd()}/data'
     assert EngineConf.echo() == True
     assert EngineConf.future() == True
     assert EngineConf.no_echo() == False
