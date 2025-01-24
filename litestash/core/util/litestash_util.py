@@ -238,6 +238,7 @@ def connect(data: Union[LiteStashData | LiteStashStore],
         Connection
     """
     key_hash = None
+    connection_type = None
     if isinstance(data, LiteStashData):
         key_hash = get_primary_key(data.key)
         connection_type = ConnectionType.GET.value
