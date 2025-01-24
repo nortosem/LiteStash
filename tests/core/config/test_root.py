@@ -10,16 +10,21 @@ def test_main_enum_values():
     assert Main.STASH.value == 'LiteStash'
 
 
-def member_chk(E):
+def name_chk(E):
+    for member in E.__members__.keys():
+        yield member
+
+
+def value_chk(E):
     for member in E.__members__:
         yield E.__members__[member].value
 
 
 def test_main_enum_membership():
-    assert 'core' in member_chk(Main)
-    assert 'LiteStashData' in member_chk(Main)
-    assert 'LiteStashStore' in member_chk(Main)
-    assert 'LiteStash' in member_chk(Main)
+    assert 'core' in value_chk(Main)
+    assert 'LiteStashData' in value_chk(Main)
+    assert 'LiteStashStore' in value_chk(Main)
+    assert 'LiteStash' in value_chk(Main)
 
 def test_core_enum_values():
     assert Core.CONFIG.value == 'config'
@@ -29,11 +34,11 @@ def test_core_enum_values():
     assert Core.SESSION.value == 'session'
 
 def test_core_enum_membership():
-    assert 'config' in member_chk(Core)
-    assert 'util' in member_chk(Core)
-    assert 'engine' in member_chk(Core)
-    assert 'schema' in member_chk(Core)
-    assert 'session' in member_chk(Core)
+    assert 'config' in value_chk(Core)
+    assert 'util' in value_chk(Core)
+    assert 'engine' in value_chk(Core)
+    assert 'schema' in value_chk(Core)
+    assert 'session' in value_chk(Core)
 
 
 def test_util_enum_values():
