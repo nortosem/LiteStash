@@ -52,7 +52,7 @@ class DigestKey(Valid):
 
     """
     DIGEST_KEY_LOG = ''
-    DIGETS_KEY_ERROR = ''
+    DIGEST_KEY_ERROR = ''
 
 class StashError(Valid):
     """StashError
@@ -93,7 +93,7 @@ class Utils(Valid):
     """
     SIZE = 41
     DB_NAME_ERROR = 'Invalid character'
-    INVALID_CHAR_LENGTH = 'Incorrect number characters'
+    INVALID_CHAR_LENGTH = 'Incorrect number of characters'
 
 
 class EngineAttr(Valid):
@@ -129,7 +129,7 @@ class SessionAttr(Valid):
     VALUE_ERROR = 'Invalid database: no tables found'
     DOC = '''Defines a namedtuple for all session attributes of a LiteStash.
     Attributes:
-        db_name (str): nameo fthe database for this session
+        db_name (str): name of the database for this session
         session (Session): the sqlalchemy session object
     '''
 
