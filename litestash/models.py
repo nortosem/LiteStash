@@ -10,6 +10,7 @@ Classes:
 """
 import orjson
 
+from typing import Any
 from typing import Dict
 from typing import List
 from typing import Literal
@@ -28,6 +29,7 @@ from pydantic import StrictBool
 from pydantic import StrictInt
 from pydantic import StrictFloat
 from pydantic import StrictStr
+from pydantic import ValidationError
 from pydantic.dataclasses import dataclass
 
 from litestash.core.config.litestash_conf import DataScheme
@@ -57,11 +59,13 @@ class LiteStashData:
         min_length=DataScheme.MIN_LENGTH.value,
         max_length=DataScheme.MAX_LENGTH.value,
     )
-    value: Optional[
-        Json | Dict | List | StrictFloat | StrictInt
-    ] = Field(default=None)
+    value: Optional[Union[
+        Json | Dict | List | StrictBool | \
+        StrictFloat | StrictInt | StrictStr | type(None) \
+    ]] = Field(default=None)
 
     @field_validator(ColumnConfig.DATA_KEY.value)
+    @classmethod
     def valid_key(cls, key: str):
         """Validate Key String
 
@@ -77,12 +81,14 @@ class LiteStashData:
 
         return key
 
-    @field_validator(ColumnConfig.DATA_VALUE.value)
-    def valid_value(cls, value):
+    @field_validator(ColumnConfig.DATA_VALUE.value, mode='before')
+    @classmethod
+    def valid_value(cls, value: Any):
         """Validate & serialize the value to JSON"""
-        if isinstance(value, (dict,list,str,int,float,type(None))):
-            value = orjson.dumps(value).decode()
-            return value
+        if isinstance(value, (dict,list,bool,str,int,float,type(None))):
+            return orjson.dumps(value)
+        else:
+            raise ValueError(StashField.VALID_VALUE_JSON.value)
 
 
 @dataclass(slots=Parameter.SLOTS.value,
@@ -133,6 +139,7 @@ class StashColumn:
     unique: StrictBool = False
 
     @field_validator(ColumnConfig.STASH_COLUMN.value)
+    @classmethod
     def valid_type(cls, column_type: ColumnType) -> Union[String,Integer,JSON]:
         """Valid Type Function
 
@@ -145,7 +152,7 @@ class StashColumn:
             case StrType.literal:
                 return StrType.sqlite
             case IntType.literal:
-                return StrType.sqlite
+                return IntType.sqlite
             case JsonType.literal:
                 return JsonType.sqlite
             case _:

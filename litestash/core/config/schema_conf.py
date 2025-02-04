@@ -130,7 +130,7 @@ class ColumnConfig(Valid):
     DATA_KEY = 'key'
     DATA_VALUE = 'value'
     DOC = 'todo'
-    ERROR = 'Value must be a valid column type'
+    ERROR = "Input should be 'String', 'Integer' or 'JSON'"
 
 class Names(Valid):
     """Various Names
