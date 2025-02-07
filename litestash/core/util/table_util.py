@@ -38,7 +38,7 @@ def mk_table_generator(
     """Tablename generator factory"""
     if table_class is None:
         logger.error('Tables cannot be Nothing')
-        raise ValueError('Invalide value: None')
+        raise ValueError('Invalid value: None')
 
     if not issubclass(table_class, Table):
         print(f'table_class type: {table_class}')
