@@ -37,7 +37,7 @@ def test_column_config_values():
     assert ColumnConfig.DATA_KEY.value == 'key'
     assert ColumnConfig.DATA_VALUE.value == 'value'
     assert ColumnConfig.DOC.value == 'todo'
-    assert ColumnConfig.ERROR.value == 'Value must be a valid column type'
+    assert ColumnConfig.ERROR.value == "Input should be 'String', 'Integer' or 'JSON'"
 
 
 def test_names_values():
