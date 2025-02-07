@@ -6,6 +6,7 @@ A quick key-value store for Python, built on SQLite with a NoSQL style API.
 
 The LiteStash Python project offers a lightning-fast, lightweight key-value storage for Python applications.  LiteStash provides a NoSQL API for seamless integration into your applications.  Optimal use for caching, session management, and other high-performance use cases.  LiteStash is for high-performance storage of key-value data that leverages SQLite's reliability and speed, optimized for scenarios where you need quick access to data.
 
+#### [Code Coverage Report](https://nortosem.github.io/LiteStash/htmlcov/index.html)
 ## Key-Value Store
 
 LiteStash is easy to integrate into your Python applications, especially web frameworks like FastAPI and Django.  Keys are hashed and indexed by Sqlite in the background.
