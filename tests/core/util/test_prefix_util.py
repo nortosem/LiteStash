@@ -122,77 +122,97 @@ def invalid_char(request):
     yield request.param
 
 
-def test_tables_03(valid_03):
+def test_tables_03(valid_03, invalid_char):
     table03 = [n for n in tables_03()]
     assert table03 == valid_03
+    assert invalid_char not in table03
 
 
-def test_tables_47(valid_47):
+def test_tables_47(valid_47, invalid_char):
     table47 = [n for n in tables_47()]
     assert table47 == valid_47
+    assert invalid_char not in table47
 
 
-def test_tables_89hu(valid_89hu):
+def test_tables_89hu(valid_89hu, invalid_char):
     table_89hu = [n for n in tables_89hu()]
     assert table_89hu == valid_89hu
+    assert invalid_char not in table_89hu
 
-def test_tables_ab(valid_ab):
+
+def test_tables_ab(valid_ab, invalid_char):
     table_ab = [n for n in tables_ab()]
     assert table_ab == valid_ab
+    assert invalid_char not in table_ab
 
 
-def test_tables_cd(valid_cd):
+def test_tables_cd(valid_cd, invalid_char):
     table_cd = [n for n in tables_cd()]
     assert table_cd == valid_cd
+    assert invalid_char not in table_cd
 
 
-def test_tables_ef(valid_ef):
+def test_tables_ef(valid_ef, invalid_char):
     table_ef = [n for n in tables_ef()]
     assert table_ef == valid_ef
+    assert invalid_char not in table_ef
 
 
-def test_tables_gh(valid_gh):
-    tablegh = [n for n in tables_gh()]
-    assert tablegh == valid_gh
+def test_tables_gh(valid_gh, invalid_char):
+    table_gh = [n for n in tables_gh()]
+    assert table_gh == valid_gh
+    assert invalid_char not in table_gh
 
 
-def test_tables_ij(valid_ij):
-    tableij = [n for n in tables_ij()]
-    assert tableij == valid_ij
+def test_tables_ij(valid_ij, invalid_char):
+    table_ij = [n for n in tables_ij()]
+    assert table_ij == valid_ij
+    assert invalid_char not in table_ij
 
 
-def test_tables_kl(valid_kl):
-    tablekl = [n for n in tables_kl()]
-    assert tablekl == valid_kl
+def test_tables_kl(valid_kl, invalid_char):
+    table_kl = [n for n in tables_kl()]
+    assert table_kl == valid_kl
+    assert invalid_char not in table_kl
 
 
-def test_tables_mn(valid_mn):
-    tablemn = [n for n in tables_mn()]
-    assert tablemn == valid_mn
-
-def test_tables_op(valid_op):
-    tableop = [n for n in tables_op()]
-    assert tableop == valid_op
+def test_tables_mn(valid_mn, invalid_char):
+    table_mn = [n for n in tables_mn()]
+    assert table_mn == valid_mn
+    assert invalid_char not in table_mn
 
 
-def test_tables_qr(valid_qr):
-    tableqr = [n for n in tables_qr()]
-    assert tableqr == valid_qr
-
-def test_tables_st(valid_st):
-    tablest = [n for n in tables_st()]
-    assert tablest == valid_st
+def test_tables_op(valid_op, invalid_char):
+    table_op = [n for n in tables_op()]
+    assert table_op == valid_op
+    assert invalid_char not in table_op
 
 
-def test_tables_uv(valid_uv):
-    tableuv = [n for n in tables_uv()]
-    assert tableuv == valid_uv
+def test_tables_qr(valid_qr, invalid_char):
+    table_qr = [n for n in tables_qr()]
+    assert table_qr == valid_qr
+    assert invalid_char not in table_qr
 
 
-def test_tables_wx(valid_wx):
-    tablewx = [n for n in tables_wx()]
-    assert tablewx == valid_wx
+def test_tables_st(valid_st, invalid_char):
+    table_st = [n for n in tables_st()]
+    assert table_st == valid_st
+    assert invalid_char not in table_st
 
-def test_tables_yz(valid_yz):
-    tableyz = [n for n in tables_yz()]
-    assert tableyz == valid_yz
+
+def test_tables_uv(valid_uv, invalid_char):
+    table_uv = [n for n in tables_uv()]
+    assert table_uv == valid_uv
+    assert invalid_char not in table_uv
+
+
+def test_tables_wx(valid_wx, invalid_char):
+    table_wx = [n for n in tables_wx()]
+    assert table_wx == valid_wx
+    assert invalid_char not in table_wx
+
+
+def test_tables_yz(valid_yz, invalid_char):
+    table_yz = [n for n in tables_yz()]
+    assert table_yz == valid_yz
+    assert invalid_char not in table_yz
