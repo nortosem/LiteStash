@@ -10,6 +10,7 @@ objects used in the LiteStash key-value store. It includes functions for:
 from sqlalchemy import Column
 from typing import Generator
 from typing import Callable
+from typing import Type
 from litestash.logging import root_logger as logger
 from litestash.models import StashColumn
 from litestash.core.config.root import Table
@@ -33,23 +34,41 @@ from litestash.core.config.schema_conf import ColumnFields as Col
 from litestash.core.config.schema_conf import ColumnConfig as Conf
 
 
+def _generator(
+    table_class: Type[Table]
+) -> Callable[[], Generator[str, None, None]]:
+    """Internal utility for mk_table_generator"""
+    for char in table_class:
+        table_name = table_class.get_table_name(char.value)
+        if not table_name:
+            logger.error('Table name not found')
+            raise ValueError('No table name?')
+        yield table_name
+
+
 def mk_table_generator(
-    table_class: type) -> Callable[[], Generator[str, None, None]]:
+    table_class: Type[Table]
+) -> Callable[[], Generator[str, None, None]]:
     """Tablename generator factory"""
     if table_class is None:
         logger.error('Tables cannot be Nothing')
         raise ValueError('Invalid value: None')
 
+    if not isinstance(table_class, type):
+        logger.error(f'Tables are a class: {type(table_class)}')
+        raise TypeError(f'A valid Table class is required: {type(table_class)}')
+
+    if table_class == Table:
+        logger.error('A specific table is required')
+        raise TypeError(
+            f'Parent of tables given instead of specific table: {table_class}'
+        )
+
     if not issubclass(table_class, Table):
-        print(f'table_class type: {table_class}')
         logger.error('Invalid type of table')
         raise TypeError(f'Incorrect table type: {type(table_class)}')
 
-    def generator():
-        for char in table_class:
-            table_name = table_class.get_table_name(char.value)
-            yield table_name
-    return generator
+    return lambda: _generator(table_class)
 
 
 get_tables_03 = mk_table_generator(Tables03)
