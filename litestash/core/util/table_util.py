@@ -7,16 +7,14 @@ objects used in the LiteStash key-value store. It includes functions for:
 - Creating tables with predefined columns.
 - Defining standard column objects for consistent table structures.
 """
-from enum import Enum
 from sqlalchemy import Column
 from typing import Generator
 from typing import Callable
 from typing import Type
 from litestash.logging import root_logger as logger
 from litestash.models import StashColumn
+from litestash.core.config.root import ErrorMessage
 from litestash.core.config.root import Table
-from litestash.core.config.default_exceptions.util_exceptions import \
-    TableUtilErrorMessages
 from litestash.core.config.tables.tables_03 import Tables03
 from litestash.core.config.tables.tables_47 import Tables47
 from litestash.core.config.tables.tables_89hu import Tables89hu
@@ -35,25 +33,23 @@ from litestash.core.config.tables.tables_wx import TablesWX
 from litestash.core.config.tables.tables_yz import TablesYZ
 from litestash.core.config.schema_conf import ColumnFields as Col
 from litestash.core.config.schema_conf import ColumnConfig as Conf
-from litestash.exceptions.core.util.table_util_expceptions import \
-    InvalidStashColumnError
-from litestash.exceptions.core.util.table_util_expceptions import \
-    InvalidTableClassError
-from litestash.exceptions.core.util.table_util_expceptions import \
-    NoneTableClassError
-from litestash.exceptions.core.util.table_util_expceptions import \
-    ParentTableClassError
-from litestash.exceptions.core.util.table_util_expceptions import \
-    StashColumnTypeError
-from litestash.exceptions.core.util.table_util_expceptions import \
-    TableNameNotFoundError
-from litestash.exceptions.core.util.table_util_expceptions import \
-    TableUtilError
+from litestash.exceptions.core.util.table_util_exceptions.TableUtilError \
+    import InvalidStashColumnError
+from litestash.exceptions.core.util.table_util_exceptions.TableUtilError \
+    import InvalidTableClassError
+from litestash.exceptions.core.util.table_util_exceptions.TableUtilErrori \
+    import NoneTableClassError
+from litestash.exceptions.core.util.table_util_exceptions.TableUtilError \
+    import ParentTableClassError
+from litestash.exceptions.core.util.table_util_exceptions.TableUtilError \
+    import StashColumnTypeError
+from litestash.exceptions.core.util.table_util_exceptions.TableUtilError \
+    import TableNameNotFoundError
 
 
 def _generator(
     table_class: Type[Table]
-) -> Callable[, Generator[str, None, None]]:
+) -> Callable[[], Generator[str, None, None]]:
     """Internal utility for mk_table_generator"""
     for char in table_class:
         table_name = table_class.get_table_name(char.value)
@@ -62,32 +58,28 @@ def _generator(
             raise TableNameNotFoundError()
         yield table_name
 
-            logger.error('Table name not found')
-            raise ValueError('No such table found.')
-        yield table_name
-
 
 def mk_table_generator(
     table_class: Type[Table]
-) -> Callable[, Generator[str, None, None]]:
+) -> Callable[[], Generator[str, None, None]]:
     """Tablename generator factory"""
     if table_class is None:
         logger.error(
-            f'Tables cannot be Nothing: ({table_class},{type(table_class)})'
+            'Tables cannot be Nothing: %s,%s',table_class,type(table_class)
         )
         raise NoneTableClassError()
     try:
         if not issubclass(table_class, Table):
-            logger.error(f'Invalid table classe: {table_class}')
+            logger.error('Invalid table classe: %s', {table_class})
             raise InvalidTableClassError()
 
         if table_class == Table:
-            logger.error(f'A specific table is required')
+            logger.error('A specific table is required')
             raise ParentTableClassError()
 
     except TypeError as e:
-        logger.error(f'A valid Table class is required: {type(table_class)}')
-        raise InvalidTableClassError()
+        logger.error('A valid Table class is required: {type(table_class)}')
+        raise InvalidTableClassError() from e
 
     return lambda: _generator(table_class)
 
@@ -148,7 +140,7 @@ def get_column(stash_column: StashColumn) -> Column:
         raise InvalidStashColumnError()
 
     if not isinstance(stash_column, StashColumn):
-        logger.error(f'Invalid stash_column type: {type(stash_column)}'
+        logger.error('Invalid stash_column type: %s', type(stash_column))
         raise StashColumnTypeError()
 
     column = Column(
