@@ -2,7 +2,10 @@
 
 This module defines the base exception for the LiteStashPackage
 """
-class BaseException(Exception):
+import datetime
+
+
+class LiteStashBaseException(Exception):
     """The Base Exception for the LiteStash Project
 
     Provides common attributes and methods for all custom exceptions.
@@ -21,7 +24,11 @@ class BaseException(Exception):
         to_dict(): Returns a dictionary representation of the exception.
         __str__(): Returns a formatted string representation of the exception.
     """
-    def __init__(self, message=None, code=None, details=None, user_message=None):
+    def __init__(self,
+                 message=None,
+                 code=None,
+                 details=None,
+                 user_message=None):
         super().__init__(message)
         self.code = code
         self.details = details or {}
