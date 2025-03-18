@@ -15,8 +15,9 @@ and management in the LiteStash key-value store.
 - **`InvalidStashColumnError`** Invalid argument for StashColumn
 - **`StashColumnTypeError`** Type must be a StashColumn
 """
-
 from litestash.exceptions import LiteStashBaseException
+from litestash.core.config.default_exceptions.util_exceptions import \
+    TableUtilErrorMessages
 
 
 class TableUtilError(LiteStashBaseException):

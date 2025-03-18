@@ -1,8 +1,10 @@
+************* Module litestash.models
+litestash/models.py:32:0: W0611: Unused ValidationError imported from pydantic (unused-import)
 
 
 Report
 ======
-2080 statements analysed.
+2158 statements analysed.
 
 Statistics by type
 ------------------
@@ -10,11 +12,11 @@ Statistics by type
 +---------+-------+-----------+-----------+------------+---------+
 |type     |number |old number |difference |%documented |%badname |
 +=========+=======+===========+===========+============+=========+
-|module   |45     |NC         |NC         |100.00      |0.00     |
+|module   |52     |NC         |NC         |100.00      |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
-|class    |66     |NC         |NC         |100.00      |0.00     |
+|class    |76     |NC         |NC         |100.00      |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
-|method   |190    |NC         |NC         |100.00      |0.00     |
+|method   |205    |NC         |NC         |100.00      |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
 |function |82     |NC         |NC         |100.00      |0.00     |
 +---------+-------+-----------+-----------+------------+---------+
@@ -29,11 +31,13 @@ External dependencies
       \-core 
       | \-config 
       | | \-connection_conf (litestash.core.util.connection_util,litestash.core.util.litestash_util)
+      | | \-default_exceptions 
+      | | | \-util_exceptions (litestash.exceptions.core.util.table_util_exceptions)
       | | \-fts_conf (litestash.core.util.fts)
       | | \-litestash_conf (litestash.core.config.model,litestash.core.schema,litestash.core.util.core_util,litestash.core.util.engine_util,litestash.core.util.litestash_util,litestash.core.util.schema_util,litestash.models,litestash.store)
       | | \-misc_conf (litestash.core.util.misc_util)
       | | \-model (litestash.models)
-      | | \-root (litestash.core.config.connection_conf,litestash.core.config.fts_conf,litestash.core.config.litestash_conf,litestash.core.config.misc_conf,litestash.core.config.model,litestash.core.config.schema_conf,litestash.core.config.tables,litestash.core.config.tables.tables_03,litestash.core.config.tables.tables_47,litestash.core.config.tables.tables_89hu,litestash.core.config.tables.tables_ab,litestash.core.config.tables.tables_cd,litestash.core.config.tables.tables_ef,litestash.core.config.tables.tables_gh,litestash.core.config.tables.tables_ij,litestash.core.config.tables.tables_kl,litestash.core.config.tables.tables_mn,litestash.core.config.tables.tables_op,litestash.core.config.tables.tables_qr,litestash.core.config.tables.tables_st,litestash.core.config.tables.tables_uv,litestash.core.config.tables.tables_wx,litestash.core.config.tables.tables_yz,litestash.core.engine,litestash.core.schema,litestash.core.session,litestash.core.util,litestash.core.util.connection_util,litestash.core.util.fts,litestash.core.util.schema_util,litestash.core.util.table_util,litestash.logging,litestash.store)
+      | | \-root (litestash.core.config.connection_conf,litestash.core.config.default_exceptions.util_exceptions,litestash.core.config.fts_conf,litestash.core.config.litestash_conf,litestash.core.config.misc_conf,litestash.core.config.model,litestash.core.config.schema_conf,litestash.core.config.tables,litestash.core.config.tables.tables_03,litestash.core.config.tables.tables_47,litestash.core.config.tables.tables_89hu,litestash.core.config.tables.tables_ab,litestash.core.config.tables.tables_cd,litestash.core.config.tables.tables_ef,litestash.core.config.tables.tables_gh,litestash.core.config.tables.tables_ij,litestash.core.config.tables.tables_kl,litestash.core.config.tables.tables_mn,litestash.core.config.tables.tables_op,litestash.core.config.tables.tables_qr,litestash.core.config.tables.tables_st,litestash.core.config.tables.tables_uv,litestash.core.config.tables.tables_wx,litestash.core.config.tables.tables_yz,litestash.core.engine,litestash.core.schema,litestash.core.session,litestash.core.util,litestash.core.util.connection_util,litestash.core.util.fts,litestash.core.util.schema_util,litestash.core.util.table_util,litestash.logging,litestash.store)
       | | \-schema_conf (litestash.core.config.tables.tables_03,litestash.core.config.tables.tables_47,litestash.core.config.tables.tables_89hu,litestash.core.config.tables.tables_ab,litestash.core.config.tables.tables_cd,litestash.core.config.tables.tables_ef,litestash.core.config.tables.tables_gh,litestash.core.config.tables.tables_ij,litestash.core.config.tables.tables_kl,litestash.core.config.tables.tables_mn,litestash.core.config.tables.tables_op,litestash.core.config.tables.tables_qr,litestash.core.config.tables.tables_st,litestash.core.config.tables.tables_uv,litestash.core.config.tables.tables_wx,litestash.core.config.tables.tables_yz,litestash.core.fts_model,litestash.core.util.engine_util,litestash.core.util.fts,litestash.core.util.litestash_util,litestash.core.util.model_util,litestash.core.util.table_util,litestash.models)
       | | \-tables 
       | |   \-tables_03 (litestash.core.util.prefix_util,litestash.core.util.schema_util,litestash.core.util.table_util)
@@ -67,6 +71,7 @@ External dependencies
       |   \-prefix_util (litestash.core.util.schema_util)
       |   \-schema_util (litestash.core.util.core_util,litestash.core.util.fts,litestash.core.util.litestash_util,litestash.store)
       |   \-table_util (litestash.core.util.schema_util)
+      \-exceptions (litestash.exceptions.core.util.table_util_exceptions)
       \-logging (litestash.core.util.core_util,litestash.core.util.engine_util,litestash.core.util.litestash_util,litestash.core.util.misc_util,litestash.core.util.table_util,litestash.store)
       \-models (litestash.core.util.connection_util,litestash.core.util.fts,litestash.core.util.litestash_util,litestash.core.util.table_util,litestash.store)
     orjson (litestash.core.util.fts,litestash.core.util.litestash_util,litestash.models,litestash.store)
@@ -83,7 +88,7 @@ External dependencies
 
 
 
-5627 lines have been analyzed
+5985 lines have been analyzed
 
 Raw metrics
 -----------
@@ -91,13 +96,13 @@ Raw metrics
 +----------+-------+------+---------+-----------+
 |type      |number |%     |previous |difference |
 +==========+=======+======+=========+===========+
-|code      |3233   |57.46 |NC       |NC         |
+|code      |3362   |56.17 |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|docstring |1681   |29.87 |NC       |NC         |
+|docstring |1869   |31.23 |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|comment   |24     |0.43  |NC       |NC         |
+|comment   |24     |0.40  |NC       |NC         |
 +----------+-------+------+---------+-----------+
-|empty     |689    |12.24 |NC       |NC         |
+|empty     |730    |12.20 |NC       |NC         |
 +----------+-------+------+---------+-----------+
 
 
@@ -125,19 +130,32 @@ Messages by category
 +-----------+-------+---------+-----------+
 |refactor   |0      |NC       |NC         |
 +-----------+-------+---------+-----------+
-|warning    |0      |NC       |NC         |
+|warning    |1      |NC       |NC         |
 +-----------+-------+---------+-----------+
 |error      |0      |NC       |NC         |
 +-----------+-------+---------+-----------+
 
 
 
+% errors / warnings by module
+-----------------------------
+
++-----------------+------+--------+---------+-----------+
+|module           |error |warning |refactor |convention |
++=================+======+========+=========+===========+
+|litestash.models |0.00  |100.00  |0.00     |0.00       |
++-----------------+------+--------+---------+-----------+
+
+
+
 Messages
 --------
 
-+-----------+------------+
-|message id |occurrences |
-+===========+============+
++--------------+------------+
+|message id    |occurrences |
++==============+============+
+|unused-import |11          |
++--------------+------------+
 
 
 
