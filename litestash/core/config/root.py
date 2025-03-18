@@ -41,6 +41,7 @@ class Main(Valid):
     """The main __all__"""
     CORE = 'core'
     DATA = 'LiteStashData'
+    EXCEPTIONS = 'exceptions'
     STORE = 'LiteStashStore'
     STASH = 'LiteStash'
 
@@ -52,8 +53,10 @@ class Core(Valid):
     ENGINE = 'engine'
     SCHEMA = 'schema'
     SESSION = 'session'
-    TASKS = 'tasks'
 
+
+class Exceptions(Valid):
+    """The exceptions __all__"""
 
 class Util(Valid):
     """The util __all__"""
