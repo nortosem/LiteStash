@@ -3,7 +3,7 @@
 This module defines the exception classes used within the
 `litestash.table_util` module.
 
-These exceptions inherit from `LiteStashBaseException` and provide
+These exceptions inherit from `LiteStashException` and provide
 specific error handling for operations related to table creation
 and management in the LiteStash key-value store.
 
@@ -15,22 +15,22 @@ and management in the LiteStash key-value store.
 - **`InvalidStashColumnError`** Invalid argument for StashColumn
 - **`StashColumnTypeError`** Type must be a StashColumn
 """
-from litestash.exceptions import LiteStashBaseException
+from litestash.exceptions.base_exception import LiteStashException
 from litestash.core.config.default_exceptions.util_exceptions import \
     TableUtilErrorMessages
 
 
-class TableUtilError(LiteStashBaseException):
+class TableUtilError(LiteStashException):
     """
     Base class for exceptions in the `table_util` module.
 
     This exception class serves as the foundation for all custom
     exceptions defined within the `table_util` module. It inherits
-    from `LiteStashBaseException`, providing a consistent base
+    from `LiteStashException`, providing a consistent base
     exception type for table utility-related operations.
 
     Inheritance:
-        LiteStashBaseException
+        LiteStashException
     """
     pass
 

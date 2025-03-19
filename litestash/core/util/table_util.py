@@ -33,17 +33,19 @@ from litestash.core.config.tables.tables_wx import TablesWX
 from litestash.core.config.tables.tables_yz import TablesYZ
 from litestash.core.config.schema_conf import ColumnFields as Col
 from litestash.core.config.schema_conf import ColumnConfig as Conf
-from litestash.exceptions.core.util.table_util_exceptions.TableUtilError \
+from litestash.exceptions.core.util.table_util_exceptions \
+    import TableUtilError
+from litestash.exceptions.core.util.table_util_exceptions \
     import InvalidStashColumnError
-from litestash.exceptions.core.util.table_util_exceptions.TableUtilError \
+from litestash.exceptions.core.util.table_util_exceptions \
     import InvalidTableClassError
-from litestash.exceptions.core.util.table_util_exceptions.TableUtilErrori \
+from litestash.exceptions.core.util.table_util_exceptions \
     import NoneTableClassError
-from litestash.exceptions.core.util.table_util_exceptions.TableUtilError \
+from litestash.exceptions.core.util.table_util_exceptions \
     import ParentTableClassError
-from litestash.exceptions.core.util.table_util_exceptions.TableUtilError \
+from litestash.exceptions.core.util.table_util_exceptions \
     import StashColumnTypeError
-from litestash.exceptions.core.util.table_util_exceptions.TableUtilError \
+from litestash.exceptions.core.util.table_util_exceptions \
     import TableNameNotFoundError
 
 

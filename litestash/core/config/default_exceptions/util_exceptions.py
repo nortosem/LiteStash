@@ -7,7 +7,7 @@ Define Default messages for the litestash.core.util modules.
 from litestash.core.config.root import Valid
 
 
-class TableUtilError(Valid):
+class TableUtilErrorMessages(Valid):
     """Default messages for TableUtil Exceptions"""
     TABLE_NOT_FOUND = 'No such table found'
     INVALID_TABLE_CLASS = 'A valid Table class is required'
