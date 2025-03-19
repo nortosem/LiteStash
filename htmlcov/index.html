@@ -26,6 +26,8 @@
                         <kbd>s</kbd>
                         <kbd>m</kbd>
                         <kbd>x</kbd>
+                        <kbd>b</kbd>
+                        <kbd>p</kbd>
                         <kbd>c</kbd>
                         &nbsp; change column sorting
                     </p>
@@ -53,8 +55,8 @@
                 <a class="button" href="class_index.html">Classes</a>
         </h2>
         <p class="text">
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.11">coverage.py v7.6.11</a>,
-            created at 2025-02-09 15:38 -0600
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.7.0">coverage.py v7.7.0</a>,
+            created at 2025-03-19 00:17 -0500
         </p>
     </div>
 </header>
@@ -66,6 +68,8 @@
                 <th id="statements" aria-sort="none" data-default-sort-order="descending" data-shortcut="s">statements<span class="arrows"></span></th>
                 <th id="missing" aria-sort="none" data-default-sort-order="descending" data-shortcut="m">missing<span class="arrows"></span></th>
                 <th id="excluded" aria-sort="none" data-default-sort-order="descending" data-shortcut="x">excluded<span class="arrows"></span></th>
+                <th id="branches" aria-sort="none" data-default-sort-order="descending" data-shortcut="b">branches<span class="arrows"></span></th>
+                <th id="partial" aria-sort="none" data-default-sort-order="descending" data-shortcut="p">partial<span class="arrows"></span></th>
                 <th id="coverage" class="right" aria-sort="none" data-shortcut="c">coverage<span class="arrows"></span></th>
             </tr>
         </thead>
@@ -75,11 +79,15 @@
                 <td>7</td>
                 <td>0</td>
                 <td>0</td>
+                <td>0</td>
+                <td>0</td>
                 <td class="right" data-ratio="7 7">100%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_64501f430d06d13c___init___py.html">litestash/core/__init__.py</a></td>
                 <td>7</td>
+                <td>0</td>
+                <td>0</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="7 7">100%</td>
@@ -89,6 +97,8 @@
                 <td>5</td>
                 <td>0</td>
                 <td>0</td>
+                <td>0</td>
+                <td>0</td>
                 <td class="right" data-ratio="5 5">100%</td>
             </tr>
             <tr class="region">
@@ -96,12 +106,34 @@
                 <td>22</td>
                 <td>0</td>
                 <td>0</td>
+                <td>0</td>
+                <td>0</td>
                 <td class="right" data-ratio="22 22">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_672ba192caf53e92___init___py.html">litestash/core/config/default_exceptions/__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_672ba192caf53e92_util_exceptions_py.html">litestash/core/config/default_exceptions/util_exceptions.py</a></td>
+                <td>26</td>
+                <td>6</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="20 26">77%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_3e8f1246f7882ecf_fts_conf_py.html">litestash/core/config/fts_conf.py</a></td>
                 <td>80</td>
                 <td>19</td>
+                <td>0</td>
+                <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="61 80">76%</td>
             </tr>
@@ -110,12 +142,16 @@
                 <td>127</td>
                 <td>18</td>
                 <td>0</td>
+                <td>0</td>
+                <td>0</td>
                 <td class="right" data-ratio="109 127">86%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_3e8f1246f7882ecf_misc_conf_py.html">litestash/core/config/misc_conf.py</a></td>
                 <td>10</td>
                 <td>2</td>
+                <td>0</td>
+                <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="8 10">80%</td>
             </tr>
@@ -124,19 +160,25 @@
                 <td>16</td>
                 <td>0</td>
                 <td>0</td>
+                <td>0</td>
+                <td>0</td>
                 <td class="right" data-ratio="16 16">100%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_3e8f1246f7882ecf_root_py.html">litestash/core/config/root.py</a></td>
-                <td>55</td>
+                <td>56</td>
                 <td>0</td>
                 <td>0</td>
-                <td class="right" data-ratio="55 55">100%</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="56 56">100%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_3e8f1246f7882ecf_schema_conf_py.html">litestash/core/config/schema_conf.py</a></td>
                 <td>81</td>
                 <td>12</td>
+                <td>0</td>
+                <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="69 81">85%</td>
             </tr>
@@ -145,151 +187,195 @@
                 <td>18</td>
                 <td>0</td>
                 <td>0</td>
+                <td>0</td>
+                <td>0</td>
                 <td class="right" data-ratio="18 18">100%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_03_py.html">litestash/core/config/tables/tables_03.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_47_py.html">litestash/core/config/tables/tables_47.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_89hu_py.html">litestash/core/config/tables/tables_89hu.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_ab_py.html">litestash/core/config/tables/tables_ab.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_cd_py.html">litestash/core/config/tables/tables_cd.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_ef_py.html">litestash/core/config/tables/tables_ef.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_gh_py.html">litestash/core/config/tables/tables_gh.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_ij_py.html">litestash/core/config/tables/tables_ij.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_kl_py.html">litestash/core/config/tables/tables_kl.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_mn_py.html">litestash/core/config/tables/tables_mn.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_op_py.html">litestash/core/config/tables/tables_op.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_qr_py.html">litestash/core/config/tables/tables_qr.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_st_py.html">litestash/core/config/tables/tables_st.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_uv_py.html">litestash/core/config/tables/tables_uv.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_wx_py.html">litestash/core/config/tables/tables_wx.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_38a56747c8f4c74e_tables_yz_py.html">litestash/core/config/tables/tables_yz.py</a></td>
                 <td>33</td>
-                <td>15</td>
+                <td>2</td>
                 <td>0</td>
-                <td class="right" data-ratio="18 33">55%</td>
+                <td>8</td>
+                <td>1</td>
+                <td class="right" data-ratio="38 41">93%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_64501f430d06d13c_engine_py.html">litestash/core/engine.py</a></td>
                 <td>33</td>
                 <td>19</td>
                 <td>0</td>
-                <td class="right" data-ratio="14 33">42%</td>
+                <td>6</td>
+                <td>0</td>
+                <td class="right" data-ratio="14 39">36%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_64501f430d06d13c_fts_model_py.html">litestash/core/fts_model.py</a></td>
                 <td>40</td>
                 <td>14</td>
                 <td>0</td>
-                <td class="right" data-ratio="26 40">65%</td>
+                <td>8</td>
+                <td>0</td>
+                <td class="right" data-ratio="26 48">54%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_64501f430d06d13c_schema_py.html">litestash/core/schema.py</a></td>
                 <td>32</td>
                 <td>20</td>
                 <td>0</td>
-                <td class="right" data-ratio="12 32">38%</td>
+                <td>12</td>
+                <td>0</td>
+                <td class="right" data-ratio="12 44">27%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_64501f430d06d13c_session_py.html">litestash/core/session.py</a></td>
                 <td>20</td>
                 <td>9</td>
                 <td>0</td>
-                <td class="right" data-ratio="11 20">55%</td>
+                <td>4</td>
+                <td>0</td>
+                <td class="right" data-ratio="11 24">46%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_aa46d5c29f79a1cb___init___py.html">litestash/core/util/__init__.py</a></td>
                 <td>7</td>
+                <td>0</td>
+                <td>0</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="7 7">100%</td>
@@ -299,46 +385,60 @@
                 <td>66</td>
                 <td>24</td>
                 <td>0</td>
-                <td class="right" data-ratio="42 66">64%</td>
+                <td>14</td>
+                <td>0</td>
+                <td class="right" data-ratio="42 80">52%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_aa46d5c29f79a1cb_core_util_py.html">litestash/core/util/core_util.py</a></td>
                 <td>45</td>
                 <td>30</td>
                 <td>0</td>
-                <td class="right" data-ratio="15 45">33%</td>
+                <td>10</td>
+                <td>0</td>
+                <td class="right" data-ratio="15 55">27%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_aa46d5c29f79a1cb_engine_util_py.html">litestash/core/util/engine_util.py</a></td>
                 <td>85</td>
                 <td>65</td>
                 <td>0</td>
-                <td class="right" data-ratio="20 85">24%</td>
+                <td>18</td>
+                <td>0</td>
+                <td class="right" data-ratio="20 103">19%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_aa46d5c29f79a1cb_fts_py.html">litestash/core/util/fts.py</a></td>
                 <td>108</td>
                 <td>75</td>
                 <td>0</td>
-                <td class="right" data-ratio="33 108">31%</td>
+                <td>24</td>
+                <td>0</td>
+                <td class="right" data-ratio="33 132">25%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_aa46d5c29f79a1cb_litestash_util_py.html">litestash/core/util/litestash_util.py</a></td>
                 <td>322</td>
                 <td>250</td>
                 <td>0</td>
-                <td class="right" data-ratio="72 322">22%</td>
+                <td>80</td>
+                <td>0</td>
+                <td class="right" data-ratio="72 402">18%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_aa46d5c29f79a1cb_misc_util_py.html">litestash/core/util/misc_util.py</a></td>
                 <td>27</td>
                 <td>18</td>
                 <td>0</td>
-                <td class="right" data-ratio="9 27">33%</td>
+                <td>8</td>
+                <td>0</td>
+                <td class="right" data-ratio="9 35">26%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_aa46d5c29f79a1cb_model_util_py.html">litestash/core/util/model_util.py</a></td>
                 <td>10</td>
+                <td>0</td>
+                <td>0</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="10 10">100%</td>
@@ -346,67 +446,130 @@
             <tr class="region">
                 <td class="name left"><a href="z_aa46d5c29f79a1cb_prefix_util_py.html">litestash/core/util/prefix_util.py</a></td>
                 <td>65</td>
+                <td>32</td>
                 <td>0</td>
+                <td>32</td>
                 <td>0</td>
-                <td class="right" data-ratio="65 65">100%</td>
+                <td class="right" data-ratio="33 97">34%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_aa46d5c29f79a1cb_schema_util_py.html">litestash/core/util/schema_util.py</a></td>
                 <td>140</td>
                 <td>112</td>
                 <td>0</td>
-                <td class="right" data-ratio="28 140">20%</td>
+                <td>102</td>
+                <td>0</td>
+                <td class="right" data-ratio="28 242">12%</td>
             </tr>
             <tr class="region">
                 <td class="name left"><a href="z_aa46d5c29f79a1cb_table_util_py.html">litestash/core/util/table_util.py</a></td>
-                <td>96</td>
-                <td>28</td>
+                <td>114</td>
+                <td>31</td>
                 <td>0</td>
-                <td class="right" data-ratio="68 96">71%</td>
+                <td>16</td>
+                <td>4</td>
+                <td class="right" data-ratio="89 130">68%</td>
             </tr>
             <tr class="region">
-                <td class="name left"><a href="z_08a93153380f5911_logging_py.html">litestash/logging.py</a></td>
-                <td>27</td>
-                <td>7</td>
+                <td class="name left"><a href="z_8c578dc49e6445b4___init___py.html">litestash/exceptions/__init__.py</a></td>
                 <td>0</td>
-                <td class="right" data-ratio="20 27">74%</td>
-            </tr>
-            <tr class="region">
-                <td class="name left"><a href="z_08a93153380f5911_models_py.html">litestash/models.py</a></td>
-                <td>74</td>
-                <td>17</td>
                 <td>0</td>
-                <td class="right" data-ratio="57 74">77%</td>
-            </tr>
-            <tr class="region">
-                <td class="name left"><a href="z_08a93153380f5911_store_py.html">litestash/store.py</a></td>
-                <td>226</td>
-                <td>154</td>
-                <td>0</td>
-                <td class="right" data-ratio="72 226">32%</td>
-            </tr>
-            <tr class="region">
-                <td class="name left"><a href="z_a44f0ac069e85531___init___py.html">tests/__init__.py</a></td>
                 <td>0</td>
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="0 0">100%</td>
             </tr>
             <tr class="region">
-                <td class="name left"><a href="z_8dca7990f748019b_prefix_util_py.html">tests/core/util/prefix_util.py</a></td>
-                <td>102</td>
-                <td>1</td>
+                <td class="name left"><a href="z_8c578dc49e6445b4_base_exception_py.html">litestash/exceptions/base_exception.py</a></td>
+                <td>21</td>
+                <td>16</td>
                 <td>0</td>
-                <td class="right" data-ratio="101 102">99%</td>
+                <td>6</td>
+                <td>0</td>
+                <td class="right" data-ratio="5 27">19%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_ad80fa2f87bcd89e___init___py.html">litestash/exceptions/core/__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1289b426bdd03841___init___py.html">litestash/exceptions/core/util/__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_1289b426bdd03841_table_util_exceptions_py.html">litestash/exceptions/core/util/table_util_exceptions.py</a></td>
+                <td>22</td>
+                <td>6</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="16 22">73%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_08a93153380f5911_logging_py.html">litestash/logging.py</a></td>
+                <td>27</td>
+                <td>7</td>
+                <td>0</td>
+                <td>10</td>
+                <td>5</td>
+                <td class="right" data-ratio="25 37">68%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_08a93153380f5911_models_py.html">litestash/models.py</a></td>
+                <td>74</td>
+                <td>17</td>
+                <td>0</td>
+                <td>12</td>
+                <td>0</td>
+                <td class="right" data-ratio="57 86">66%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_08a93153380f5911_store_py.html">litestash/store.py</a></td>
+                <td>226</td>
+                <td>154</td>
+                <td>0</td>
+                <td>56</td>
+                <td>0</td>
+                <td class="right" data-ratio="72 282">26%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_a44f0ac069e85531___init___py.html">tests/__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            <tr class="region">
+                <td class="name left"><a href="z_8dca7990f748019b_test_table_util_py.html">tests/core/util/test_table_util.py</a></td>
+                <td>54</td>
+                <td>6</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="48 54">89%</td>
             </tr>
         </tbody>
         <tfoot>
             <tr class="total">
                 <td class="name left">Total</td>
-                <td>2481</td>
-                <td>1134</td>
+                <td>2521</td>
+                <td>994</td>
                 <td>0</td>
-                <td class="right" data-ratio="1347 2481">54%</td>
+                <td>546</td>
+                <td>25</td>
+                <td class="right" data-ratio="1650 3067">54%</td>
             </tr>
         </tfoot>
     </table>
@@ -417,12 +580,12 @@
 <footer>
     <div class="content">
         <p>
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.6.11">coverage.py v7.6.11</a>,
-            created at 2025-02-09 15:38 -0600
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.7.0">coverage.py v7.7.0</a>,
+            created at 2025-03-19 00:17 -0500
         </p>
     </div>
     <aside class="hidden">
-        <a id="prevFileLink" class="nav" href="z_8dca7990f748019b_prefix_util_py.html"></a>
+        <a id="prevFileLink" class="nav" href="z_8dca7990f748019b_test_table_util_py.html"></a>
         <a id="nextFileLink" class="nav" href="z_08a93153380f5911___init___py.html"></a>
         <button type="button" class="button_prev_file" data-shortcut="["></button>
         <button type="button" class="button_next_file" data-shortcut="]"></button>
