@@ -5,7 +5,7 @@ This module defines the base exception for the LiteStashPackage
 import datetime
 
 
-class LiteStashBaseException(Exception):
+class LiteStashException(Exception):
     """The Base Exception for the LiteStash Project
 
     Provides common attributes and methods for all custom exceptions.
